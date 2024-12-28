@@ -1,10 +1,10 @@
-import { Home, Users, ShoppingCart, Settings, BarChart2 } from "lucide-react";
+import { Home, Users, ShoppingCart, Settings, BarChart2, Package, ClipboardList } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
-  SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -20,13 +20,14 @@ const getMenuItems = (role: UserRole) => {
   ];
 
   const collectorItems = [
-    { title: "Orders", icon: ShoppingCart, url: "/orders" },
+    { title: "Orders", icon: ClipboardList, url: "/orders" },
   ];
 
   const adminItems = [
-    { title: "Orders", icon: ShoppingCart, url: "/orders" },
+    { title: "Orders List", icon: ClipboardList, url: "/orders" },
+    { title: "Single Order", icon: ShoppingCart, url: "/orders/:id" },
+    { title: "Products List", icon: Package, url: "/products" },
     { title: "Users", icon: Users, url: "/users" },
-    { title: "Products", icon: ShoppingCart, url: "/products" },
     { title: "Analytics", icon: BarChart2, url: "/analytics" },
     { title: "Settings", icon: Settings, url: "/settings" },
   ];
