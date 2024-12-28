@@ -9,6 +9,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Search } from "lucide-react";
 
 interface Order {
   id: string;
@@ -17,9 +20,11 @@ interface Order {
   status: 'pending' | 'processing' | 'completed' | 'cancelled';
   total: number;
   items: number;
+  location?: string;
+  collector?: string;
 }
 
-// Mock data - in a real app, this would come from your API
+// Mock data with additional fields
 const mockOrders: Order[] = [
   {
     id: "ORD-001",
@@ -28,6 +33,8 @@ const mockOrders: Order[] = [
     status: "pending",
     total: 299.99,
     items: 3,
+    location: "New York",
+    collector: "Alice Smith"
   },
   {
     id: "ORD-002",
@@ -36,15 +43,19 @@ const mockOrders: Order[] = [
     status: "completed",
     total: 159.99,
     items: 2,
+    location: "Los Angeles",
+    collector: "Bob Johnson"
   },
-  // Add more mock orders as needed
 ];
+
+const locations = ["All Locations", "New York", "Los Angeles", "Chicago", "Miami"];
+const collectors = ["All Collectors", "Alice Smith", "Bob Johnson", "Carol Williams"];
+const statuses = ["All Statuses", "pending", "processing", "completed", "cancelled"];
 
 const Orders = () => {
   const { data: orders, isLoading } = useQuery({
     queryKey: ["orders"],
     queryFn: async () => {
-      // Simulate API call
       return new Promise<Order[]>((resolve) => {
         setTimeout(() => resolve(mockOrders), 1000);
       });
@@ -65,6 +76,64 @@ const Orders = () => {
         <h1 className="text-2xl font-bold">Orders</h1>
       </div>
 
+      {/* Filter Zone */}
+      <Card className="mb-6">
+        <CardContent className="pt-6">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {/* Search Input */}
+            <div className="relative">
+              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search orders..."
+                className="pl-8"
+              />
+            </div>
+
+            {/* Location Filter */}
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Location" />
+              </SelectTrigger>
+              <SelectContent>
+                {locations.map((location) => (
+                  <SelectItem key={location} value={location.toLowerCase()}>
+                    {location}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {/* Collector Filter */}
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Collector" />
+              </SelectTrigger>
+              <SelectContent>
+                {collectors.map((collector) => (
+                  <SelectItem key={collector} value={collector.toLowerCase()}>
+                    {collector}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {/* Status Filter */}
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                {statuses.map((status) => (
+                  <SelectItem key={status} value={status.toLowerCase()}>
+                    {status.charAt(0).toUpperCase() + status.slice(1)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </CardContent>
+      </Card>
+
       <Card>
         <CardHeader>
           <CardTitle>Recent Orders</CardTitle>
@@ -79,6 +148,8 @@ const Orders = () => {
                 <TableHead>Status</TableHead>
                 <TableHead>Total</TableHead>
                 <TableHead>Items</TableHead>
+                <TableHead>Location</TableHead>
+                <TableHead>Collector</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -104,6 +175,8 @@ const Orders = () => {
                   </TableCell>
                   <TableCell>${order.total.toFixed(2)}</TableCell>
                   <TableCell>{order.items}</TableCell>
+                  <TableCell>{order.location}</TableCell>
+                  <TableCell>{order.collector}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
