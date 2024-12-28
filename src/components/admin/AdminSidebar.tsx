@@ -9,16 +9,33 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { UserRole } from "@/types/user";
 
-const menuItems = [
-  { title: "Dashboard", icon: Home, url: "/" },
-  { title: "Users", icon: Users, url: "/users" },
-  { title: "Products", icon: ShoppingCart, url: "/products" },
-  { title: "Analytics", icon: BarChart2, url: "/analytics" },
-  { title: "Settings", icon: Settings, url: "/settings" },
-];
+// For demo purposes, we'll hardcode the role. In a real app, this would come from auth context
+const currentUserRole: UserRole = 'admin';
+
+const getMenuItems = (role: UserRole) => {
+  const baseItems = [
+    { title: "Dashboard", icon: Home, url: "/" },
+  ];
+
+  const collectorItems = [
+    { title: "Orders", icon: ShoppingCart, url: "/orders" },
+  ];
+
+  const adminItems = [
+    { title: "Users", icon: Users, url: "/users" },
+    { title: "Products", icon: ShoppingCart, url: "/products" },
+    { title: "Analytics", icon: BarChart2, url: "/analytics" },
+    { title: "Settings", icon: Settings, url: "/settings" },
+  ];
+
+  return [...baseItems, ...(role === 'admin' ? adminItems : collectorItems)];
+};
 
 export function AdminSidebar() {
+  const menuItems = getMenuItems(currentUserRole);
+
   return (
     <Sidebar>
       <SidebarContent>
