@@ -22,6 +22,9 @@ interface Order {
   items: number;
   location?: string;
   collector?: string;
+  paymentStatus: 'paid' | 'pending' | 'failed';
+  deliveryDate: string;
+  deliveryWindow: string;
 }
 
 // Mock data with additional fields
@@ -34,7 +37,10 @@ const mockOrders: Order[] = [
     total: 299.99,
     items: 3,
     location: "New York",
-    collector: "Alice Smith"
+    collector: "Alice Smith",
+    paymentStatus: "paid",
+    deliveryDate: "2024-02-22",
+    deliveryWindow: "09:00 AM - 12:00 PM"
   },
   {
     id: "ORD-002",
@@ -44,7 +50,10 @@ const mockOrders: Order[] = [
     total: 159.99,
     items: 2,
     location: "Los Angeles",
-    collector: "Bob Johnson"
+    collector: "Bob Johnson",
+    paymentStatus: "pending",
+    deliveryDate: "2024-02-21",
+    deliveryWindow: "02:00 PM - 05:00 PM"
   },
 ];
 
@@ -146,10 +155,13 @@ const Orders = () => {
                 <TableHead>Customer</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead>Payment Status</TableHead>
                 <TableHead>Total</TableHead>
                 <TableHead>Items</TableHead>
                 <TableHead>Location</TableHead>
                 <TableHead>Collector</TableHead>
+                <TableHead>Delivery Date</TableHead>
+                <TableHead>Time Window</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -173,10 +185,25 @@ const Orders = () => {
                       {order.status}
                     </Badge>
                   </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={
+                        order.paymentStatus === "paid"
+                          ? "default"
+                          : order.paymentStatus === "pending"
+                          ? "secondary"
+                          : "destructive"
+                      }
+                    >
+                      {order.paymentStatus}
+                    </Badge>
+                  </TableCell>
                   <TableCell>${order.total.toFixed(2)}</TableCell>
                   <TableCell>{order.items}</TableCell>
                   <TableCell>{order.location}</TableCell>
                   <TableCell>{order.collector}</TableCell>
+                  <TableCell>{new Date(order.deliveryDate).toLocaleDateString()}</TableCell>
+                  <TableCell>{order.deliveryWindow}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
