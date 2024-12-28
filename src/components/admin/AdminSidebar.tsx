@@ -1,4 +1,4 @@
-import { Home, Users, ShoppingCart, Settings, BarChart2, Package, ClipboardList } from "lucide-react";
+import { Home, Users, Package, Settings, BarChart2, ClipboardList } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -24,10 +24,9 @@ const getMenuItems = (role: UserRole) => {
   ];
 
   const adminItems = [
-    { title: "Orders List", icon: ClipboardList, url: "/orders" },
-    { title: "Single Order", icon: ShoppingCart, url: "/orders/:id" },
-    { title: "Products List", icon: Package, url: "/products" },
-    { title: "Users", icon: Users, url: "/users" },
+    { title: "Products", icon: Package, url: "/products" },
+    { title: "Orders", icon: ClipboardList, url: "/orders" },
+    { title: "Customers", icon: Users, url: "/customers" },
     { title: "Analytics", icon: BarChart2, url: "/analytics" },
     { title: "Settings", icon: Settings, url: "/settings" },
   ];
@@ -42,7 +41,7 @@ export function AdminSidebar() {
     <Sidebar>
       <SidebarContent>
         <div className="p-6">
-          <h1 className="text-2xl font-bold text-primary">Soft UI Admin</h1>
+          <h1 className="text-2xl font-bold text-primary">Store Admin</h1>
         </div>
         <SidebarGroup>
           <SidebarGroupLabel>Menu</SidebarGroupLabel>
