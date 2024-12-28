@@ -24,6 +24,7 @@ const getMenuItems = (role: UserRole) => {
   ];
 
   const adminItems = [
+    { title: "Orders", icon: ShoppingCart, url: "/orders" },
     { title: "Users", icon: Users, url: "/users" },
     { title: "Products", icon: ShoppingCart, url: "/products" },
     { title: "Analytics", icon: BarChart2, url: "/analytics" },
