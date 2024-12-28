@@ -1,17 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search } from "lucide-react";
+import { OrderFilters } from "@/components/orders/OrderFilters";
+import { OrdersTable } from "@/components/orders/OrdersTable";
 
 interface Order {
   id: string;
@@ -88,58 +78,11 @@ const Orders = () => {
       {/* Filter Zone */}
       <Card className="mb-6">
         <CardContent className="pt-6">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {/* Search Input */}
-            <div className="relative">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search orders..."
-                className="pl-8"
-              />
-            </div>
-
-            {/* Location Filter */}
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="Location" />
-              </SelectTrigger>
-              <SelectContent>
-                {locations.map((location) => (
-                  <SelectItem key={location} value={location.toLowerCase()}>
-                    {location}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            {/* Collector Filter */}
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="Collector" />
-              </SelectTrigger>
-              <SelectContent>
-                {collectors.map((collector) => (
-                  <SelectItem key={collector} value={collector.toLowerCase()}>
-                    {collector}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            {/* Status Filter */}
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="Status" />
-              </SelectTrigger>
-              <SelectContent>
-                {statuses.map((status) => (
-                  <SelectItem key={status} value={status.toLowerCase()}>
-                    {status.charAt(0).toUpperCase() + status.slice(1)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          <OrderFilters
+            locations={locations}
+            collectors={collectors}
+            statuses={statuses}
+          />
         </CardContent>
       </Card>
 
@@ -148,66 +91,7 @@ const Orders = () => {
           <CardTitle>Recent Orders</CardTitle>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Order ID</TableHead>
-                <TableHead>Customer</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Payment Status</TableHead>
-                <TableHead>Total</TableHead>
-                <TableHead>Items</TableHead>
-                <TableHead>Location</TableHead>
-                <TableHead>Collector</TableHead>
-                <TableHead>Delivery Date</TableHead>
-                <TableHead>Time Window</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {orders?.map((order) => (
-                <TableRow key={order.id}>
-                  <TableCell className="font-medium">{order.id}</TableCell>
-                  <TableCell>{order.customerName}</TableCell>
-                  <TableCell>{new Date(order.date).toLocaleDateString()}</TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={
-                        order.status === "completed"
-                          ? "default"
-                          : order.status === "pending"
-                          ? "secondary"
-                          : order.status === "processing"
-                          ? "outline"
-                          : "destructive"
-                      }
-                    >
-                      {order.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={
-                        order.paymentStatus === "paid"
-                          ? "default"
-                          : order.paymentStatus === "pending"
-                          ? "secondary"
-                          : "destructive"
-                      }
-                    >
-                      {order.paymentStatus}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>${order.total.toFixed(2)}</TableCell>
-                  <TableCell>{order.items}</TableCell>
-                  <TableCell>{order.location}</TableCell>
-                  <TableCell>{order.collector}</TableCell>
-                  <TableCell>{new Date(order.deliveryDate).toLocaleDateString()}</TableCell>
-                  <TableCell>{order.deliveryWindow}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <OrdersTable orders={orders || []} />
         </CardContent>
       </Card>
     </div>
