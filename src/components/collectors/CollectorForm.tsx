@@ -1,17 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { X } from "lucide-react";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Check, ChevronsUpDown, X } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useState } from "react";
 import { Collector } from "@/types/user";
 import { Badge } from "@/components/ui/badge";
 import { getAllCities } from "@/data/locations";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 interface CollectorFormProps {
   collector: Partial<Collector>;
@@ -21,6 +18,9 @@ interface CollectorFormProps {
 }
 
 export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: CollectorFormProps) => {
+  const [open, setOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  
   // Get all available cities and ensure it's never undefined
   const availableCities = getAllCities() || [];
 
@@ -32,6 +32,7 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
         locations: [...currentLocations, city]
       });
     }
+    setOpen(false);
   };
 
   const handleLocationRemove = (cityToRemove: string) => {
@@ -41,6 +42,11 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
       locations: currentLocations.filter(city => city !== cityToRemove)
     });
   };
+
+  // Ensure filteredLocations is never undefined
+  const filteredLocations = availableCities.filter(city => 
+    city.toLowerCase().includes(searchValue.toLowerCase())
+  ) || [];
 
   return (
     <div className="grid gap-4 py-4">
@@ -116,20 +122,50 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
             </Badge>
           ))}
         </div>
-        <Select onValueChange={handleLocationSelect}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select a location" />
-          </SelectTrigger>
-          <SelectContent>
-            {availableCities
-              .filter(city => !(collector.locations || []).includes(city))
-              .map((city) => (
-                <SelectItem key={city} value={city}>
-                  {city}
-                </SelectItem>
-              ))}
-          </SelectContent>
-        </Select>
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              role="combobox"
+              aria-expanded={open}
+              className="justify-between"
+            >
+              Add location...
+              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-[400px] p-0">
+            <Command>
+              <CommandInput 
+                placeholder="Search location..." 
+                value={searchValue}
+                onValueChange={setSearchValue}
+              />
+              <CommandEmpty>No location found.</CommandEmpty>
+              {filteredLocations.length > 0 && (
+                <CommandGroup className="max-h-[300px] overflow-auto">
+                  {filteredLocations.map((location) => (
+                    <CommandItem
+                      key={location}
+                      value={location}
+                      onSelect={() => handleLocationSelect(location)}
+                    >
+                      <Check
+                        className={cn(
+                          "mr-2 h-4 w-4",
+                          (collector.locations || []).includes(location)
+                            ? "opacity-100"
+                            : "opacity-0"
+                        )}
+                      />
+                      {location}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              )}
+            </Command>
+          </PopoverContent>
+        </Popover>
       </div>
       <Button onClick={onSubmit}>{isEditing ? 'Update' : 'Create'}</Button>
     </div>
