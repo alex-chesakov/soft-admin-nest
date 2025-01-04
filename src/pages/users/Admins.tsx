@@ -17,6 +17,8 @@ import { useToast } from "@/components/ui/use-toast";
 const Admins = () => {
   const [admins, setAdmins] = useState<Admin[]>([]);
   const [open, setOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [selectedAdmin, setSelectedAdmin] = useState<Admin | null>(null);
   const [newAdmin, setNewAdmin] = useState({
     name: "",
     email: "",
@@ -62,12 +64,60 @@ const Admins = () => {
     });
   };
 
+  const handleEditClick = (admin: Admin) => {
+    setSelectedAdmin(admin);
+    setNewAdmin({
+      name: admin.name,
+      email: admin.email,
+      password: admin.password,
+    });
+    setIsEditing(true);
+    setOpen(true);
+  };
+
+  const handleUpdateAdmin = () => {
+    if (!selectedAdmin) return;
+
+    const updatedAdmins = admins.map((admin) =>
+      admin.id === selectedAdmin.id
+        ? {
+            ...admin,
+            name: newAdmin.name,
+            email: newAdmin.email,
+            password: newAdmin.password,
+          }
+        : admin
+    );
+
+    setAdmins(updatedAdmins);
+    localStorage.setItem("admins", JSON.stringify(updatedAdmins));
+    
+    setNewAdmin({ name: "", email: "", password: "" });
+    setSelectedAdmin(null);
+    setIsEditing(false);
+    setOpen(false);
+    
+    toast({
+      title: "Success",
+      description: "Admin updated successfully",
+    });
+  };
+
+  const handleDialogClose = (open: boolean) => {
+    if (!open) {
+      setNewAdmin({ name: "", email: "", password: "" });
+      setSelectedAdmin(null);
+      setIsEditing(false);
+    }
+    setOpen(open);
+  };
+
   return (
     <div className="p-6">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Admins Management</CardTitle>
-          <Dialog open={open} onOpenChange={setOpen}>
+          <Dialog open={open} onOpenChange={handleDialogClose}>
             <DialogTrigger asChild>
               <Button>
                 <UserPlus className="mr-2 h-4 w-4" />
@@ -76,7 +126,9 @@ const Admins = () => {
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Create New Admin</DialogTitle>
+                <DialogTitle>
+                  {isEditing ? "Edit Admin" : "Create New Admin"}
+                </DialogTitle>
               </DialogHeader>
               <div className="grid gap-4 py-4">
                 <div className="grid gap-2">
@@ -111,7 +163,9 @@ const Admins = () => {
                     }
                   />
                 </div>
-                <Button onClick={handleCreateAdmin}>Create</Button>
+                <Button onClick={isEditing ? handleUpdateAdmin : handleCreateAdmin}>
+                  {isEditing ? "Update" : "Create"}
+                </Button>
               </div>
             </DialogContent>
           </Dialog>
@@ -122,16 +176,22 @@ const Admins = () => {
               <p className="text-muted-foreground">No admins found.</p>
             ) : (
               <div className="grid gap-4">
-                {admins.map((admin) => (
+                {admins.map((admin, index) => (
                   <div
                     key={admin.id}
-                    className="flex items-center justify-between p-4 border rounded-lg"
+                    className="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-muted/50 transition-colors"
+                    onClick={() => handleEditClick(admin)}
                   >
-                    <div>
-                      <p className="font-medium">{admin.name}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {admin.email}
-                      </p>
+                    <div className="flex items-center gap-4">
+                      <span className="font-medium text-muted-foreground">
+                        {index + 1}.
+                      </span>
+                      <div>
+                        <p className="font-medium">{admin.name}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {admin.email}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 ))}
