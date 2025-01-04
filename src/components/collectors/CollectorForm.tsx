@@ -3,11 +3,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { defaultLocations } from "@/types/location";
 import { useState } from "react";
 import { Collector } from "@/types/user";
+import { Badge } from "@/components/ui/badge";
+import { getAllCities } from "@/data/locations";
 
 interface CollectorFormProps {
   collector: Partial<Collector>;
@@ -18,17 +19,33 @@ interface CollectorFormProps {
 
 export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: CollectorFormProps) => {
   const [open, setOpen] = useState(false);
-  const locations = defaultLocations.map(loc => loc.id);
+  const [searchValue, setSearchValue] = useState("");
+  
+  // Get all available cities
+  const availableCities = getAllCities();
 
-  const handleLocationSelect = (locationId: string) => {
+  const handleLocationSelect = (city: string) => {
+    const currentLocations = collector.locations || [];
+    if (!currentLocations.includes(city)) {
+      setCollector({
+        ...collector,
+        locations: [...currentLocations, city]
+      });
+    }
+    setOpen(false);
+  };
+
+  const handleLocationRemove = (cityToRemove: string) => {
     const currentLocations = collector.locations || [];
     setCollector({
       ...collector,
-      locations: currentLocations.includes(locationId)
-        ? currentLocations.filter(loc => loc !== locationId)
-        : [...currentLocations, locationId]
+      locations: currentLocations.filter(city => city !== cityToRemove)
     });
   };
+
+  const filteredLocations = availableCities.filter(city => 
+    city.toLowerCase().includes(searchValue.toLowerCase())
+  );
 
   return (
     <div className="grid gap-4 py-4">
@@ -89,6 +106,21 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
       )}
       <div className="grid gap-2">
         <Label>Locations</Label>
+        <div className="flex flex-wrap gap-2 mb-2">
+          {(collector.locations || []).map((location) => (
+            <Badge key={location} variant="secondary" className="flex items-center gap-1">
+              {location}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-4 w-4 p-0 hover:bg-transparent"
+                onClick={() => handleLocationRemove(location)}
+              >
+                <X className="h-3 w-3" />
+              </Button>
+            </Badge>
+          ))}
+        </div>
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button
@@ -97,32 +129,34 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
               aria-expanded={open}
               className="justify-between"
             >
-              {collector.locations?.length
-                ? `${collector.locations.length} selected`
-                : "Select locations..."}
+              Add location...
               <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-[400px] p-0">
             <Command>
-              <CommandInput placeholder="Search location..." />
+              <CommandInput 
+                placeholder="Search location..." 
+                value={searchValue}
+                onValueChange={setSearchValue}
+              />
               <CommandEmpty>No location found.</CommandEmpty>
               <CommandGroup className="max-h-[300px] overflow-auto">
-                {defaultLocations.map((location) => (
+                {filteredLocations.map((location) => (
                   <CommandItem
-                    key={location.id}
-                    value={location.id}
-                    onSelect={() => handleLocationSelect(location.id)}
+                    key={location}
+                    value={location}
+                    onSelect={() => handleLocationSelect(location)}
                   >
                     <Check
                       className={cn(
                         "mr-2 h-4 w-4",
-                        (collector.locations || []).includes(location.id)
+                        (collector.locations || []).includes(location)
                           ? "opacity-100"
                           : "opacity-0"
                       )}
                     />
-                    {location.name}
+                    {location}
                   </CommandItem>
                 ))}
               </CommandGroup>
