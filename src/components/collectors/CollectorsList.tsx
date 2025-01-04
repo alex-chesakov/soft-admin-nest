@@ -1,6 +1,5 @@
 import { Card } from "@/components/ui/card";
 import { Collector } from "@/types/user";
-import { defaultLocations } from "@/types/location";
 import { Button } from "@/components/ui/button";
 import { Edit, Trash2 } from "lucide-react";
 
@@ -38,9 +37,7 @@ export const CollectorsList = ({ collectors, onEdit, onDelete }: CollectorsListP
                       {collector.phone}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      Locations: {collector.locations.map(id => 
-                        defaultLocations.find(l => l.id === id)?.name
-                      ).join(', ')}
+                      Locations: {collector.locations?.join(', ') || 'No locations assigned'}
                     </p>
                   </div>
                 </div>
