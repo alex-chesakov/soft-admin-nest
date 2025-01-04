@@ -1,4 +1,4 @@
-import { Home, Users, Package, Settings, BarChart2, ClipboardList } from "lucide-react";
+import { Home, Users, Package, Settings, BarChart2, ClipboardList, MapPin } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -28,6 +28,7 @@ const getMenuItems = (role: UserRole) => {
     { title: "Orders", icon: ClipboardList, url: "/orders" },
     { title: "Customers", icon: Users, url: "/customers" },
     { title: "Users", icon: Users, url: "/users" },
+    { title: "Locations", icon: MapPin, url: "/locations" },
     { title: "Analytics", icon: BarChart2, url: "/analytics" },
     { title: "Settings", icon: Settings, url: "/settings" },
   ];

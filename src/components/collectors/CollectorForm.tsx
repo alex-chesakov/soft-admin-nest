@@ -1,8 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { defaultLocations } from "@/types/location";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { getAllCities } from "@/data/locations";
+import { useState } from "react";
 import { Collector } from "@/types/user";
 
 interface CollectorFormProps {
@@ -13,12 +17,15 @@ interface CollectorFormProps {
 }
 
 export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: CollectorFormProps) => {
-  const handleLocationChange = (locationId: string) => {
+  const [open, setOpen] = useState(false);
+  const cities = getAllCities();
+
+  const handleLocationSelect = (city: string) => {
     setCollector({
       ...collector,
-      locations: collector.locations?.includes(locationId)
-        ? collector.locations.filter(id => id !== locationId)
-        : [...(collector.locations || []), locationId]
+      locations: collector.locations?.includes(city)
+        ? collector.locations.filter(loc => loc !== city)
+        : [...(collector.locations || []), city]
     });
   };
 
@@ -81,18 +88,46 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
       )}
       <div className="grid gap-2">
         <Label>Locations</Label>
-        <div className="grid gap-2">
-          {defaultLocations.map((location) => (
-            <div key={location.id} className="flex items-center space-x-2">
-              <Checkbox
-                id={`location-${location.id}`}
-                checked={collector.locations?.includes(location.id)}
-                onCheckedChange={() => handleLocationChange(location.id)}
-              />
-              <Label htmlFor={`location-${location.id}`}>{location.name}</Label>
-            </div>
-          ))}
-        </div>
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              role="combobox"
+              aria-expanded={open}
+              className="justify-between"
+            >
+              {collector.locations?.length
+                ? `${collector.locations.length} selected`
+                : "Select locations..."}
+              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-[400px] p-0">
+            <Command>
+              <CommandInput placeholder="Search location..." />
+              <CommandEmpty>No location found.</CommandEmpty>
+              <CommandGroup className="max-h-[300px] overflow-auto">
+                {cities.map((city) => (
+                  <CommandItem
+                    key={city}
+                    value={city}
+                    onSelect={() => handleLocationSelect(city)}
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        collector.locations?.includes(city)
+                          ? "opacity-100"
+                          : "opacity-0"
+                      )}
+                    />
+                    {city}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </Command>
+          </PopoverContent>
+        </Popover>
       </div>
       <Button onClick={onSubmit}>{isEditing ? 'Update' : 'Create'}</Button>
     </div>
