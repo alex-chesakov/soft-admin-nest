@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { Collector } from "@/types/user";
 import { Badge } from "@/components/ui/badge";
+import { getAllCities } from "@/data/locations";
 
 interface CollectorFormProps {
   collector: Partial<Collector>;
@@ -18,18 +19,16 @@ interface CollectorFormProps {
 
 export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: CollectorFormProps) => {
   const [open, setOpen] = useState(false);
-  const [availableCities, setAvailableCities] = useState<string[]>([]);
   const [searchValue, setSearchValue] = useState("");
+  const [availableCities, setAvailableCities] = useState<string[]>([]);
   
   // Initialize locations array if undefined
   const locations = collector.locations || [];
 
   useEffect(() => {
-    // Load available cities from localStorage
-    const savedCities = localStorage.getItem('selectedCities');
-    if (savedCities) {
-      setAvailableCities(JSON.parse(savedCities));
-    }
+    // Get all available cities
+    const cities = getAllCities();
+    setAvailableCities(cities);
   }, []);
 
   const handleLocationSelect = (city: string) => {
@@ -41,6 +40,7 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
       });
     }
     setOpen(false);
+    setSearchValue("");
   };
 
   const handleLocationRemove = (cityToRemove: string) => {
@@ -152,6 +152,7 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
                         key={city}
                         value={city}
                         onSelect={() => handleLocationSelect(city)}
+                        className="cursor-pointer"
                       >
                         <Check
                           className={cn(
