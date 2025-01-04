@@ -19,11 +19,11 @@ import Collectors from "./pages/users/Collectors";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
+  <BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
         <MainLayout>
           <Routes>
             <Route path="/" element={<Index />} />
@@ -39,9 +39,9 @@ const App = () => (
             <Route path="/users/collectors" element={<Collectors />} />
           </Routes>
         </MainLayout>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </BrowserRouter>
 );
 
 export default App;
