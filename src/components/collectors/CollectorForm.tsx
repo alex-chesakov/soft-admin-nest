@@ -39,7 +39,7 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
         locations: [...currentLocations, city]
       });
     }
-    setSearchValue(city);
+    setSearchValue("");
     setOpen(false);
   };
 
@@ -142,7 +142,6 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
                 setSearchValue(e.target.value);
                 setOpen(e.target.value.length > 0);
               }}
-              onClick={() => setOpen(searchValue.length > 0)}
             />
           </PopoverTrigger>
           <PopoverContent className="w-[400px] p-0" align="start">
@@ -150,7 +149,10 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
               <CommandInput 
                 placeholder="Search location..." 
                 value={searchValue}
-                onValueChange={setSearchValue}
+                onValueChange={(value) => {
+                  setSearchValue(value);
+                  setOpen(value.length > 0);
+                }}
               />
               <CommandList>
                 <CommandEmpty>No location found.</CommandEmpty>
