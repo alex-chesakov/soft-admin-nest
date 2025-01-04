@@ -50,14 +50,6 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
     });
   };
 
-  // Filter locations only if searchValue has at least 1 character
-  const filteredLocations = searchValue.length > 0
-    ? availableCities.filter(city => 
-        !currentLocations.includes(city) && 
-        city.toLowerCase().includes(searchValue.toLowerCase())
-      )
-    : [];
-
   return (
     <div className="grid gap-4 py-4">
       <div className="grid gap-2">
@@ -153,22 +145,27 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
               <CommandList>
                 <CommandEmpty>No location found.</CommandEmpty>
                 <CommandGroup>
-                  {filteredLocations.map((location) => (
-                    <CommandItem
-                      key={location}
-                      value={location}
-                      onSelect={() => handleLocationSelect(location)}
-                      className="cursor-pointer"
-                    >
-                      <Check
-                        className={cn(
-                          "mr-2 h-4 w-4",
-                          currentLocations.includes(location) ? "opacity-100" : "opacity-0"
-                        )}
-                      />
-                      {location}
-                    </CommandItem>
-                  ))}
+                  {availableCities
+                    .filter(city => 
+                      !currentLocations.includes(city) && 
+                      city.toLowerCase().includes(searchValue.toLowerCase())
+                    )
+                    .map((location) => (
+                      <CommandItem
+                        key={location}
+                        value={location}
+                        onSelect={() => handleLocationSelect(location)}
+                        className="cursor-pointer"
+                      >
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            currentLocations.includes(location) ? "opacity-100" : "opacity-0"
+                          )}
+                        />
+                        {location}
+                      </CommandItem>
+                    ))}
                 </CommandGroup>
               </CommandList>
             </Command>

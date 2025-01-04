@@ -36,9 +36,12 @@ export const CollectorsList = ({ collectors, onEdit, onDelete }: CollectorsListP
                     <p className="text-sm text-muted-foreground">
                       {collector.phone}
                     </p>
-                    <p className="text-sm text-muted-foreground">
-                      Locations: {collector.locations?.join(', ') || 'No locations assigned'}
-                    </p>
+                    <div className="text-sm text-muted-foreground">
+                      <span className="font-medium">Locations:</span>{" "}
+                      {collector.locations && collector.locations.length > 0 
+                        ? collector.locations.join(', ')
+                        : 'No locations assigned'}
+                    </div>
                   </div>
                 </div>
                 <div className="flex gap-2">
