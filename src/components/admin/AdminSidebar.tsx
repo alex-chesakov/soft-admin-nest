@@ -27,6 +27,7 @@ const getMenuItems = (role: UserRole) => {
     { title: "Products", icon: Package, url: "/products" },
     { title: "Orders", icon: ClipboardList, url: "/orders" },
     { title: "Customers", icon: Users, url: "/customers" },
+    { title: "Users", icon: Users, url: "/users" },
     { title: "Analytics", icon: BarChart2, url: "/analytics" },
     { title: "Settings", icon: Settings, url: "/settings" },
   ];

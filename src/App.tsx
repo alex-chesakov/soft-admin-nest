@@ -12,6 +12,7 @@ import OrderDetails from "./pages/OrderDetails";
 import Analytics from "./pages/Analytics";
 import Customers from "./pages/Customers";
 import Settings from "./pages/Settings";
+import Users from "./pages/Users";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/customers" element={<Customers />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/users" element={<Users />} />
           </Routes>
         </MainLayout>
       </BrowserRouter>
