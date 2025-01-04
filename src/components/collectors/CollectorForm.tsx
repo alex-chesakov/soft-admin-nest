@@ -134,25 +134,21 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
         </div>
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
-            <Input
-              type="text"
-              placeholder="Type to search locations..."
-              value={searchValue}
-              onChange={(e) => {
-                setSearchValue(e.target.value);
-                setOpen(e.target.value.length > 0);
-              }}
-            />
+            <Button
+              variant="outline"
+              role="combobox"
+              aria-expanded={open}
+              className="w-full justify-between"
+            >
+              {searchValue || "Select location..."}
+            </Button>
           </PopoverTrigger>
           <PopoverContent className="w-[400px] p-0" align="start">
             <Command>
               <CommandInput 
                 placeholder="Search location..." 
                 value={searchValue}
-                onValueChange={(value) => {
-                  setSearchValue(value);
-                  setOpen(value.length > 0);
-                }}
+                onValueChange={setSearchValue}
               />
               <CommandList>
                 <CommandEmpty>No location found.</CommandEmpty>
@@ -163,14 +159,6 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
                       value={location}
                       onSelect={() => handleLocationSelect(location)}
                     >
-                      <Check
-                        className={cn(
-                          "mr-2 h-4 w-4",
-                          currentLocations.includes(location)
-                            ? "opacity-100"
-                            : "opacity-0"
-                        )}
-                      />
                       {location}
                     </CommandItem>
                   ))}
