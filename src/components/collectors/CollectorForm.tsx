@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Check, ChevronsUpDown, X } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Collector } from "@/types/user";
@@ -33,6 +33,7 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
       });
     }
     setOpen(false);
+    setSearchValue("");
   };
 
   const handleLocationRemove = (cityToRemove: string) => {
@@ -125,15 +126,16 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
         </div>
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              role="combobox"
-              aria-expanded={open}
-              className="justify-between"
-            >
-              Add location...
-              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-            </Button>
+            <Input
+              type="text"
+              placeholder="Type to search locations..."
+              value={searchValue}
+              onChange={(e) => {
+                setSearchValue(e.target.value);
+                setOpen(true);
+              }}
+              onClick={() => setOpen(true)}
+            />
           </PopoverTrigger>
           <PopoverContent className="w-[400px] p-0">
             <Command shouldFilter={false}>
