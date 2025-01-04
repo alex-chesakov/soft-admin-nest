@@ -137,6 +137,27 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
           </PopoverTrigger>
           <PopoverContent className="w-[400px] p-0">
             <Command>
+              {/* Show selected locations at the top of popup */}
+              {locations.length > 0 && (
+                <div className="border-b border-border p-2">
+                  <p className="text-sm text-muted-foreground mb-2">Selected locations:</p>
+                  <div className="flex flex-wrap gap-1">
+                    {locations.map((location) => (
+                      <Badge key={location} variant="secondary" className="flex items-center gap-1">
+                        {location}
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-4 w-4 p-0 hover:bg-transparent"
+                          onClick={() => handleLocationRemove(location)}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
               <CommandInput 
                 placeholder="Search locations..." 
                 value={searchValue}
