@@ -7,6 +7,10 @@ export interface User {
   email: string;
 }
 
+export interface Admin extends User {
+  password: string;
+}
+
 export const hasPermission = (role: UserRole, permission: string): boolean => {
   const permissions = {
     admin: ['all'],
