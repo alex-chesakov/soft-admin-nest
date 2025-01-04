@@ -32,23 +32,25 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
   }, []);
 
   const handleLocationSelect = (selectedCity: string) => {
-    console.log("Selecting city:", selectedCity);
     if (!locations.includes(selectedCity)) {
+      const updatedLocations = [...locations, selectedCity];
       setCollector({
         ...collector,
-        locations: [...locations, selectedCity]
+        locations: updatedLocations
       });
+      console.log("Updated locations:", updatedLocations);
     }
     setOpen(false);
     setSearchValue("");
   };
 
   const handleLocationRemove = (cityToRemove: string) => {
-    console.log("Removing city:", cityToRemove);
+    const updatedLocations = locations.filter(city => city !== cityToRemove);
     setCollector({
       ...collector,
-      locations: locations.filter(city => city !== cityToRemove)
+      locations: updatedLocations
     });
+    console.log("Removed city, updated locations:", updatedLocations);
   };
 
   return (
