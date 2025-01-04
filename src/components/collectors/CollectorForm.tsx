@@ -5,10 +5,9 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Check, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Collector } from "@/types/user";
 import { Badge } from "@/components/ui/badge";
-import { getAllCities } from "@/data/locations";
 
 interface CollectorFormProps {
   collector: Partial<Collector>;
@@ -20,12 +19,18 @@ interface CollectorFormProps {
 export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: CollectorFormProps) => {
   const [open, setOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const [availableCities, setAvailableCities] = useState<string[]>([]);
   
   // Ensure locations is always initialized as an array
   const currentLocations = collector.locations || [];
-  
-  // Get all available cities and ensure it's never undefined
-  const availableCities = getAllCities() || [];
+
+  useEffect(() => {
+    // Get selected cities from localStorage
+    const savedCities = localStorage.getItem('selectedCities');
+    if (savedCities) {
+      setAvailableCities(JSON.parse(savedCities));
+    }
+  }, []);
 
   const handleLocationSelect = (city: string) => {
     if (!currentLocations.includes(city)) {
@@ -34,7 +39,6 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
         locations: [...currentLocations, city]
       });
     }
-    setOpen(false);
     setSearchValue("");
   };
 
@@ -45,11 +49,13 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
     });
   };
 
-  // Filter locations and ensure it's never undefined
-  const filteredLocations = availableCities.filter(city => 
-    !currentLocations.includes(city) && 
-    city.toLowerCase().includes(searchValue.toLowerCase())
-  );
+  // Filter locations only if searchValue has at least 1 character
+  const filteredLocations = searchValue.length > 0
+    ? availableCities.filter(city => 
+        !currentLocations.includes(city) && 
+        city.toLowerCase().includes(searchValue.toLowerCase())
+      )
+    : [];
 
   return (
     <div className="grid gap-4 py-4">
@@ -133,9 +139,9 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
               value={searchValue}
               onChange={(e) => {
                 setSearchValue(e.target.value);
-                setOpen(true);
+                setOpen(e.target.value.length > 0);
               }}
-              onClick={() => setOpen(true)}
+              onClick={() => setOpen(searchValue.length > 0)}
             />
           </PopoverTrigger>
           <PopoverContent className="w-[400px] p-0" align="start">
@@ -143,7 +149,10 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
               <CommandInput 
                 placeholder="Search location..." 
                 value={searchValue}
-                onValueChange={setSearchValue}
+                onValueChange={(value) => {
+                  setSearchValue(value);
+                  setOpen(value.length > 0);
+                }}
               />
               <CommandList>
                 <CommandEmpty>No location found.</CommandEmpty>
