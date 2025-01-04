@@ -38,9 +38,9 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
         ...collector,
         locations: [...currentLocations, city]
       });
-      setSearchValue(city); // Keep the selected value in the input
-      setOpen(false); // Close the popover after selection
     }
+    setSearchValue(city);
+    setOpen(false);
   };
 
   const handleLocationRemove = (cityToRemove: string) => {
@@ -150,10 +150,7 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
               <CommandInput 
                 placeholder="Search location..." 
                 value={searchValue}
-                onValueChange={(value) => {
-                  setSearchValue(value);
-                  setOpen(value.length > 0);
-                }}
+                onValueChange={setSearchValue}
               />
               <CommandList>
                 <CommandEmpty>No location found.</CommandEmpty>
