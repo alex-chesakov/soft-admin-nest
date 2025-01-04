@@ -13,6 +13,8 @@ import Analytics from "./pages/Analytics";
 import Customers from "./pages/Customers";
 import Settings from "./pages/Settings";
 import Users from "./pages/Users";
+import Admins from "./pages/users/Admins";
+import Collectors from "./pages/users/Collectors";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +35,8 @@ const App = () => (
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/users" element={<Users />} />
+            <Route path="/users/admins" element={<Admins />} />
+            <Route path="/users/collectors" element={<Collectors />} />
           </Routes>
         </MainLayout>
       </BrowserRouter>
