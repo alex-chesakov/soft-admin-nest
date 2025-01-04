@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Check, X } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -139,32 +139,34 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
             />
           </PopoverTrigger>
           <PopoverContent className="w-[400px] p-0" align="start">
-            <Command shouldFilter={false}>
+            <Command>
               <CommandInput 
                 placeholder="Search location..." 
                 value={searchValue}
                 onValueChange={setSearchValue}
               />
-              <CommandEmpty>No location found.</CommandEmpty>
-              <CommandGroup>
-                {filteredLocations.map((location) => (
-                  <CommandItem
-                    key={location}
-                    value={location}
-                    onSelect={() => handleLocationSelect(location)}
-                  >
-                    <Check
-                      className={cn(
-                        "mr-2 h-4 w-4",
-                        currentLocations.includes(location)
-                          ? "opacity-100"
-                          : "opacity-0"
-                      )}
-                    />
-                    {location}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
+              <CommandList>
+                <CommandEmpty>No location found.</CommandEmpty>
+                <CommandGroup>
+                  {filteredLocations.map((location) => (
+                    <CommandItem
+                      key={location}
+                      value={location}
+                      onSelect={() => handleLocationSelect(location)}
+                    >
+                      <Check
+                        className={cn(
+                          "mr-2 h-4 w-4",
+                          currentLocations.includes(location)
+                            ? "opacity-100"
+                            : "opacity-0"
+                        )}
+                      />
+                      {location}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </CommandList>
             </Command>
           </PopoverContent>
         </Popover>
