@@ -149,7 +149,10 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
                           variant="ghost"
                           size="icon"
                           className="h-4 w-4 p-0 hover:bg-transparent"
-                          onClick={() => handleLocationRemove(location)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleLocationRemove(location);
+                          }}
                         >
                           <X className="h-3 w-3" />
                         </Button>
@@ -175,7 +178,7 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
                       <CommandItem
                         key={city}
                         value={city}
-                        onSelect={() => handleLocationSelect(city)}
+                        onSelect={handleLocationSelect}
                         className="cursor-pointer hover:bg-accent"
                       >
                         <Check
