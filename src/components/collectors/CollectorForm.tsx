@@ -153,7 +153,10 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
                       <CommandItem
                         key={location}
                         value={location}
-                        onSelect={() => handleLocationSelect(location)}
+                        onSelect={() => {
+                          handleLocationSelect(location);
+                          setOpen(false);
+                        }}
                         className="cursor-pointer"
                       >
                         <Check
