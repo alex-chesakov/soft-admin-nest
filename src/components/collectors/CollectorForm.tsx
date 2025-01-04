@@ -21,11 +21,13 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
   const [open, setOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   
+  // Ensure locations is always initialized as an array
+  const currentLocations = collector.locations || [];
+  
   // Get all available cities and ensure it's never undefined
   const availableCities = getAllCities() || [];
 
   const handleLocationSelect = (city: string) => {
-    const currentLocations = collector.locations || [];
     if (!currentLocations.includes(city)) {
       setCollector({
         ...collector,
@@ -37,7 +39,6 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
   };
 
   const handleLocationRemove = (cityToRemove: string) => {
-    const currentLocations = collector.locations || [];
     setCollector({
       ...collector,
       locations: currentLocations.filter(city => city !== cityToRemove)
@@ -46,7 +47,7 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
 
   // Filter locations and ensure it's never undefined
   const filteredLocations = availableCities.filter(city => 
-    !collector.locations?.includes(city) && 
+    !currentLocations.includes(city) && 
     city.toLowerCase().includes(searchValue.toLowerCase())
   );
 
@@ -110,7 +111,7 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
       <div className="grid gap-2">
         <Label>Locations</Label>
         <div className="flex flex-wrap gap-2 mb-2">
-          {(collector.locations || []).map((location) => (
+          {currentLocations.map((location) => (
             <Badge key={location} variant="secondary" className="flex items-center gap-1">
               {location}
               <Button
@@ -137,7 +138,7 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
               onClick={() => setOpen(true)}
             />
           </PopoverTrigger>
-          <PopoverContent className="w-[400px] p-0">
+          <PopoverContent className="w-[400px] p-0" align="start">
             <Command shouldFilter={false}>
               <CommandInput 
                 placeholder="Search location..." 
@@ -145,7 +146,7 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
                 onValueChange={setSearchValue}
               />
               <CommandEmpty>No location found.</CommandEmpty>
-              <CommandGroup className="max-h-[300px] overflow-auto">
+              <CommandGroup>
                 {filteredLocations.map((location) => (
                   <CommandItem
                     key={location}
@@ -155,7 +156,7 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
                     <Check
                       className={cn(
                         "mr-2 h-4 w-4",
-                        (collector.locations || []).includes(location)
+                        currentLocations.includes(location)
                           ? "opacity-100"
                           : "opacity-0"
                       )}
