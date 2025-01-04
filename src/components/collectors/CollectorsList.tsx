@@ -2,14 +2,15 @@ import { Card } from "@/components/ui/card";
 import { Collector } from "@/types/user";
 import { defaultLocations } from "@/types/location";
 import { Button } from "@/components/ui/button";
-import { Edit } from "lucide-react";
+import { Edit, Trash2 } from "lucide-react";
 
 interface CollectorsListProps {
   collectors: Collector[];
   onEdit: (collector: Collector) => void;
+  onDelete: (collectorId: string) => void;
 }
 
-export const CollectorsList = ({ collectors, onEdit }: CollectorsListProps) => {
+export const CollectorsList = ({ collectors, onEdit, onDelete }: CollectorsListProps) => {
   return (
     <div className="space-y-4">
       {collectors.length === 0 ? (
@@ -43,14 +44,24 @@ export const CollectorsList = ({ collectors, onEdit }: CollectorsListProps) => {
                     </p>
                   </div>
                 </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => onEdit(collector)}
-                  className="hover:bg-muted"
-                >
-                  <Edit className="h-4 w-4" />
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => onEdit(collector)}
+                    className="hover:bg-muted"
+                  >
+                    <Edit className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => onDelete(collector.id)}
+                    className="hover:bg-destructive hover:text-destructive-foreground"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
             </Card>
           ))}

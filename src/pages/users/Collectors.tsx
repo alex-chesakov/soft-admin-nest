@@ -86,6 +86,17 @@ const Collectors = () => {
     setOpen(true);
   };
 
+  const handleDelete = (collectorId: string) => {
+    const updatedCollectors = collectors.filter(collector => collector.id !== collectorId);
+    setCollectors(updatedCollectors);
+    localStorage.setItem("collectors", JSON.stringify(updatedCollectors));
+    
+    toast({
+      title: "Success",
+      description: "Collector deleted successfully",
+    });
+  };
+
   const handleDialogClose = (open: boolean) => {
     if (!open) {
       setSelectedCollector({
@@ -132,6 +143,7 @@ const Collectors = () => {
           <CollectorsList
             collectors={collectors}
             onEdit={handleEdit}
+            onDelete={handleDelete}
           />
         </CardContent>
       </Card>

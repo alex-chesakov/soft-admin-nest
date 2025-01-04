@@ -104,6 +104,17 @@ const Admins = () => {
     });
   };
 
+  const handleDeleteAdmin = (adminId: string) => {
+    const updatedAdmins = admins.filter(admin => admin.id !== adminId);
+    setAdmins(updatedAdmins);
+    localStorage.setItem("admins", JSON.stringify(updatedAdmins));
+    
+    toast({
+      title: "Success",
+      description: "Admin deleted successfully",
+    });
+  };
+
   const handleDialogClose = (open: boolean) => {
     if (!open) {
       setNewAdmin({ name: "", email: "", password: "" });
@@ -172,7 +183,11 @@ const Admins = () => {
           </Dialog>
         </CardHeader>
         <CardContent>
-          <AdminsList admins={admins} onEdit={handleEditClick} />
+          <AdminsList 
+            admins={admins} 
+            onEdit={handleEditClick} 
+            onDelete={handleDeleteAdmin}
+          />
         </CardContent>
       </Card>
     </div>
