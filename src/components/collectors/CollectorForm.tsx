@@ -51,9 +51,9 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
     });
   };
 
-  // Basic form fields
   return (
     <div className="grid gap-4 py-4">
+      {/* Basic form fields */}
       <div className="grid gap-2">
         <Label htmlFor="name">First Name</Label>
         <Input
@@ -130,7 +130,7 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
               aria-expanded={open}
               className="w-full justify-between"
             >
-              Select locations...
+              {locations.length > 0 ? `${locations.length} location(s) selected` : "Select locations..."}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-[400px] p-0">
@@ -152,10 +152,7 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
                       <CommandItem
                         key={city}
                         value={city}
-                        onSelect={() => {
-                          console.log("CommandItem onSelect triggered for city:", city);
-                          handleLocationSelect(city);
-                        }}
+                        onSelect={() => handleLocationSelect(city)}
                         className="cursor-pointer hover:bg-accent"
                       >
                         <Check

@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Collector } from "@/types/user";
 import { Button } from "@/components/ui/button";
 import { Edit, Trash2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 interface CollectorsListProps {
   collectors: Collector[];
@@ -36,11 +37,16 @@ export const CollectorsList = ({ collectors, onEdit, onDelete }: CollectorsListP
                     <p className="text-sm text-muted-foreground">
                       {collector.phone}
                     </p>
-                    <div className="text-sm text-muted-foreground">
-                      <span className="font-medium">Locations:</span>{" "}
-                      {collector.locations && collector.locations.length > 0 
-                        ? collector.locations.join(', ')
-                        : 'No locations assigned'}
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {collector.locations && collector.locations.length > 0 ? (
+                        collector.locations.map((location) => (
+                          <Badge key={location} variant="secondary">
+                            {location}
+                          </Badge>
+                        ))
+                      ) : (
+                        <span className="text-sm text-muted-foreground">No locations assigned</span>
+                      )}
                     </div>
                   </div>
                 </div>
