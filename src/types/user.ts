@@ -11,6 +11,13 @@ export interface Admin extends User {
   password: string;
 }
 
+export interface Collector extends User {
+  lastName: string;
+  phone: string;
+  locations: string[];
+  password: string;
+}
+
 export const hasPermission = (role: UserRole, permission: string): boolean => {
   const permissions = {
     admin: ['all'],
