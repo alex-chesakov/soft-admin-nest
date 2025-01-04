@@ -2,7 +2,9 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LocationSelector } from "@/components/locations/LocationSelector";
 import { CitiesList } from "@/components/locations/CitiesList";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
+import { Save } from "lucide-react";
 
 const Locations = () => {
   const [selectedState, setSelectedState] = useState<string>("");
@@ -14,6 +16,13 @@ const Locations = () => {
     toast({
       title: "State Updated",
       description: `Selected state changed to ${state}`,
+    });
+  };
+
+  const handleSave = () => {
+    toast({
+      title: "Success",
+      description: "Location preferences have been saved",
     });
   };
 
@@ -29,6 +38,13 @@ const Locations = () => {
             onStateChange={handleStateChange} 
           />
           <CitiesList selectedState={selectedState} />
+          <Button 
+            onClick={handleSave}
+            className="w-full sm:w-auto"
+          >
+            <Save className="mr-2 h-4 w-4" />
+            Save Changes
+          </Button>
         </CardContent>
       </Card>
     </div>
