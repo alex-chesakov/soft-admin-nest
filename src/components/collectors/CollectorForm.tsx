@@ -103,6 +103,7 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
       {/* Locations Section */}
       <div className="grid gap-2">
         <Label>Locations</Label>
+        
         {/* Display selected locations */}
         <div className="flex flex-wrap gap-2 mb-2">
           {locations.map((location) => (
