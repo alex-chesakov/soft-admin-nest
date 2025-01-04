@@ -1,29 +1,26 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { MainLayout } from "@/components/layouts/MainLayout";
-import Index from "./pages/Index";
-import Products from "./pages/Products";
-import Orders from "./pages/Orders";
-import ProductDetails from "./pages/ProductDetails";
-import OrderDetails from "./pages/OrderDetails";
-import Analytics from "./pages/Analytics";
-import Customers from "./pages/Customers";
-import Settings from "./pages/Settings";
-import Users from "./pages/Users";
-import Admins from "./pages/users/Admins";
-import Collectors from "./pages/users/Collectors";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "@/components/ui/toaster";
+import Index from "@/pages/Index";
+import Products from "@/pages/Products";
+import ProductDetails from "@/pages/ProductDetails";
+import Orders from "@/pages/Orders";
+import OrderDetails from "@/pages/OrderDetails";
+import Customers from "@/pages/Customers";
+import Users from "@/pages/Users";
+import Settings from "@/pages/Settings";
+import Analytics from "@/pages/Analytics";
+import Admins from "@/pages/users/Admins";
+import Collectors from "@/pages/users/Collectors";
+import Locations from "@/pages/Locations";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <BrowserRouter>
+function App() {
+  return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
+      <Router>
         <MainLayout>
           <Routes>
             <Route path="/" element={<Index />} />
@@ -32,16 +29,18 @@ const App = () => (
             <Route path="/orders" element={<Orders />} />
             <Route path="/orders/:id" element={<OrderDetails />} />
             <Route path="/customers" element={<Customers />} />
-            <Route path="/analytics" element={<Analytics />} />
-            <Route path="/settings" element={<Settings />} />
             <Route path="/users" element={<Users />} />
             <Route path="/users/admins" element={<Admins />} />
             <Route path="/users/collectors" element={<Collectors />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/locations" element={<Locations />} />
           </Routes>
         </MainLayout>
-      </TooltipProvider>
+        <Toaster />
+      </Router>
     </QueryClientProvider>
-  </BrowserRouter>
-);
+  );
+}
 
 export default App;
