@@ -140,7 +140,7 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
               aria-expanded={open}
               className="w-full justify-between"
             >
-              {searchValue || "Select location..."}
+              Select location...
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-[400px] p-0" align="start">
@@ -158,7 +158,14 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
                       key={location}
                       value={location}
                       onSelect={() => handleLocationSelect(location)}
+                      className="cursor-pointer"
                     >
+                      <Check
+                        className={cn(
+                          "mr-2 h-4 w-4",
+                          currentLocations.includes(location) ? "opacity-100" : "opacity-0"
+                        )}
+                      />
                       {location}
                     </CommandItem>
                   ))}
