@@ -39,7 +39,6 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
         locations: [...currentLocations, city]
       });
     }
-    setSearchValue("");
   };
 
   const handleLocationRemove = (cityToRemove: string) => {
@@ -153,10 +152,7 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
                       <CommandItem
                         key={location}
                         value={location}
-                        onSelect={() => {
-                          handleLocationSelect(location);
-                          setOpen(false);
-                        }}
+                        onSelect={handleLocationSelect}
                         className="cursor-pointer"
                       >
                         <Check
