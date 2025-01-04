@@ -21,8 +21,8 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
   const [open, setOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   
-  // Get all available cities
-  const availableCities = getAllCities();
+  // Get all available cities and ensure it's never undefined
+  const availableCities = getAllCities() || [];
 
   const handleLocationSelect = (city: string) => {
     const currentLocations = collector.locations || [];
@@ -43,9 +43,10 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
     });
   };
 
+  // Ensure filteredLocations is never undefined
   const filteredLocations = availableCities.filter(city => 
     city.toLowerCase().includes(searchValue.toLowerCase())
-  );
+  ) || [];
 
   return (
     <div className="grid gap-4 py-4">
@@ -141,25 +142,27 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
                 onValueChange={setSearchValue}
               />
               <CommandEmpty>No location found.</CommandEmpty>
-              <CommandGroup className="max-h-[300px] overflow-auto">
-                {filteredLocations.map((location) => (
-                  <CommandItem
-                    key={location}
-                    value={location}
-                    onSelect={() => handleLocationSelect(location)}
-                  >
-                    <Check
-                      className={cn(
-                        "mr-2 h-4 w-4",
-                        (collector.locations || []).includes(location)
-                          ? "opacity-100"
-                          : "opacity-0"
-                      )}
-                    />
-                    {location}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
+              {filteredLocations.length > 0 && (
+                <CommandGroup className="max-h-[300px] overflow-auto">
+                  {filteredLocations.map((location) => (
+                    <CommandItem
+                      key={location}
+                      value={location}
+                      onSelect={() => handleLocationSelect(location)}
+                    >
+                      <Check
+                        className={cn(
+                          "mr-2 h-4 w-4",
+                          (collector.locations || []).includes(location)
+                            ? "opacity-100"
+                            : "opacity-0"
+                        )}
+                      />
+                      {location}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              )}
             </Command>
           </PopoverContent>
         </Popover>
