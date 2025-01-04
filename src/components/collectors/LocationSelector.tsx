@@ -30,24 +30,6 @@ export const LocationSelector = ({
 
   return (
     <div className="grid gap-2">
-      {/* Display selected locations */}
-      <div className="flex flex-wrap gap-2 mb-2">
-        {locations.map((location) => (
-          <Badge key={location} variant="secondary" className="flex items-center gap-1">
-            {location}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-4 w-4 p-0 hover:bg-transparent"
-              onClick={() => onLocationRemove(location)}
-            >
-              <X className="h-3 w-3" />
-            </Button>
-          </Badge>
-        ))}
-      </div>
-
-      {/* Location selector */}
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -61,30 +43,6 @@ export const LocationSelector = ({
         </PopoverTrigger>
         <PopoverContent className="w-[400px] p-0">
           <Command>
-            {/* Show selected locations at the top of popup */}
-            {locations.length > 0 && (
-              <div className="border-b border-border p-2">
-                <p className="text-sm text-muted-foreground mb-2">Selected locations:</p>
-                <div className="flex flex-wrap gap-1">
-                  {locations.map((location) => (
-                    <Badge key={location} variant="secondary" className="flex items-center gap-1">
-                      {location}
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-4 w-4 p-0 hover:bg-transparent"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onLocationRemove(location);
-                        }}
-                      >
-                        <X className="h-3 w-3" />
-                      </Button>
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            )}
             <CommandInput 
               placeholder="Search locations..." 
               value={searchValue}
@@ -119,6 +77,30 @@ export const LocationSelector = ({
           </Command>
         </PopoverContent>
       </Popover>
+
+      {/* Display selected locations below */}
+      <div className="mt-4">
+        {locations.length > 0 && (
+          <div className="space-y-2">
+            <p className="text-sm text-muted-foreground">Selected locations:</p>
+            <div className="flex flex-wrap gap-2">
+              {locations.map((location) => (
+                <Badge key={location} variant="secondary" className="flex items-center gap-1">
+                  {location}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-4 w-4 p-0 hover:bg-transparent"
+                    onClick={() => onLocationRemove(location)}
+                  >
+                    <X className="h-3 w-3" />
+                  </Button>
+                </Badge>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
