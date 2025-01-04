@@ -40,7 +40,6 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
       });
     }
     setSearchValue("");
-    setOpen(false);
   };
 
   const handleLocationRemove = (cityToRemove: string) => {
