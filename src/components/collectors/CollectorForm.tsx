@@ -5,7 +5,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { getAllCities } from "@/data/locations";
+import { defaultLocations } from "@/types/location";
 import { useState } from "react";
 import { Collector } from "@/types/user";
 
@@ -18,14 +18,15 @@ interface CollectorFormProps {
 
 export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: CollectorFormProps) => {
   const [open, setOpen] = useState(false);
-  const cities = getAllCities();
+  const locations = defaultLocations.map(loc => loc.id);
 
-  const handleLocationSelect = (city: string) => {
+  const handleLocationSelect = (locationId: string) => {
+    const currentLocations = collector.locations || [];
     setCollector({
       ...collector,
-      locations: collector.locations?.includes(city)
-        ? collector.locations.filter(loc => loc !== city)
-        : [...(collector.locations || []), city]
+      locations: currentLocations.includes(locationId)
+        ? currentLocations.filter(loc => loc !== locationId)
+        : [...currentLocations, locationId]
     });
   };
 
@@ -107,21 +108,21 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
               <CommandInput placeholder="Search location..." />
               <CommandEmpty>No location found.</CommandEmpty>
               <CommandGroup className="max-h-[300px] overflow-auto">
-                {cities.map((city) => (
+                {defaultLocations.map((location) => (
                   <CommandItem
-                    key={city}
-                    value={city}
-                    onSelect={() => handleLocationSelect(city)}
+                    key={location.id}
+                    value={location.id}
+                    onSelect={() => handleLocationSelect(location.id)}
                   >
                     <Check
                       className={cn(
                         "mr-2 h-4 w-4",
-                        collector.locations?.includes(city)
+                        (collector.locations || []).includes(location.id)
                           ? "opacity-100"
                           : "opacity-0"
                       )}
                     />
-                    {city}
+                    {location.name}
                   </CommandItem>
                 ))}
               </CommandGroup>
