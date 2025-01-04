@@ -31,12 +31,12 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
     setAvailableCities(cities);
   }, []);
 
-  const handleLocationSelect = (city: string) => {
-    console.log("Selecting city:", city);
-    if (!locations.includes(city)) {
+  const handleLocationSelect = (selectedCity: string) => {
+    console.log("Selecting city:", selectedCity);
+    if (!locations.includes(selectedCity)) {
       setCollector({
         ...collector,
-        locations: [...locations, city]
+        locations: [...locations, selectedCity]
       });
     }
     setOpen(false);
@@ -151,8 +151,11 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
                       <CommandItem
                         key={city}
                         value={city}
-                        onSelect={() => handleLocationSelect(city)}
-                        className="cursor-pointer"
+                        onSelect={() => {
+                          console.log("CommandItem onSelect triggered for city:", city);
+                          handleLocationSelect(city);
+                        }}
+                        className="cursor-pointer hover:bg-accent"
                       >
                         <Check
                           className={cn(
