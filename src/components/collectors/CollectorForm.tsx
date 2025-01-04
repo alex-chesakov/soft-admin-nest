@@ -18,14 +18,14 @@ interface CollectorFormProps {
 
 export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: CollectorFormProps) => {
   const [open, setOpen] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
   const [availableCities, setAvailableCities] = useState<string[]>([]);
+  const [searchValue, setSearchValue] = useState("");
   
-  // Ensure locations is always initialized as an array
-  const currentLocations = collector.locations || [];
+  // Initialize locations array if undefined
+  const locations = collector.locations || [];
 
   useEffect(() => {
-    // Get selected cities from localStorage
+    // Load available cities from localStorage
     const savedCities = localStorage.getItem('selectedCities');
     if (savedCities) {
       setAvailableCities(JSON.parse(savedCities));
@@ -33,23 +33,25 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
   }, []);
 
   const handleLocationSelect = (city: string) => {
-    if (!currentLocations.includes(city)) {
+    console.log("Selecting city:", city);
+    if (!locations.includes(city)) {
       setCollector({
         ...collector,
-        locations: [...currentLocations, city]
+        locations: [...locations, city]
       });
     }
     setOpen(false);
-    setSearchValue("");
   };
 
   const handleLocationRemove = (cityToRemove: string) => {
+    console.log("Removing city:", cityToRemove);
     setCollector({
       ...collector,
-      locations: currentLocations.filter(city => city !== cityToRemove)
+      locations: locations.filter(city => city !== cityToRemove)
     });
   };
 
+  // Basic form fields
   return (
     <div className="grid gap-4 py-4">
       <div className="grid gap-2">
@@ -57,9 +59,7 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
         <Input
           id="name"
           value={collector.name || ""}
-          onChange={(e) =>
-            setCollector({ ...collector, name: e.target.value })
-          }
+          onChange={(e) => setCollector({ ...collector, name: e.target.value })}
         />
       </div>
       <div className="grid gap-2">
@@ -67,9 +67,7 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
         <Input
           id="lastName"
           value={collector.lastName || ""}
-          onChange={(e) =>
-            setCollector({ ...collector, lastName: e.target.value })
-          }
+          onChange={(e) => setCollector({ ...collector, lastName: e.target.value })}
         />
       </div>
       <div className="grid gap-2">
@@ -78,9 +76,7 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
           id="email"
           type="email"
           value={collector.email || ""}
-          onChange={(e) =>
-            setCollector({ ...collector, email: e.target.value })
-          }
+          onChange={(e) => setCollector({ ...collector, email: e.target.value })}
         />
       </div>
       <div className="grid gap-2">
@@ -89,9 +85,7 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
           id="phone"
           type="tel"
           value={collector.phone || ""}
-          onChange={(e) =>
-            setCollector({ ...collector, phone: e.target.value })
-          }
+          onChange={(e) => setCollector({ ...collector, phone: e.target.value })}
         />
       </div>
       {!isEditing && (
@@ -101,16 +95,17 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
             id="password"
             type="password"
             value={collector.password || ""}
-            onChange={(e) =>
-              setCollector({ ...collector, password: e.target.value })
-            }
+            onChange={(e) => setCollector({ ...collector, password: e.target.value })}
           />
         </div>
       )}
+
+      {/* Locations Section */}
       <div className="grid gap-2">
         <Label>Locations</Label>
+        {/* Display selected locations */}
         <div className="flex flex-wrap gap-2 mb-2">
-          {currentLocations.map((location) => (
+          {locations.map((location) => (
             <Badge key={location} variant="secondary" className="flex items-center gap-1">
               {location}
               <Button
@@ -124,6 +119,8 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
             </Badge>
           ))}
         </div>
+
+        {/* Location selector */}
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button
@@ -132,38 +129,37 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
               aria-expanded={open}
               className="w-full justify-between"
             >
-              Select location...
+              Select locations...
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-[400px] p-0" align="start">
+          <PopoverContent className="w-[400px] p-0">
             <Command>
               <CommandInput 
-                placeholder="Search location..." 
+                placeholder="Search locations..." 
                 value={searchValue}
                 onValueChange={setSearchValue}
               />
               <CommandList>
-                <CommandEmpty>No location found.</CommandEmpty>
+                <CommandEmpty>No locations found.</CommandEmpty>
                 <CommandGroup>
                   {availableCities
                     .filter(city => 
-                      !currentLocations.includes(city) && 
+                      !locations.includes(city) && 
                       city.toLowerCase().includes(searchValue.toLowerCase())
                     )
-                    .map((location) => (
+                    .map((city) => (
                       <CommandItem
-                        key={location}
-                        value={location}
-                        onSelect={() => handleLocationSelect(location)}
-                        className="cursor-pointer"
+                        key={city}
+                        value={city}
+                        onSelect={() => handleLocationSelect(city)}
                       >
                         <Check
                           className={cn(
                             "mr-2 h-4 w-4",
-                            currentLocations.includes(location) ? "opacity-100" : "opacity-0"
+                            locations.includes(city) ? "opacity-100" : "opacity-0"
                           )}
                         />
-                        {location}
+                        {city}
                       </CommandItem>
                     ))}
                 </CommandGroup>
@@ -172,6 +168,7 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
           </PopoverContent>
         </Popover>
       </div>
+
       <Button onClick={onSubmit}>{isEditing ? 'Update' : 'Create'}</Button>
     </div>
   );
