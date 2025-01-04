@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { useState, useEffect } from "react";
 import { Admin } from "@/types/user";
 import { useToast } from "@/components/ui/use-toast";
+import { AdminsList } from "@/components/admins/AdminsList";
 
 const Admins = () => {
   const [admins, setAdmins] = useState<Admin[]>([]);
@@ -171,33 +172,7 @@ const Admins = () => {
           </Dialog>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            {admins.length === 0 ? (
-              <p className="text-muted-foreground">No admins found.</p>
-            ) : (
-              <div className="grid gap-4">
-                {admins.map((admin, index) => (
-                  <div
-                    key={admin.id}
-                    className="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-muted/50 transition-colors"
-                    onClick={() => handleEditClick(admin)}
-                  >
-                    <div className="flex items-center gap-4">
-                      <span className="font-medium text-muted-foreground">
-                        {index + 1}.
-                      </span>
-                      <div>
-                        <p className="font-medium">{admin.name}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {admin.email}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <AdminsList admins={admins} onEdit={handleEditClick} />
         </CardContent>
       </Card>
     </div>
