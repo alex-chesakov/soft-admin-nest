@@ -38,8 +38,9 @@ export const CollectorForm = ({ collector, setCollector, onSubmit, isEditing }: 
         ...collector,
         locations: [...currentLocations, city]
       });
+      setSearchValue(city); // Keep the selected value in the input
+      setOpen(false); // Close the popover after selection
     }
-    setSearchValue("");
   };
 
   const handleLocationRemove = (cityToRemove: string) => {
