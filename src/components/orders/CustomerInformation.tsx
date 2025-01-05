@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { User } from "lucide-react";
+import { CustomerInfoEditDialog } from "./CustomerInfoEditDialog";
 
 interface CustomerInformationProps {
   customerName: string;
@@ -32,13 +33,25 @@ const CustomerInformation = ({
   email,
   phone,
   shippingAddress,
+  onSave,
+  onLocationUpdate,
 }: CustomerInformationProps) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-lg">
-          <User className="h-5 w-5" />
-          Customer Information
+        <CardTitle className="flex items-center justify-between text-lg">
+          <div className="flex items-center gap-2">
+            <User className="h-5 w-5" />
+            Customer Information
+          </div>
+          <CustomerInfoEditDialog
+            customerName={customerName}
+            email={email}
+            phone={phone}
+            shippingAddress={shippingAddress}
+            onSave={onSave}
+            onLocationUpdate={onLocationUpdate}
+          />
         </CardTitle>
       </CardHeader>
       <CardContent>
