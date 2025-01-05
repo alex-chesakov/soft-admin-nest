@@ -1,4 +1,4 @@
-import { Home, Users, Package, Settings, BarChart2, ClipboardList, MapPin, BookOpen } from "lucide-react";
+import { Home, Users, Package, Settings, BarChart2, ClipboardList, MapPin, BookOpen, User } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -8,12 +8,13 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarFooter,
 } from "@/components/ui/sidebar";
 import { UserRole } from "@/types/user";
+import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 // For demo purposes, we'll hardcode the role. In a real app, this would come from auth context
-const currentUserRole: UserRole = 'admin';
-
 const getMenuItems = (role: UserRole) => {
   const baseItems = [
     { title: "Dashboard", icon: Home, url: "/" },
@@ -38,7 +39,17 @@ const getMenuItems = (role: UserRole) => {
 };
 
 export function AdminSidebar() {
-  const menuItems = getMenuItems(currentUserRole);
+  const [currentRole, setCurrentRole] = useState<UserRole>('admin');
+  const { toast } = useToast();
+  const menuItems = getMenuItems(currentRole);
+
+  const handleRoleChange = (newRole: UserRole) => {
+    setCurrentRole(newRole);
+    toast({
+      title: "View Changed",
+      description: `Switched to ${newRole} view`,
+    });
+  };
 
   return (
     <Sidebar>
@@ -64,6 +75,32 @@ export function AdminSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter className="border-t p-4">
+        <div className="flex gap-2">
+          <button
+            onClick={() => handleRoleChange('admin')}
+            className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-md transition-colors ${
+              currentRole === 'admin'
+                ? 'bg-primary text-primary-foreground'
+                : 'hover:bg-muted'
+            }`}
+          >
+            <User className="h-4 w-4" />
+            Admin
+          </button>
+          <button
+            onClick={() => handleRoleChange('collector')}
+            className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-md transition-colors ${
+              currentRole === 'collector'
+                ? 'bg-primary text-primary-foreground'
+                : 'hover:bg-muted'
+            }`}
+          >
+            <Users className="h-4 w-4" />
+            Collector
+          </button>
+        </div>
+      </SidebarFooter>
     </Sidebar>
   );
 }
