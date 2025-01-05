@@ -164,16 +164,9 @@ const CustomerDetails = () => {
           {customer.locations && customer.locations.length > 0 ? (
             <div className="space-y-4">
               {customer.locations.map((location, index) => (
-                <div key={index} className="space-y-2 p-3 rounded-lg border">
-                  <div>
-                    <label className="text-sm font-medium text-muted-foreground">Location Name</label>
-                    <p className="text-base">{location.name}</p>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-muted-foreground">Address</label>
-                    <p className="text-base">{location.address}</p>
-                  </div>
-                </div>
+                <p key={index} className="text-base">
+                  {location.name} - {location.address}
+                </p>
               ))}
             </div>
           ) : (
