@@ -194,12 +194,14 @@ export const OrderFees = ({ items, fees, total, onItemsChange, role = 'admin' }:
               >
                 Collection Complete
               </Button>
-              <Button 
-                onClick={() => setIsConfirmOpen(true)}
-                className="bg-[#ea384c] hover:bg-[#ea384c]/90 text-white h-8 text-sm px-3"
-              >
-                Charge Client
-              </Button>
+              {role === 'admin' && (
+                <Button 
+                  onClick={() => setIsConfirmOpen(true)}
+                  className="bg-[#ea384c] hover:bg-[#ea384c]/90 text-white h-8 text-sm px-3"
+                >
+                  Charge Client
+                </Button>
+              )}
             </div>
           </div>
         </div>
