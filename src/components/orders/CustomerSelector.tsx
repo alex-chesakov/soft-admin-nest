@@ -27,7 +27,7 @@ interface CustomerSelectorProps {
   onChange: (value: string, email: string, phone: string) => void;
 }
 
-export function CustomerSelector({ value, onChange }: CustomerSelectorProps) {
+export function CustomerSelector({ value = '', onChange }: CustomerSelectorProps) {
   const [open, setOpen] = useState(false);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [searchValue, setSearchValue] = useState("");
@@ -62,7 +62,10 @@ export function CustomerSelector({ value, onChange }: CustomerSelectorProps) {
     setIsLoading(false);
   }, []);
 
-  const filteredCustomers = customers.filter(customer =>
+  // Ensure we're working with an array
+  const safeCustomers = Array.isArray(customers) ? customers : [];
+
+  const filteredCustomers = safeCustomers.filter(customer =>
     customer.name.toLowerCase().includes(searchValue.toLowerCase()) ||
     customer.email.toLowerCase().includes(searchValue.toLowerCase()) ||
     customer.phone.toLowerCase().includes(searchValue.toLowerCase())
@@ -82,7 +85,7 @@ export function CustomerSelector({ value, onChange }: CustomerSelectorProps) {
     );
   }
 
-  if (!customers.length) {
+  if (!safeCustomers.length) {
     return (
       <Button
         variant="outline"

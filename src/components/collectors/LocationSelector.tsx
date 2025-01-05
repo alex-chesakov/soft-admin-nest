@@ -14,8 +14,8 @@ interface LocationSelectorProps {
 }
 
 export const LocationSelector = ({
-  locations,
-  availableCities,
+  locations = [], // Add default value
+  availableCities = [], // Add default value
   onLocationSelect,
   onLocationRemove,
 }: LocationSelectorProps) => {
@@ -28,6 +28,10 @@ export const LocationSelector = ({
     setSearchValue("");
   };
 
+  // Ensure we're working with arrays
+  const safeLocations = Array.isArray(locations) ? locations : [];
+  const safeAvailableCities = Array.isArray(availableCities) ? availableCities : [];
+
   return (
     <div className="grid gap-2">
       <Popover open={open} onOpenChange={setOpen}>
@@ -38,7 +42,7 @@ export const LocationSelector = ({
             aria-expanded={open}
             className="w-full justify-between"
           >
-            {locations.length > 0 ? `${locations.length} location(s) selected` : "Select locations..."}
+            {safeLocations.length > 0 ? `${safeLocations.length} location(s) selected` : "Select locations..."}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[400px] p-0">
@@ -51,9 +55,9 @@ export const LocationSelector = ({
             <CommandList>
               <CommandEmpty>No locations found.</CommandEmpty>
               <CommandGroup>
-                {availableCities
+                {safeAvailableCities
                   .filter(city => 
-                    !locations.includes(city) && 
+                    !safeLocations.includes(city) && 
                     city.toLowerCase().includes(searchValue.toLowerCase())
                   )
                   .map((city) => (
@@ -66,7 +70,7 @@ export const LocationSelector = ({
                       <Check
                         className={cn(
                           "mr-2 h-4 w-4",
-                          locations.includes(city) ? "opacity-100" : "opacity-0"
+                          safeLocations.includes(city) ? "opacity-100" : "opacity-0"
                         )}
                       />
                       {city}
@@ -80,11 +84,11 @@ export const LocationSelector = ({
 
       {/* Display selected locations below */}
       <div className="mt-4">
-        {locations.length > 0 && (
+        {safeLocations.length > 0 && (
           <div className="space-y-2">
             <p className="text-sm text-muted-foreground">Selected locations:</p>
             <div className="flex flex-wrap gap-2">
-              {locations.map((location) => (
+              {safeLocations.map((location) => (
                 <Badge key={location} variant="secondary" className="flex items-center gap-1">
                   {location}
                   <Button
