@@ -1,5 +1,6 @@
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -30,22 +31,41 @@ export const ItemStatusPopover = ({
   onStatusChange, 
   statuses 
 }: ItemStatusPopoverProps) => {
+  const [adjustedQty, setAdjustedQty] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
+  const [showQtyInput, setShowQtyInput] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState<string>("");
 
   const handleStatusClick = (newStatus: string) => {
     if (newStatus === "Collected Adjusted") {
-      setIsConfirmOpen(true);
-      setIsOpen(false); // Close the popover when showing confirmation
+      setShowQtyInput(true);
       return;
     }
-    onStatusChange(newStatus);
+    setSelectedStatus(newStatus);
+    setIsConfirmOpen(true);
     setIsOpen(false);
   };
 
-  const handleConfirm = () => {
-    onStatusChange("Collected Adjusted");
+  const handleAdjustedQtySave = () => {
+    if (adjustedQty) {
+      setSelectedStatus("Collected Adjusted");
+      setIsConfirmOpen(true);
+      setIsOpen(false);
+    }
+  };
+
+  const handleConfirmStatusChange = () => {
+    if (selectedStatus === "Collected Adjusted") {
+      onStatusChange(selectedStatus, Number(adjustedQty));
+      setAdjustedQty("");
+      setShowQtyInput(false);
+    } else {
+      onStatusChange(selectedStatus);
+    }
+    setIsOpen(false);
     setIsConfirmOpen(false);
+    setSelectedStatus("");
   };
 
   return (
@@ -65,15 +85,34 @@ export const ItemStatusPopover = ({
         </PopoverTrigger>
         <PopoverContent className="w-48 p-2">
           <div className="space-y-1">
-            {statuses.map((statusItem) => (
-              <button
-                key={statusItem.id}
-                className="w-full text-left px-2 py-1 text-sm rounded hover:bg-gray-100"
-                onClick={() => handleStatusClick(statusItem.name)}
-              >
-                {statusItem.name}
-              </button>
-            ))}
+            {!showQtyInput ? (
+              statuses.map((statusItem) => (
+                <button
+                  key={statusItem.id}
+                  className="w-full text-left px-2 py-1 text-sm rounded hover:bg-gray-100"
+                  onClick={() => handleStatusClick(statusItem.name)}
+                >
+                  {statusItem.name}
+                </button>
+              ))
+            ) : (
+              <div className="space-y-2">
+                <Input
+                  type="number"
+                  placeholder="Adjusted quantity"
+                  value={adjustedQty}
+                  onChange={(e) => setAdjustedQty(e.target.value)}
+                  className="w-full"
+                />
+                <Button 
+                  onClick={handleAdjustedQtySave}
+                  className="w-full"
+                  disabled={!adjustedQty}
+                >
+                  Save
+                </Button>
+              </div>
+            )}
           </div>
         </PopoverContent>
       </Popover>
@@ -81,19 +120,21 @@ export const ItemStatusPopover = ({
       <AlertDialog open={isConfirmOpen} onOpenChange={setIsConfirmOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Change Status to Collected Adjusted</AlertDialogTitle>
+            <AlertDialogTitle>Confirm Status Change</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to change the status to Collected Adjusted?
+              {selectedStatus === "Collected Adjusted" 
+                ? `Are you sure you want to set the adjusted quantity to ${adjustedQty}?`
+                : `Are you sure you want to change the status to ${selectedStatus}?`}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={() => {
               setIsConfirmOpen(false);
-              setIsOpen(true); // Reopen the popover when canceling
+              setIsOpen(true);
               }}>
               Cancel
             </AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirm}>
+            <AlertDialogAction onClick={handleConfirmStatusChange}>
               Confirm
             </AlertDialogAction>
           </AlertDialogFooter>
