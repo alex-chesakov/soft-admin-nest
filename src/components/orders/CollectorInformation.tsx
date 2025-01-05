@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, UserCog, UserPlus } from "lucide-react";
+import { ChevronDown, UserCog, UserPlus, Image } from "lucide-react";
 import { CollectorInfoEditDialog } from "./CollectorInfoEditDialog";
 import ProofOfCollection from "./ProofOfCollection";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -88,6 +88,7 @@ const CollectorInformation = ({
           <CardHeader>
             <CollapsibleTrigger className="flex w-full items-center justify-between">
               <CardTitle className="flex items-center gap-2 text-lg">
+                <Image className="h-5 w-5" />
                 Proof of Collection
               </CardTitle>
               <ChevronDown className={cn(

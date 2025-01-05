@@ -1,4 +1,4 @@
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, FileText } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RequirementsEditDialog } from "./RequirementsEditDialog";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -29,6 +29,7 @@ export const RequirementsSummary = ({
         <CardHeader className="pb-3">
           <CollapsibleTrigger className="flex w-full items-center justify-between">
             <CardTitle className="flex items-center gap-2 text-lg font-medium">
+              <FileText className="h-5 w-5" />
               Order Requirements
               {role === 'admin' && (
                 <RequirementsEditDialog
