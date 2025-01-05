@@ -14,11 +14,13 @@ interface CollectorInformationProps {
     phone: string;
     email: string;
   }) => void;
+  role?: 'admin' | 'collector';
 }
 
 const CollectorInformation = ({
   collector,
   onSave,
+  role = 'admin'
 }: CollectorInformationProps) => {
   return (
     <div className="space-y-6">
@@ -44,7 +46,7 @@ const CollectorInformation = ({
           )}
         </CardContent>
       </Card>
-      <ProofOfCollection />
+      <ProofOfCollection role={role} />
     </div>
   );
 };

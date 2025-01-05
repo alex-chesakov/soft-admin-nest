@@ -6,9 +6,10 @@ import { useToast } from "@/hooks/use-toast";
 
 interface ProofOfCollectionProps {
   onComplete?: () => void;
+  role?: 'admin' | 'collector';
 }
 
-const ProofOfCollection = ({ onComplete }: ProofOfCollectionProps) => {
+const ProofOfCollection = ({ onComplete, role = 'admin' }: ProofOfCollectionProps) => {
   const [images, setImages] = useState<string[]>([]);
   const { toast } = useToast();
 
@@ -50,6 +51,38 @@ const ProofOfCollection = ({ onComplete }: ProofOfCollectionProps) => {
       description: "Collection proof uploaded successfully",
     });
   };
+
+  if (role === 'collector') {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <Image className="h-5 w-5" />
+            Proof of Collection
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 gap-4">
+            {[0, 1].map((index) => (
+              <div key={index} className="relative aspect-video rounded-lg border bg-muted">
+                {images[index] ? (
+                  <img
+                    src={images[index]}
+                    alt={`POC ${index + 1}`}
+                    className="h-full w-full rounded-lg object-cover"
+                  />
+                ) : (
+                  <div className="flex h-full items-center justify-center">
+                    <p className="text-gray-500">No image</p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>
