@@ -8,7 +8,20 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Order } from "@/types/order";
+
+interface Order {
+  id: string;
+  customerName: string;
+  date: string;
+  status: 'pending' | 'processing' | 'completed' | 'cancelled';
+  total: number;
+  items: number;
+  location?: string;
+  collector?: string;
+  paymentStatus: 'paid' | 'pending' | 'failed';
+  deliveryDate: string;
+  deliveryWindow: string;
+}
 
 interface OrdersTableProps {
   orders: Order[];
@@ -85,9 +98,9 @@ export const OrdersTable = ({ orders }: OrdersTableProps) => {
               </Badge>
             </TableCell>
             <TableCell>${order.total.toFixed(2)}</TableCell>
-            <TableCell>{order.items.length}</TableCell>
-            <TableCell>{order.deliveryLocation?.name}</TableCell>
-            <TableCell>{order.collector?.name}</TableCell>
+            <TableCell>{order.items}</TableCell>
+            <TableCell>{order.location}</TableCell>
+            <TableCell>{order.collector}</TableCell>
             <TableCell>{new Date(order.deliveryDate).toLocaleDateString()}</TableCell>
             <TableCell>{order.deliveryWindow}</TableCell>
           </TableRow>
