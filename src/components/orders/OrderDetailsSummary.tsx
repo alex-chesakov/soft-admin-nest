@@ -12,6 +12,13 @@ interface OrderDetailsSummaryProps {
   pickupLocations: { name: string; address: string }[];
   deliveryLocation: { name: string; address: string };
   onDeliveryLocationUpdate?: (location: { name: string; address: string }) => void;
+  shippingAddress?: {
+    street: string;
+    city: string;
+    state: string;
+    zip: string;
+    country: string;
+  };
 }
 
 export const OrderDetailsSummary = ({
@@ -22,6 +29,7 @@ export const OrderDetailsSummary = ({
   pickupLocations,
   deliveryLocation,
   onDeliveryLocationUpdate,
+  shippingAddress,
 }: OrderDetailsSummaryProps) => {
   const handleOrderDetailsUpdate = (data: {
     deliveryDate: string;
@@ -92,8 +100,21 @@ export const OrderDetailsSummary = ({
             <div>
               <p className="text-sm font-medium mb-2">Delivery to:</p>
               <div className="text-sm">
-                <p className="font-medium text-primary">{deliveryLocation.name}</p>
-                <p className="text-muted-foreground">{deliveryLocation.address}</p>
+                {shippingAddress ? (
+                  <>
+                    <p className="font-medium text-primary">{deliveryLocation.name}</p>
+                    <p className="text-muted-foreground">{shippingAddress.street}</p>
+                    <p className="text-muted-foreground">
+                      {shippingAddress.city}, {shippingAddress.state} {shippingAddress.zip}
+                    </p>
+                    <p className="text-muted-foreground">{shippingAddress.country}</p>
+                  </>
+                ) : (
+                  <>
+                    <p className="font-medium text-primary">{deliveryLocation.name}</p>
+                    <p className="text-muted-foreground">{deliveryLocation.address}</p>
+                  </>
+                )}
               </div>
             </div>
           </div>
