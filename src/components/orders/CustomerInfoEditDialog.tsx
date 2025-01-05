@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 
 interface CustomerInfoEditDialogProps {
   customerName: string;
@@ -42,6 +43,7 @@ interface CustomerInfoEditDialogProps {
       country: string;
     };
   }) => void;
+  onLocationUpdate?: (location: { name: string; address: string }) => void;
 }
 
 export const CustomerInfoEditDialog = ({
@@ -50,6 +52,7 @@ export const CustomerInfoEditDialog = ({
   phone,
   shippingAddress,
   onSave,
+  onLocationUpdate,
 }: CustomerInfoEditDialogProps) => {
   const [selectedCustomer, setSelectedCustomer] = useState(customerName);
   const [selectedEmail, setSelectedEmail] = useState(email);
@@ -57,6 +60,7 @@ export const CustomerInfoEditDialog = ({
   const [open, setOpen] = useState(false);
   const [locations, setLocations] = useState<{ name: string; address: string }[]>([]);
   const [selectedLocation, setSelectedLocation] = useState("");
+  const { toast } = useToast();
 
   useEffect(() => {
     // Get customer locations from localStorage
@@ -85,6 +89,10 @@ export const CustomerInfoEditDialog = ({
     e.preventDefault();
     const selectedLocationData = locations.find(loc => loc.name === selectedLocation);
     
+    if (selectedLocationData && onLocationUpdate) {
+      onLocationUpdate(selectedLocationData);
+    }
+    
     onSave({
       customerName: selectedCustomer,
       email: selectedEmail,
@@ -97,6 +105,12 @@ export const CustomerInfoEditDialog = ({
         country: shippingAddress.country,
       },
     });
+
+    toast({
+      title: "Success",
+      description: "Customer information updated successfully",
+    });
+    
     setOpen(false);
   };
 

@@ -11,6 +11,7 @@ interface OrderDetailsSummaryProps {
   itemsCount: number;
   pickupLocations: { name: string; address: string }[];
   deliveryLocation: { name: string; address: string };
+  onDeliveryLocationUpdate?: (location: { name: string; address: string }) => void;
 }
 
 const getPaymentStatusVariant = (status: string) => {
@@ -33,6 +34,7 @@ export const OrderDetailsSummary = ({
   itemsCount,
   pickupLocations,
   deliveryLocation,
+  onDeliveryLocationUpdate,
 }: OrderDetailsSummaryProps) => {
   const handleOrderDetailsUpdate = (data: {
     deliveryDate: string;
@@ -48,7 +50,9 @@ export const OrderDetailsSummary = ({
     deliveryLocation: { name: string; address: string };
   }) => {
     console.log('Updating locations:', data);
-    // TODO: Implement the update logic
+    if (onDeliveryLocationUpdate) {
+      onDeliveryLocationUpdate(data.deliveryLocation);
+    }
   };
 
   return (
