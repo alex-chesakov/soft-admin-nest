@@ -22,19 +22,23 @@ interface LocationsEditDialogProps {
   pickupLocations: Location[];
   deliveryLocation: Location;
   onSave: (data: { pickupLocations: Location[]; deliveryLocation: Location }) => void;
+  mode: 'create' | 'edit';
+  trigger?: React.ReactNode;
 }
 
 export const LocationsEditDialog = ({
   pickupLocations,
   deliveryLocation,
   onSave,
+  mode = 'create',
+  trigger,
 }: LocationsEditDialogProps) => {
   const [open, setOpen] = useState(false);
   const [locations, setLocations] = useState<Location[]>([...pickupLocations, deliveryLocation]);
-  const [newLocation, setNewLocation] = useState({ name: '', address: '' });
+  const [newLocation, setNewLocation] = useState(mode === 'edit' ? deliveryLocation : { name: '', address: '' });
   const { toast } = useToast();
 
-  const handleCreateLocation = () => {
+  const handleSave = () => {
     if (!newLocation.name || !newLocation.address) {
       toast({
         title: "Error",
@@ -44,38 +48,39 @@ export const LocationsEditDialog = ({
       return;
     }
 
-    const updatedLocations = [...locations, newLocation];
+    const updatedLocations = mode === 'edit' ? locations : [...locations, newLocation];
     setLocations(updatedLocations);
     onSave({
       pickupLocations: updatedLocations.slice(0, -1),
-      deliveryLocation: updatedLocations[updatedLocations.length - 1] || { name: '', address: '' }
+      deliveryLocation: newLocation
     });
     setNewLocation({ name: '', address: '' });
     setOpen(false);
     
     toast({
       title: "Success",
-      description: "Location added successfully",
+      description: `Location ${mode === 'create' ? 'added' : 'updated'} successfully`,
     });
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
-          <Plus className="h-4 w-4 mr-2" />
-          Add Location
-        </Button>
+        {trigger || (
+          <Button variant="outline" size="sm">
+            <Plus className="h-4 w-4 mr-2" />
+            Add Location
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add New Location</DialogTitle>
+          <DialogTitle>{mode === 'create' ? 'Add New Location' : 'Edit Location'}</DialogTitle>
           <DialogDescription>
             Fill in the location details below.
           </DialogDescription>
         </DialogHeader>
         
-        {/* Add New Location Form */}
         <div className="grid gap-4 py-4">
           <div className="grid gap-2">
             <Label htmlFor="name">Location Name</Label>
@@ -93,7 +98,9 @@ export const LocationsEditDialog = ({
               onChange={(e) => setNewLocation({ ...newLocation, address: e.target.value })}
             />
           </div>
-          <Button onClick={handleCreateLocation}>Create Location</Button>
+          <Button onClick={handleSave}>
+            {mode === 'create' ? 'Create Location' : 'Save Changes'}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

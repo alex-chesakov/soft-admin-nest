@@ -15,10 +15,20 @@ interface CustomerLocationsProps {
 }
 
 export const CustomerLocations = ({ locations, onLocationsChange }: CustomerLocationsProps) => {
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
+
   const handleLocationCreate = (data: { pickupLocations: Location[]; deliveryLocation: Location }) => {
     const newLocations = [...locations];
     if (data.deliveryLocation.name && data.deliveryLocation.address) {
       newLocations.push(data.deliveryLocation);
+      onLocationsChange(newLocations);
+    }
+  };
+
+  const handleLocationEdit = (data: { pickupLocations: Location[]; deliveryLocation: Location }, index: number) => {
+    const newLocations = [...locations];
+    if (data.deliveryLocation.name && data.deliveryLocation.address) {
+      newLocations[index] = data.deliveryLocation;
       onLocationsChange(newLocations);
     }
   };
@@ -39,6 +49,7 @@ export const CustomerLocations = ({ locations, onLocationsChange }: CustomerLoca
           pickupLocations={locations.slice(0, -1)}
           deliveryLocation={locations[locations.length - 1] || { name: '', address: '' }}
           onSave={handleLocationCreate}
+          mode="create"
         />
       </CardHeader>
       <CardContent>
@@ -51,6 +62,17 @@ export const CustomerLocations = ({ locations, onLocationsChange }: CustomerLoca
                   <p className="text-sm text-muted-foreground">{location.address}</p>
                 </div>
                 <div className="flex gap-2">
+                  <LocationsEditDialog
+                    pickupLocations={[]}
+                    deliveryLocation={location}
+                    onSave={(data) => handleLocationEdit(data, index)}
+                    mode="edit"
+                    trigger={
+                      <Button variant="ghost" size="icon">
+                        <Edit2 className="h-4 w-4" />
+                      </Button>
+                    }
+                  />
                   <Button
                     variant="ghost"
                     size="icon"
