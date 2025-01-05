@@ -34,35 +34,37 @@ export function CustomerSelector({ value = '', onChange }: CustomerSelectorProps
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const defaultCustomers = [
+      {
+        id: "CUST-001",
+        name: "John Doe",
+        email: "john@example.com",
+        phone: "+1 234 567 8900",
+      },
+      {
+        id: "CUST-002",
+        name: "Jane Smith",
+        email: "jane@example.com",
+        phone: "+1 234 567 8901",
+      },
+    ];
+
     const storedCustomers = localStorage.getItem("customers");
     if (storedCustomers) {
       try {
         const parsedCustomers = JSON.parse(storedCustomers);
-        setCustomers(Array.isArray(parsedCustomers) ? parsedCustomers : []);
+        setCustomers(Array.isArray(parsedCustomers) ? parsedCustomers : defaultCustomers);
       } catch (error) {
         console.error("Error parsing customers from localStorage:", error);
-        setCustomers([]);
+        setCustomers(defaultCustomers);
       }
     } else {
-      setCustomers([
-        {
-          id: "CUST-001",
-          name: "John Doe",
-          email: "john@example.com",
-          phone: "+1 234 567 8900",
-        },
-        {
-          id: "CUST-002",
-          name: "Jane Smith",
-          email: "jane@example.com",
-          phone: "+1 234 567 8901",
-        },
-      ]);
+      setCustomers(defaultCustomers);
     }
     setIsLoading(false);
   }, []);
 
-  // Ensure we're working with an array
+  // Ensure we're working with an array and handle null/undefined cases
   const safeCustomers = Array.isArray(customers) ? customers : [];
 
   const filteredCustomers = safeCustomers.filter(customer =>
