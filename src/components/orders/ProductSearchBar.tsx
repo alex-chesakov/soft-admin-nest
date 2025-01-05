@@ -52,7 +52,7 @@ export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => 
           value={value}
           onValueChange={setValue}
         />
-        <div className="absolute w-full z-50">
+        <div className="absolute left-0 right-0 top-[100%] mt-1 z-50">
           <CommandList className={value ? "visible bg-popover border rounded-md shadow-md" : "hidden"}>
             <CommandEmpty>No products found.</CommandEmpty>
             <CommandGroup>
