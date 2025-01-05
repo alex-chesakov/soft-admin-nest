@@ -14,7 +14,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useState, useEffect } from "react";
-import { Admin, Collector } from "@/types/user";
+
+interface Customer {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+}
 
 interface CustomerSelectorProps {
   value: string;
@@ -23,24 +29,40 @@ interface CustomerSelectorProps {
 
 export function CustomerSelector({ value, onChange }: CustomerSelectorProps) {
   const [open, setOpen] = useState(false);
-  const [users, setUsers] = useState<(Admin | Collector)[]>([]);
+  const [customers, setCustomers] = useState<Customer[]>([]);
 
   useEffect(() => {
-    // Load users from localStorage with proper initialization
-    const admins: Admin[] = JSON.parse(localStorage.getItem("admins") || "[]");
-    const collectors: Collector[] = JSON.parse(localStorage.getItem("collectors") || "[]");
-    setUsers([...admins, ...collectors]);
+    // Get customers from localStorage (as stored in the Customers page)
+    const storedCustomers = localStorage.getItem("customers");
+    if (storedCustomers) {
+      setCustomers(JSON.parse(storedCustomers));
+    } else {
+      // If no customers in localStorage, use mock data
+      setCustomers([
+        {
+          id: "CUST-001",
+          name: "John Doe",
+          email: "john@example.com",
+          phone: "+1 234 567 8900",
+        },
+        {
+          id: "CUST-002",
+          name: "Jane Smith",
+          email: "jane@example.com",
+          phone: "+1 234 567 8901",
+        },
+      ]);
+    }
   }, []);
 
-  // Ensure we have users before rendering the Command component
-  if (users.length === 0) {
+  if (!customers.length) {
     return (
       <Button
         variant="outline"
         role="combobox"
         className="w-full justify-between"
       >
-        No users available
+        No customers available
       </Button>
     );
   }
@@ -60,29 +82,25 @@ export function CustomerSelector({ value, onChange }: CustomerSelectorProps) {
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
         <Command>
-          <CommandInput placeholder="Search users..." />
-          <CommandEmpty>No user found.</CommandEmpty>
+          <CommandInput placeholder="Search customers..." />
+          <CommandEmpty>No customer found.</CommandEmpty>
           <CommandGroup>
-            {users.map((user) => (
+            {customers.map((customer) => (
               <CommandItem
-                key={user.id}
-                value={user.name}
+                key={customer.id}
+                value={customer.name}
                 onSelect={() => {
-                  onChange(
-                    user.name,
-                    user.email,
-                    'phone' in user ? user.phone : ''
-                  );
+                  onChange(customer.name, customer.email, customer.phone);
                   setOpen(false);
                 }}
               >
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    value === user.name ? "opacity-100" : "opacity-0"
+                    value === customer.name ? "opacity-100" : "opacity-0"
                   )}
                 />
-                {user.name}
+                {customer.name}
               </CommandItem>
             ))}
           </CommandGroup>

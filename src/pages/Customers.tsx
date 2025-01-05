@@ -7,11 +7,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect } from "react";
 
 interface Customer {
   id: string;
   name: string;
   email: string;
+  phone: string;
   orders: number;
   totalSpent: number;
   lastOrder: string;
@@ -23,6 +25,7 @@ const mockCustomers: Customer[] = [
     id: "CUST-001",
     name: "John Doe",
     email: "john@example.com",
+    phone: "+1 234 567 8900",
     orders: 5,
     totalSpent: 599.99,
     lastOrder: "2024-02-20",
@@ -31,6 +34,7 @@ const mockCustomers: Customer[] = [
     id: "CUST-002",
     name: "Jane Smith",
     email: "jane@example.com",
+    phone: "+1 234 567 8901",
     orders: 3,
     totalSpent: 299.99,
     lastOrder: "2024-02-19",
@@ -38,6 +42,11 @@ const mockCustomers: Customer[] = [
 ];
 
 const Customers = () => {
+  useEffect(() => {
+    // Store customers in localStorage for use in CustomerSelector
+    localStorage.setItem("customers", JSON.stringify(mockCustomers));
+  }, []);
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -54,6 +63,7 @@ const Customers = () => {
               <TableRow>
                 <TableHead>Name</TableHead>
                 <TableHead>Email</TableHead>
+                <TableHead>Phone</TableHead>
                 <TableHead>Orders</TableHead>
                 <TableHead>Total Spent</TableHead>
                 <TableHead>Last Order</TableHead>
@@ -64,6 +74,7 @@ const Customers = () => {
                 <TableRow key={customer.id}>
                   <TableCell className="font-medium">{customer.name}</TableCell>
                   <TableCell>{customer.email}</TableCell>
+                  <TableCell>{customer.phone}</TableCell>
                   <TableCell>{customer.orders}</TableCell>
                   <TableCell>${customer.totalSpent.toFixed(2)}</TableCell>
                   <TableCell>{new Date(customer.lastOrder).toLocaleDateString()}</TableCell>
