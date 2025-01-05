@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MapPin, User } from "lucide-react";
+import { MapPin, User, Edit2, Trash2 } from "lucide-react";
 import { LocationsEditDialog } from "@/components/orders/LocationsEditDialog";
 import { CustomerEditDialog } from "@/components/customers/CustomerEditDialog";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
 
 interface Customer {
   id: string;
@@ -14,10 +15,21 @@ interface Customer {
   locations?: Array<{ name: string; address: string }>;
 }
 
+const initialLocations = [
+  { name: "Home Office", address: "123 Main St, San Francisco, CA 94105" },
+  { name: "Downtown Branch", address: "456 Market St, San Francisco, CA 94103" },
+  { name: "South Bay Office", address: "789 Castro St, Mountain View, CA 94041" },
+  { name: "East Bay Location", address: "321 Broadway, Oakland, CA 94612" },
+  { name: "North Bay Site", address: "654 Grant Ave, San Rafael, CA 94901" }
+];
+
 const CustomerDetails = () => {
   const { id } = useParams();
   const [customer, setCustomer] = useState<Customer | null>(null);
   const { toast } = useToast();
+  const [locations, setLocations] = useState(initialLocations);
+  const [editingLocation, setEditingLocation] = useState<{ name: string; address: string } | null>(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   useEffect(() => {
     const storedCustomers = localStorage.getItem("customers");
@@ -28,14 +40,14 @@ const CustomerDetails = () => {
         if (foundCustomer) {
           setCustomer({
             ...foundCustomer,
-            locations: foundCustomer.locations || []
+            locations: locations
           });
         }
       } catch (error) {
         console.error("Error parsing customers from localStorage:", error);
       }
     }
-  }, [id]);
+  }, [id, locations]);
 
   const handleCustomerUpdate = (data: { name: string; email: string; phone: string }) => {
     if (customer) {
@@ -44,7 +56,6 @@ const CustomerDetails = () => {
         ...data
       };
       
-      // Update customer in localStorage
       const storedCustomers = localStorage.getItem("customers");
       if (storedCustomers) {
         try {
@@ -70,40 +81,31 @@ const CustomerDetails = () => {
     }
   };
 
-  const handleLocationsSave = (data: {
-    pickupLocations: { name: string; address: string }[];
-    deliveryLocation: { name: string; address: string };
-  }) => {
-    if (customer) {
-      const updatedCustomer = {
-        ...customer,
-        locations: [...data.pickupLocations, data.deliveryLocation]
-      };
-      
-      // Update customer in localStorage
-      const storedCustomers = localStorage.getItem("customers");
-      if (storedCustomers) {
-        try {
-          const customers = JSON.parse(storedCustomers);
-          const updatedCustomers = customers.map((c: Customer) =>
-            c.id === customer.id ? updatedCustomer : c
-          );
-          localStorage.setItem("customers", JSON.stringify(updatedCustomers));
-          setCustomer(updatedCustomer);
-          toast({
-            title: "Success",
-            description: "Customer locations updated successfully",
-          });
-        } catch (error) {
-          console.error("Error updating customer locations:", error);
-          toast({
-            title: "Error",
-            description: "Failed to update customer locations",
-            variant: "destructive",
-          });
-        }
-      }
-    }
+  const handleLocationDelete = (index: number) => {
+    const newLocations = locations.filter((_, i) => i !== index);
+    setLocations(newLocations);
+    toast({
+      title: "Success",
+      description: "Location deleted successfully",
+    });
+  };
+
+  const handleLocationEdit = (location: { name: string; address: string }) => {
+    setEditingLocation(location);
+    setIsEditDialogOpen(true);
+  };
+
+  const handleLocationUpdate = (updatedLocation: { name: string; address: string }) => {
+    const newLocations = locations.map((loc) =>
+      loc === editingLocation ? updatedLocation : loc
+    );
+    setLocations(newLocations);
+    setIsEditDialogOpen(false);
+    setEditingLocation(null);
+    toast({
+      title: "Success",
+      description: "Location updated successfully",
+    });
   };
 
   if (!customer) {
@@ -120,7 +122,6 @@ const CustomerDetails = () => {
 
   return (
     <div className="p-6 space-y-6">
-      {/* Customer Details Section */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0">
           <div className="flex items-center gap-2">
@@ -147,7 +148,6 @@ const CustomerDetails = () => {
         </CardContent>
       </Card>
 
-      {/* Locations Section */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0">
           <div className="flex items-center gap-2">
@@ -155,18 +155,37 @@ const CustomerDetails = () => {
             <CardTitle>Locations</CardTitle>
           </div>
           <LocationsEditDialog
-            pickupLocations={customer.locations?.slice(0, -1) || []}
-            deliveryLocation={customer.locations?.[customer.locations.length - 1] || { name: '', address: '' }}
-            onSave={handleLocationsSave}
+            pickupLocations={locations.slice(0, -1)}
+            deliveryLocation={locations[locations.length - 1] || { name: '', address: '' }}
+            onSave={() => {}}
           />
         </CardHeader>
         <CardContent>
-          {customer.locations && customer.locations.length > 0 ? (
+          {locations.length > 0 ? (
             <div className="space-y-4">
-              {customer.locations.map((location, index) => (
-                <p key={index} className="text-base">
-                  {location.name} - {location.address}
-                </p>
+              {locations.map((location, index) => (
+                <div key={index} className="flex items-center justify-between p-3 rounded-lg border">
+                  <div>
+                    <p className="text-base font-medium">{location.name}</p>
+                    <p className="text-sm text-muted-foreground">{location.address}</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleLocationEdit(location)}
+                    >
+                      <Edit2 className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleLocationDelete(index)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
               ))}
             </div>
           ) : (
@@ -174,6 +193,14 @@ const CustomerDetails = () => {
           )}
         </CardContent>
       </Card>
+
+      {isEditDialogOpen && editingLocation && (
+        <LocationsEditDialog
+          pickupLocations={[]}
+          deliveryLocation={editingLocation}
+          onSave={(data) => handleLocationUpdate(data.deliveryLocation)}
+        />
+      )}
     </div>
   );
 };
