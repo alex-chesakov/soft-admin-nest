@@ -71,30 +71,34 @@ export const OrderDetailsSummary = ({
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-x-6 gap-y-3">
-            <div className="col-span-2 border-b pb-2">
+          <div className="grid gap-x-6 gap-y-3">
+            <div className="border-b pb-4">
               <div className="grid grid-cols-2 gap-x-6">
                 <div>
-                  <p className="text-sm text-muted-foreground">Collection Window</p>
-                  <p className="font-medium">{collectionWindow || 'Not set'}</p>
+                  <p className="text-sm text-muted-foreground">Delivery Date</p>
+                  <p className="font-medium">{deliveryDate}</p>
                 </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Delivery Window</p>
-                  <p className="font-medium">{deliveryWindow}</p>
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Collection Window</p>
+                    <p className="font-medium">{collectionWindow || 'Not set'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Delivery Window</p>
+                    <p className="font-medium">{deliveryWindow}</p>
+                  </div>
                 </div>
               </div>
             </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Delivery Date</p>
-              <p className="font-medium">{deliveryDate}</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Payment Status</p>
-              <p className="font-medium">{paymentStatus}</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Total Items</p>
-              <p className="font-medium">{itemsCount}</p>
+            <div className="grid grid-cols-2 gap-x-6">
+              <div>
+                <p className="text-sm text-muted-foreground">Payment Status</p>
+                <p className="font-medium">{paymentStatus}</p>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Total Items</p>
+                <p className="font-medium">{itemsCount}</p>
+              </div>
             </div>
           </div>
 
