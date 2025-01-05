@@ -10,7 +10,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Edit2 } from "lucide-react";
 import { CustomerSelector } from "./CustomerSelector";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface CustomerInfoEditDialogProps {
   customerName: string;
@@ -48,20 +55,37 @@ export const CustomerInfoEditDialog = ({
   const [selectedEmail, setSelectedEmail] = useState(email);
   const [selectedPhone, setSelectedPhone] = useState(phone);
   const [open, setOpen] = useState(false);
+  const [locations, setLocations] = useState<{ name: string; address: string }[]>([]);
+  const [selectedLocation, setSelectedLocation] = useState("");
+
+  useEffect(() => {
+    // Get locations from localStorage
+    const storedLocations = localStorage.getItem("customerLocations");
+    if (storedLocations) {
+      try {
+        const parsedLocations = JSON.parse(storedLocations);
+        setLocations(Array.isArray(parsedLocations) ? parsedLocations : []);
+      } catch (error) {
+        console.error("Error parsing locations:", error);
+        setLocations([]);
+      }
+    }
+  }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+    const selectedLocationData = locations.find(loc => loc.name === selectedLocation);
+    
     onSave({
       customerName: selectedCustomer,
       email: selectedEmail,
       phone: selectedPhone,
       shippingAddress: {
-        street: formData.get('street') as string,
-        city: formData.get('city') as string,
-        state: formData.get('state') as string,
-        zip: formData.get('zip') as string,
-        country: formData.get('country') as string,
+        street: selectedLocationData?.address || shippingAddress.street,
+        city: shippingAddress.city,
+        state: shippingAddress.state,
+        zip: shippingAddress.zip,
+        country: shippingAddress.country,
       },
     });
     setOpen(false);
@@ -117,44 +141,22 @@ export const CustomerInfoEditDialog = ({
           <div className="space-y-4">
             <h4 className="font-medium">Shipping Address</h4>
             <div className="grid gap-2">
-              <Label htmlFor="street">Street</Label>
-              <Input
-                id="street"
-                name="street"
-                defaultValue={shippingAddress.street}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="city">City</Label>
-              <Input
-                id="city"
-                name="city"
-                defaultValue={shippingAddress.city}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="state">State</Label>
-              <Input
-                id="state"
-                name="state"
-                defaultValue={shippingAddress.state}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="zip">ZIP Code</Label>
-              <Input
-                id="zip"
-                name="zip"
-                defaultValue={shippingAddress.zip}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="country">Country</Label>
-              <Input
-                id="country"
-                name="country"
-                defaultValue={shippingAddress.country}
-              />
+              <Label htmlFor="location">Select Location</Label>
+              <Select 
+                value={selectedLocation} 
+                onValueChange={setSelectedLocation}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a location" />
+                </SelectTrigger>
+                <SelectContent>
+                  {locations.map((location) => (
+                    <SelectItem key={location.name} value={location.name}>
+                      {location.name} - {location.address}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
           
