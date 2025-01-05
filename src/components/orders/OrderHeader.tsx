@@ -64,14 +64,16 @@ export const OrderHeader = ({
         <p className="text-gray-500">Placed on {date}</p>
       </div>
       <div className="flex items-center gap-4">
-        <Button 
-          onClick={handleStartCollection}
-          className="bg-green-500 hover:bg-green-600"
-          size="sm"
-        >
-          <Play className="mr-2 h-4 w-4" />
-          Start Collection
-        </Button>
+        {role === 'collector' && (
+          <Button 
+            onClick={handleStartCollection}
+            className="bg-green-500 hover:bg-green-600"
+            size="sm"
+          >
+            <Play className="mr-2 h-4 w-4" />
+            Start Collection
+          </Button>
+        )}
         <Badge variant={getStatusVariant(status)}>
           {status}
         </Badge>
