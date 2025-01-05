@@ -3,8 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import { OrderFilters } from "@/components/orders/OrderFilters";
 import { OrdersTable } from "@/components/orders/OrdersTable";
 import { Order } from "@/types/order";
+import { useState } from "react";
+import { filterOrdersByStatus } from "@/features/orders/ordersData";
 
-// Mock data with correct types
 const mockOrders: Order[] = [
   {
     id: "ORD-001",
@@ -366,6 +367,8 @@ const collectors = ["All Collectors", "Alice Smith", "Bob Johnson", "Carol Willi
 const statuses = ["All Statuses", "new order", "collector assigned", "in progress", "in transit", "delivered", "cancelled"];
 
 const Orders = () => {
+  const [selectedStatus, setSelectedStatus] = useState<string>("All Statuses");
+
   const { data: orders, isLoading } = useQuery({
     queryKey: ["orders"],
     queryFn: async () => {
@@ -388,6 +391,8 @@ const Orders = () => {
     );
   }
 
+  const filteredOrders = filterOrdersByStatus(orders || [], selectedStatus);
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -400,6 +405,7 @@ const Orders = () => {
             locations={locations}
             collectors={collectors}
             statuses={statuses}
+            onStatusChange={setSelectedStatus}
           />
         </CardContent>
       </Card>
@@ -409,7 +415,7 @@ const Orders = () => {
           <CardTitle>Recent Orders</CardTitle>
         </CardHeader>
         <CardContent>
-          <OrdersTable orders={orders || []} />
+          <OrdersTable orders={filteredOrders} />
         </CardContent>
       </Card>
     </div>

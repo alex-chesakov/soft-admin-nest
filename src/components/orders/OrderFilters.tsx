@@ -5,27 +5,30 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 
 interface OrderFiltersProps {
   locations: string[];
   collectors: string[];
   statuses: string[];
+  onStatusChange: (status: string) => void;
 }
 
-export const OrderFilters = ({ locations, collectors, statuses }: OrderFiltersProps) => {
+export const OrderFilters = ({ 
+  locations, 
+  collectors, 
+  statuses, 
+  onStatusChange 
+}: OrderFiltersProps) => {
   const paymentStatuses = ["All Payment Statuses", "paid", "pending", "failed"];
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      {/* Search Input */}
       <div className="relative">
         <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input placeholder="Search orders..." className="pl-8" />
       </div>
 
-      {/* Location Filter */}
       <Select>
         <SelectTrigger>
           <SelectValue placeholder="Location" />
@@ -39,7 +42,6 @@ export const OrderFilters = ({ locations, collectors, statuses }: OrderFiltersPr
         </SelectContent>
       </Select>
 
-      {/* Collector Filter */}
       <Select>
         <SelectTrigger>
           <SelectValue placeholder="Collector" />
@@ -53,8 +55,7 @@ export const OrderFilters = ({ locations, collectors, statuses }: OrderFiltersPr
         </SelectContent>
       </Select>
 
-      {/* Status Filter */}
-      <Select>
+      <Select onValueChange={onStatusChange}>
         <SelectTrigger>
           <SelectValue placeholder="Status" />
         </SelectTrigger>
@@ -67,7 +68,6 @@ export const OrderFilters = ({ locations, collectors, statuses }: OrderFiltersPr
         </SelectContent>
       </Select>
 
-      {/* Payment Status Filter */}
       <Select>
         <SelectTrigger>
           <SelectValue placeholder="Payment Status" />
@@ -81,7 +81,6 @@ export const OrderFilters = ({ locations, collectors, statuses }: OrderFiltersPr
         </SelectContent>
       </Select>
 
-      {/* Order Date Filter */}
       <Popover>
         <PopoverTrigger asChild>
           <Button
@@ -102,7 +101,6 @@ export const OrderFilters = ({ locations, collectors, statuses }: OrderFiltersPr
         </PopoverContent>
       </Popover>
 
-      {/* Delivery Date Filter */}
       <Popover>
         <PopoverTrigger asChild>
           <Button
