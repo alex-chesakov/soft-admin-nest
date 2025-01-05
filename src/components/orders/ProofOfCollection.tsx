@@ -52,38 +52,6 @@ const ProofOfCollection = ({ onComplete, role = 'admin' }: ProofOfCollectionProp
     });
   };
 
-  if (role === 'collector') {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <Image className="h-5 w-5" />
-            Proof of Collection
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-4">
-            {[0, 1].map((index) => (
-              <div key={index} className="relative aspect-video rounded-lg border bg-muted">
-                {images[index] ? (
-                  <img
-                    src={images[index]}
-                    alt={`POC ${index + 1}`}
-                    className="h-full w-full rounded-lg object-cover"
-                  />
-                ) : (
-                  <div className="flex h-full items-center justify-center">
-                    <p className="text-gray-500">No image</p>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
   return (
     <Card>
       <CardHeader>
@@ -104,28 +72,34 @@ const ProofOfCollection = ({ onComplete, role = 'admin' }: ProofOfCollectionProp
                 />
               ) : (
                 <div className="flex h-full items-center justify-center">
-                  <label className="cursor-pointer">
-                    <Upload className="h-8 w-8 text-gray-400" />
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={handleImageUpload}
-                    />
-                  </label>
+                  {role === 'admin' ? (
+                    <label className="cursor-pointer">
+                      <Upload className="h-8 w-8 text-gray-400" />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleImageUpload}
+                      />
+                    </label>
+                  ) : (
+                    <p className="text-gray-500">No image</p>
+                  )}
                 </div>
               )}
             </div>
           ))}
         </div>
-        <div className="mt-4 flex justify-end">
-          <Button 
-            onClick={handleComplete}
-            className="bg-green-500 hover:bg-green-600 text-white"
-          >
-            Complete
-          </Button>
-        </div>
+        {role === 'admin' && (
+          <div className="mt-4 flex justify-end">
+            <Button 
+              onClick={handleComplete}
+              className="bg-green-500 hover:bg-green-600 text-white"
+            >
+              Complete
+            </Button>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
