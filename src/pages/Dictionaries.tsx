@@ -102,7 +102,7 @@ const Dictionaries = () => {
             <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <h3 className="text-lg font-semibold">
-                  {selectedDictionary === "order-requirements" ? "Order Requirements" : "Delivery Windows"}
+                  {selectedDictionary === "order-requirements" ? "Order Requirements" : selectedDictionary === "order-statuses" ? "Order Statuses" : "Delivery Windows"}
                 </h3>
                 <AddItemDialog onAdd={handleAddItem} />
               </div>
