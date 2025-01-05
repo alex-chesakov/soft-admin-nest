@@ -23,20 +23,25 @@ export const ItemStatusPopover = ({
 }: ItemStatusPopoverProps) => {
   const [adjustedQty, setAdjustedQty] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
+  const [showQtyInput, setShowQtyInput] = useState(false);
 
   const handleStatusClick = (newStatus: string) => {
     if (newStatus === "Collected Adjusted") {
-      // Don't close popover, wait for quantity input
+      setShowQtyInput(true);
       return;
     }
+    setShowQtyInput(false);
     onStatusChange(newStatus);
     setIsOpen(false);
   };
 
   const handleAdjustedQtySave = () => {
-    onStatusChange("Collected Adjusted", Number(adjustedQty));
-    setAdjustedQty("");
-    setIsOpen(false);
+    if (adjustedQty) {
+      onStatusChange("Collected Adjusted", Number(adjustedQty));
+      setAdjustedQty("");
+      setShowQtyInput(false);
+      setIsOpen(false);
+    }
   };
 
   return (
@@ -55,17 +60,18 @@ export const ItemStatusPopover = ({
       </PopoverTrigger>
       <PopoverContent className="w-48 p-2">
         <div className="space-y-1">
-          {statuses.map((statusItem) => (
-            <button
-              key={statusItem.id}
-              className="w-full text-left px-2 py-1 text-sm rounded hover:bg-gray-100"
-              onClick={() => handleStatusClick(statusItem.name)}
-            >
-              {statusItem.name}
-            </button>
-          ))}
-          {status === "Collected Adjusted" && (
-            <div className="mt-2 space-y-2">
+          {!showQtyInput ? (
+            statuses.map((statusItem) => (
+              <button
+                key={statusItem.id}
+                className="w-full text-left px-2 py-1 text-sm rounded hover:bg-gray-100"
+                onClick={() => handleStatusClick(statusItem.name)}
+              >
+                {statusItem.name}
+              </button>
+            ))
+          ) : (
+            <div className="space-y-2">
               <Input
                 type="number"
                 placeholder="Adjusted quantity"

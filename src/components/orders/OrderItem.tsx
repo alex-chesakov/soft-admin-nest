@@ -66,7 +66,7 @@ export const OrderItemComponent = ({
           {item.adjustedQuantity !== undefined && (
             <div className="flex items-center gap-2">
               <label className="text-sm text-gray-500">Adjusted Qty:</label>
-              <span className="text-sm">{item.adjustedQuantity}</span>
+              <span className="text-sm font-medium">{item.adjustedQuantity}</span>
             </div>
           )}
           <Select
