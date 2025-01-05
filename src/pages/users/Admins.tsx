@@ -12,8 +12,46 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState, useEffect } from "react";
 import { Admin } from "@/types/user";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { AdminsList } from "@/components/admins/AdminsList";
+
+const defaultAdmins: Admin[] = [
+  {
+    id: "default-1",
+    role: "admin",
+    name: "John Smith",
+    email: "john.smith@example.com",
+    password: "admin123",
+  },
+  {
+    id: "default-2",
+    role: "admin",
+    name: "Sarah Johnson",
+    email: "sarah.johnson@example.com",
+    password: "admin123",
+  },
+  {
+    id: "default-3",
+    role: "admin",
+    name: "Michael Brown",
+    email: "michael.brown@example.com",
+    password: "admin123",
+  },
+  {
+    id: "default-4",
+    role: "admin",
+    name: "Emily Davis",
+    email: "emily.davis@example.com",
+    password: "admin123",
+  },
+  {
+    id: "default-5",
+    role: "admin",
+    name: "David Wilson",
+    email: "david.wilson@example.com",
+    password: "admin123",
+  },
+];
 
 const Admins = () => {
   const [admins, setAdmins] = useState<Admin[]>([]);
@@ -29,7 +67,10 @@ const Admins = () => {
 
   useEffect(() => {
     const savedAdmins = localStorage.getItem("admins");
-    if (savedAdmins) {
+    if (!savedAdmins || JSON.parse(savedAdmins).length === 0) {
+      setAdmins(defaultAdmins);
+      localStorage.setItem("admins", JSON.stringify(defaultAdmins));
+    } else {
       setAdmins(JSON.parse(savedAdmins));
     }
   }, []);
@@ -106,6 +147,18 @@ const Admins = () => {
 
   const handleDeleteAdmin = (adminId: string) => {
     const updatedAdmins = admins.filter(admin => admin.id !== adminId);
+    
+    // Ensure we never delete all admins by restoring defaults if needed
+    if (updatedAdmins.length === 0) {
+      setAdmins(defaultAdmins);
+      localStorage.setItem("admins", JSON.stringify(defaultAdmins));
+      toast({
+        title: "Info",
+        description: "Default admins have been restored",
+      });
+      return;
+    }
+
     setAdmins(updatedAdmins);
     localStorage.setItem("admins", JSON.stringify(updatedAdmins));
     
