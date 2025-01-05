@@ -53,7 +53,10 @@ export function CustomerSelector({ value = '', onChange }: CustomerSelectorProps
       const storedCustomers = localStorage.getItem("customers");
       if (storedCustomers) {
         const parsedCustomers = JSON.parse(storedCustomers);
-        setCustomers(Array.isArray(parsedCustomers) ? parsedCustomers : defaultCustomers);
+        setCustomers(Array.isArray(parsedCustomers) && parsedCustomers.length > 0 
+          ? parsedCustomers 
+          : defaultCustomers
+        );
       } else {
         setCustomers(defaultCustomers);
       }
@@ -65,14 +68,22 @@ export function CustomerSelector({ value = '', onChange }: CustomerSelectorProps
     }
   }, []);
 
-  // Ensure we're working with an array and handle null/undefined cases
-  const safeCustomers = Array.isArray(customers) ? customers : [];
+  // Ensure we're working with a valid array
+  const safeCustomers = Array.isArray(customers) && customers.length > 0 
+    ? customers 
+    : [];
 
-  const filteredCustomers = safeCustomers.filter(customer =>
-    customer?.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
-    customer?.email?.toLowerCase().includes(searchValue.toLowerCase()) ||
-    customer?.phone?.toLowerCase().includes(searchValue.toLowerCase())
-  );
+  // Safe filtering with null checks
+  const filteredCustomers = safeCustomers.filter(customer => {
+    if (!customer || typeof customer !== 'object') return false;
+    
+    const searchLower = searchValue.toLowerCase();
+    const nameMatch = customer.name?.toLowerCase()?.includes(searchLower) ?? false;
+    const emailMatch = customer.email?.toLowerCase()?.includes(searchLower) ?? false;
+    const phoneMatch = customer.phone?.toLowerCase()?.includes(searchLower) ?? false;
+    
+    return nameMatch || emailMatch || phoneMatch;
+  });
 
   if (isLoading) {
     return (
