@@ -20,6 +20,7 @@ interface OrderItemProps {
   onStatusChange: (itemId: string, newStatus: string, adjustedQty?: number) => void;
   onDelete: (itemId: string) => void;
   itemStatuses: Array<{ id: string; name: string }>;
+  role?: 'admin' | 'collector';
 }
 
 export const OrderItemComponent = ({
@@ -29,6 +30,7 @@ export const OrderItemComponent = ({
   onStatusChange,
   onDelete,
   itemStatuses,
+  role = 'admin'
 }: OrderItemProps) => {
   const getStatusBadgeVariant = (status: string) => {
     switch (status?.toLowerCase()) {
@@ -60,31 +62,40 @@ export const OrderItemComponent = ({
         <p className="text-sm text-gray-500 mt-2">Price: ${displayPrice.toFixed(2)}/{item.unit || 'Unit'}</p>
         <div className="flex items-center gap-4 mt-2">
           <div className="flex items-center gap-2">
-            <label className="text-sm text-gray-500">Booked Qty:</label>
-            <div className="flex items-center">
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-8 w-8 rounded-r-none"
-                onClick={() => onQuantityChange(item.id, -1)}
-              >
-                <Minus className="h-4 w-4" />
-              </Button>
-              <Input
-                type="number"
-                value={item.quantity}
-                onChange={(e) => onQuantityChange(item.id, parseInt(e.target.value) - item.quantity)}
-                className="w-16 h-8 rounded-none text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-              />
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-8 w-8 rounded-l-none"
-                onClick={() => onQuantityChange(item.id, 1)}
-              >
-                <Plus className="h-4 w-4" />
-              </Button>
-            </div>
+            {role === 'admin' ? (
+              <>
+                <label className="text-sm text-gray-500">Booked Qty:</label>
+                <div className="flex items-center">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8 rounded-r-none"
+                    onClick={() => onQuantityChange(item.id, -1)}
+                  >
+                    <Minus className="h-4 w-4" />
+                  </Button>
+                  <Input
+                    type="number"
+                    value={item.quantity}
+                    onChange={(e) => onQuantityChange(item.id, parseInt(e.target.value) - item.quantity)}
+                    className="w-16 h-8 rounded-none text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  />
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8 rounded-l-none"
+                    onClick={() => onQuantityChange(item.id, 1)}
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+              </>
+            ) : (
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-500">Quantity:</span>
+                <span className="text-sm font-medium">{item.quantity}</span>
+              </div>
+            )}
           </div>
           {item.adjustedQuantity !== undefined && (
             <div className="flex items-center gap-2">
@@ -92,18 +103,20 @@ export const OrderItemComponent = ({
               <span className="text-sm font-medium">{item.adjustedQuantity}</span>
             </div>
           )}
-          <Select
-            value={item.unit || "Unit"}
-            onValueChange={(value) => onUnitChange(item.id, value as "Unit" | "Case")}
-          >
-            <SelectTrigger className="w-24 h-8">
-              <SelectValue placeholder="Select unit" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Unit">Unit</SelectItem>
-              <SelectItem value="Case">Case</SelectItem>
-            </SelectContent>
-          </Select>
+          {role === 'admin' && (
+            <Select
+              value={item.unit || "Unit"}
+              onValueChange={(value) => onUnitChange(item.id, value as "Unit" | "Case")}
+            >
+              <SelectTrigger className="w-24 h-8">
+                <SelectValue placeholder="Select unit" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Unit">Unit</SelectItem>
+                <SelectItem value="Case">Case</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
         </div>
       </div>
       <div className="text-right space-y-2">
@@ -114,14 +127,16 @@ export const OrderItemComponent = ({
           statuses={itemStatuses}
         />
         <p className="font-medium">${(displayPrice * item.quantity).toFixed(2)}</p>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 text-red-500 hover:text-red-600 hover:bg-red-50"
-          onClick={() => onDelete(item.id)}
-        >
-          <Trash2 className="h-4 w-4" />
-        </Button>
+        {role === 'admin' && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 text-red-500 hover:text-red-600 hover:bg-red-50"
+            onClick={() => onDelete(item.id)}
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        )}
       </div>
     </div>
   );
