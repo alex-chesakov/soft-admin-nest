@@ -80,6 +80,8 @@ const Dictionaries = () => {
         return "Order Requirements";
       case "delivery-windows":
         return "Delivery Windows";
+      case "collection-windows":
+        return "Collection Windows";
       case "order-statuses":
         return "Order Statuses";
       case "item-statuses":
@@ -108,6 +110,7 @@ const Dictionaries = () => {
               <SelectContent>
                 <SelectItem value="order-requirements">Order Requirements</SelectItem>
                 <SelectItem value="delivery-windows">Delivery Windows</SelectItem>
+                <SelectItem value="collection-windows">Collection Windows</SelectItem>
                 <SelectItem value="order-statuses">Order Statuses</SelectItem>
                 <SelectItem value="item-statuses">Item Statuses</SelectItem>
               </SelectContent>

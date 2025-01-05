@@ -20,6 +20,11 @@ const DEFAULT_DICTIONARIES: Record<string, DictionaryItem[]> = {
     { id: '3', name: '3:00 PM - 6:00 PM' },
     { id: '4', name: '6:00 PM - 9:00 PM' }
   ],
+  'collection-windows': [
+    { id: '1', name: '7:00 AM - 9:00 AM' },
+    { id: '2', name: '9:00 AM - 11:00 AM' },
+    { id: '3', name: '11:00 AM - 1:00 PM' }
+  ],
   'order-statuses': [
     { id: '1', name: 'New Order' },
     { id: '2', name: 'In Progress' },
