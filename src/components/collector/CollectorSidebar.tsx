@@ -1,4 +1,4 @@
-import { Home, Users, Package, Settings, BarChart2, ClipboardList, MapPin, BookOpen } from "lucide-react";
+import { Home, ClipboardList } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -11,26 +11,19 @@ import {
 } from "@/components/ui/sidebar";
 import { useView } from "@/contexts/ViewContext";
 
-export function AdminSidebar() {
+export function CollectorSidebar() {
   const { setViewType } = useView();
-  
+
   const menuItems = [
     { title: "Dashboard", icon: Home, url: "/" },
-    { title: "Products", icon: Package, url: "/products" },
     { title: "Orders", icon: ClipboardList, url: "/orders" },
-    { title: "Customers", icon: Users, url: "/customers" },
-    { title: "Users", icon: Users, url: "/users" },
-    { title: "Locations", icon: MapPin, url: "/locations" },
-    { title: "Dictionaries", icon: BookOpen, url: "/dictionaries" },
-    { title: "Analytics", icon: BarChart2, url: "/analytics" },
-    { title: "Settings", icon: Settings, url: "/settings" },
   ];
 
   return (
     <Sidebar>
       <SidebarContent>
         <div className="p-6">
-          <h1 className="text-2xl font-bold text-primary">Store Admin</h1>
+          <h1 className="text-2xl font-bold text-primary">Store Collector</h1>
         </div>
         <SidebarGroup>
           <SidebarGroupLabel>View Type</SidebarGroupLabel>
