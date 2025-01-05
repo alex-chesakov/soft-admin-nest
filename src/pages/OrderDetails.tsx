@@ -1,11 +1,12 @@
 import { useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Package2, User, UserCog, Info } from "lucide-react";
+import { Package2, User, UserCog } from "lucide-react";
 import { OrderHeader } from "@/components/orders/OrderHeader";
 import { OrderDetailsSummary } from "@/components/orders/OrderDetailsSummary";
 import { RequirementsEditDialog } from "@/components/orders/RequirementsEditDialog";
 import { CustomerInfoEditDialog } from "@/components/orders/CustomerInfoEditDialog";
 import { CollectorInfoEditDialog } from "@/components/orders/CollectorInfoEditDialog";
+import { useToast } from "@/hooks/use-toast";
 
 interface OrderItem {
   id: number;
@@ -104,6 +105,16 @@ const mockOrder: Order = {
 
 const OrderDetails = () => {
   const { id } = useParams();
+  const { toast } = useToast();
+
+  const handleStatusUpdate = (newStatus: string) => {
+    console.log('Updating order status:', newStatus);
+    toast({
+      title: "Order status updated",
+      description: `Status changed to ${newStatus}`,
+    });
+    // TODO: Implement the update logic
+  };
 
   const handleRequirementsUpdate = (requirements: string[]) => {
     console.log('Updating requirements:', requirements);
@@ -142,7 +153,8 @@ const OrderDetails = () => {
         <OrderHeader 
           id={id || ''} 
           date={mockOrder.date} 
-          status={mockOrder.status} 
+          status={mockOrder.status}
+          onStatusUpdate={handleStatusUpdate}
         />
 
         <OrderDetailsSummary

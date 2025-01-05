@@ -93,6 +93,7 @@ const Dictionaries = () => {
               <SelectContent>
                 <SelectItem value="order-requirements">Order Requirements</SelectItem>
                 <SelectItem value="delivery-windows">Delivery Windows</SelectItem>
+                <SelectItem value="order-statuses">Order Statuses</SelectItem>
               </SelectContent>
             </Select>
           </div>
