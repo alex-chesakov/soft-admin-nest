@@ -26,11 +26,24 @@ export function CustomerSelector({ value, onChange }: CustomerSelectorProps) {
   const [users, setUsers] = useState<(Admin | Collector)[]>([]);
 
   useEffect(() => {
-    // Load users from localStorage
-    const admins = JSON.parse(localStorage.getItem("admins") || "[]");
-    const collectors = JSON.parse(localStorage.getItem("collectors") || "[]");
+    // Load users from localStorage with proper initialization
+    const admins: Admin[] = JSON.parse(localStorage.getItem("admins") || "[]");
+    const collectors: Collector[] = JSON.parse(localStorage.getItem("collectors") || "[]");
     setUsers([...admins, ...collectors]);
   }, []);
+
+  // Ensure we have users before rendering the Command component
+  if (users.length === 0) {
+    return (
+      <Button
+        variant="outline"
+        role="combobox"
+        className="w-full justify-between"
+      >
+        No users available
+      </Button>
+    );
+  }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

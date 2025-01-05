@@ -2,35 +2,70 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { OrderFilters } from "@/components/orders/OrderFilters";
 import { OrdersTable } from "@/components/orders/OrdersTable";
-import { Order } from "@/types/order";
+import { Order, OrderItem } from "@/types/order";
 
-// Mock data with correct status types
+// Mock data with correct types
 const mockOrders: Order[] = [
   {
     id: "ORD-001",
     customerName: "John Doe",
+    email: "john@example.com",
+    phone: "+1234567890",
     date: "2024-02-20",
     status: "pending",
     total: 299.99,
-    items: 3,
+    items: [
+      { id: 1, productName: "Product 1", quantity: 2, price: 149.99 },
+      { id: 2, productName: "Product 2", quantity: 1, price: 149.99 }
+    ],
     location: "New York",
-    collector: "Alice Smith",
+    collector: {
+      name: "Alice Smith",
+      phone: "+1987654321",
+      email: "alice@example.com"
+    },
     paymentStatus: "paid",
     deliveryDate: "2024-02-22",
-    deliveryWindow: "09:00 AM - 12:00 PM"
+    deliveryWindow: "09:00 AM - 12:00 PM",
+    shippingAddress: {
+      street: "123 Main St",
+      city: "New York",
+      state: "NY",
+      zip: "10001",
+      country: "USA"
+    },
+    pickupLocations: [{ name: "Warehouse A", address: "456 Storage St" }],
+    deliveryLocation: { name: "Office", address: "789 Work Ave" }
   },
   {
     id: "ORD-002",
     customerName: "Jane Smith",
+    email: "jane@example.com",
+    phone: "+1234567891",
     date: "2024-02-19",
     status: "completed",
     total: 159.99,
-    items: 2,
+    items: [
+      { id: 3, productName: "Product 3", quantity: 1, price: 159.99 }
+    ],
     location: "Los Angeles",
-    collector: "Bob Johnson",
+    collector: {
+      name: "Bob Johnson",
+      phone: "+1987654322",
+      email: "bob@example.com"
+    },
     paymentStatus: "pending",
     deliveryDate: "2024-02-21",
-    deliveryWindow: "02:00 PM - 05:00 PM"
+    deliveryWindow: "02:00 PM - 05:00 PM",
+    shippingAddress: {
+      street: "456 Oak St",
+      city: "Los Angeles",
+      state: "CA",
+      zip: "90001",
+      country: "USA"
+    },
+    pickupLocations: [{ name: "Store B", address: "123 Retail St" }],
+    deliveryLocation: { name: "Home", address: "321 Home Ave" }
   },
 ];
 
@@ -67,7 +102,6 @@ const Orders = () => {
         <h1 className="text-2xl font-bold">Orders</h1>
       </div>
 
-      {/* Filter Zone */}
       <Card className="mb-6">
         <CardContent className="pt-6">
           <OrderFilters
