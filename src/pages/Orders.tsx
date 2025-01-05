@@ -2,35 +2,74 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { OrderFilters } from "@/components/orders/OrderFilters";
 import { OrdersTable } from "@/components/orders/OrdersTable";
-import { Order } from "@/types/order";
+import { Order, OrderItem } from "@/types/order";
 
-// Mock data with correct status types
+// Mock data with correct types
 const mockOrders: Order[] = [
   {
     id: "ORD-001",
     customerName: "John Doe",
+    email: "john@example.com",
+    phone: "+1 234 567 8900",
     date: "2024-02-20",
     status: "pending",
     total: 299.99,
-    items: 3,
-    location: "New York",
-    collector: "Alice Smith",
+    items: [
+      { id: 1, productName: "Product 1", quantity: 2, price: 99.99 },
+      { id: 2, productName: "Product 2", quantity: 1, price: 100.01 }
+    ],
+    shippingAddress: {
+      street: "123 Main St",
+      city: "New York",
+      state: "NY",
+      zip: "10001",
+      country: "USA",
+    },
+    collector: {
+      name: "Alice Smith",
+      phone: "+1 234 567 8901",
+      email: "alice@example.com"
+    },
     paymentStatus: "paid",
     deliveryDate: "2024-02-22",
-    deliveryWindow: "09:00 AM - 12:00 PM"
+    deliveryWindow: "09:00 AM - 12:00 PM",
+    pickupLocations: [],
+    deliveryLocation: {
+      name: "Main Kitchen",
+      address: "2500 El Camino Real, Palo Alto, CA 94306"
+    }
   },
   {
     id: "ORD-002",
     customerName: "Jane Smith",
+    email: "jane@example.com",
+    phone: "+1 234 567 8901",
     date: "2024-02-19",
     status: "completed",
     total: 159.99,
-    items: 2,
-    location: "Los Angeles",
-    collector: "Bob Johnson",
+    items: [
+      { id: 3, productName: "Product 3", quantity: 1, price: 159.99 }
+    ],
+    shippingAddress: {
+      street: "456 Oak St",
+      city: "Los Angeles",
+      state: "CA",
+      zip: "90001",
+      country: "USA",
+    },
+    collector: {
+      name: "Bob Johnson",
+      phone: "+1 234 567 8902",
+      email: "bob@example.com"
+    },
     paymentStatus: "pending",
     deliveryDate: "2024-02-21",
-    deliveryWindow: "02:00 PM - 05:00 PM"
+    deliveryWindow: "02:00 PM - 05:00 PM",
+    pickupLocations: [],
+    deliveryLocation: {
+      name: "Secondary Kitchen",
+      address: "1234 University Ave, Palo Alto, CA 94301"
+    }
   },
 ];
 
