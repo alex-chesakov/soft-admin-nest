@@ -53,10 +53,8 @@ const CollectorInformation = ({
             <div className="space-y-4">
               <p className="text-gray-500">No collector assigned</p>
               {role === 'admin' && (
-                <CollectorInfoEditDialog
-                  onSave={onSave}
-                >
-                  <Button variant="secondary" className="w-full">
+                <CollectorInfoEditDialog onSave={onSave}>
+                  <Button variant="outline" className="w-full">
                     <UserPlus className="h-4 w-4 mr-2" />
                     Assign Collector
                   </Button>
