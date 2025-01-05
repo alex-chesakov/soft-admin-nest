@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Package2, Plus, Minus, Trash2 } from "lucide-react";
+import { Package2, Plus, Minus, Trash2, ChevronDown } from "lucide-react";
 import { OrderItem } from "@/types/order";
 import { ProductSearchBar } from "./ProductSearchBar";
 import { loadDictionaryItems, getItemStatusColor } from "@/utils/dictionaryStorage";
@@ -12,6 +12,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { useToast } from "@/hooks/use-toast";
 
 interface OrderFeesProps {
   items: OrderItem[];
@@ -26,6 +32,7 @@ interface OrderFeesProps {
 
 export const OrderFees = ({ items, fees, total, onItemsChange }: OrderFeesProps) => {
   const itemStatuses = loadDictionaryItems('item-statuses');
+  const { toast } = useToast();
 
   const handleProductSelect = (newProduct: OrderItem) => {
     if (onItemsChange) {
@@ -50,6 +57,19 @@ export const OrderFees = ({ items, fees, total, onItemsChange }: OrderFeesProps)
         };
         onItemsChange([...items, productWithStatus]);
       }
+    }
+  };
+
+  const handleStatusChange = (itemId: string, newStatus: string) => {
+    if (onItemsChange) {
+      const updatedItems = items.map((item) =>
+        item.id === itemId ? { ...item, status: newStatus } : item
+      );
+      onItemsChange(updatedItems);
+      toast({
+        title: "Status updated",
+        description: `Item status changed to ${newStatus}`,
+      });
     }
   };
 
@@ -152,15 +172,33 @@ export const OrderFees = ({ items, fees, total, onItemsChange }: OrderFeesProps)
                 </div>
               </div>
               <div className="text-right space-y-2">
-                <span 
-                  className="text-xs px-2 py-1 rounded inline-block"
-                  style={{ 
-                    backgroundColor: getItemStatusColor(item.status || 'Not collected'),
-                    color: 'white'
-                  }}
-                >
-                  {item.status || 'Not collected'}
-                </span>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <button
+                      className="text-xs px-2 py-1 rounded inline-flex items-center gap-1 hover:opacity-90 transition-opacity"
+                      style={{ 
+                        backgroundColor: getItemStatusColor(item.status || 'Not collected'),
+                        color: 'white'
+                      }}
+                    >
+                      {item.status || 'Not collected'}
+                      <ChevronDown className="h-3 w-3" />
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-48 p-2">
+                    <div className="space-y-1">
+                      {itemStatuses.map((status) => (
+                        <button
+                          key={status.id}
+                          className="w-full text-left px-2 py-1 text-sm rounded hover:bg-gray-100"
+                          onClick={() => handleStatusChange(item.id, status.name)}
+                        >
+                          {status.name}
+                        </button>
+                      ))}
+                    </div>
+                  </PopoverContent>
+                </Popover>
                 <p className="font-medium">${(item.price * item.quantity).toFixed(2)}</p>
                 <Button
                   variant="ghost"
