@@ -6,6 +6,17 @@ import { loadDictionaryItems } from "@/utils/dictionaryStorage";
 import { useToast } from "@/hooks/use-toast";
 import { OrderItemComponent } from "./OrderItem";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { useState } from "react";
 
 interface OrderFeesProps {
   items: OrderItemType[];
@@ -21,6 +32,7 @@ interface OrderFeesProps {
 export const OrderFees = ({ items, fees, total, onItemsChange }: OrderFeesProps) => {
   const itemStatuses = loadDictionaryItems('item-statuses');
   const { toast } = useToast();
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const handleProductSelect = (newProduct: OrderItemType) => {
     if (onItemsChange) {
@@ -105,6 +117,7 @@ export const OrderFees = ({ items, fees, total, onItemsChange }: OrderFeesProps)
   };
 
   const handleChargeClient = () => {
+    setIsConfirmOpen(false);
     toast({
       title: "Processing charge",
       description: "Client charge initiated",
@@ -154,7 +167,7 @@ export const OrderFees = ({ items, fees, total, onItemsChange }: OrderFeesProps)
             </div>
             <div className="flex justify-end pt-2">
               <Button 
-                onClick={handleChargeClient}
+                onClick={() => setIsConfirmOpen(true)}
                 className="bg-[#ea384c] hover:bg-[#ea384c]/90 text-white h-8 text-sm px-3"
               >
                 Charge Client
@@ -163,6 +176,23 @@ export const OrderFees = ({ items, fees, total, onItemsChange }: OrderFeesProps)
           </div>
         </div>
       </CardContent>
+
+      <AlertDialog open={isConfirmOpen} onOpenChange={setIsConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirm Charge</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to charge the client ${total.toFixed(2)}?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleChargeClient}>
+              Confirm
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Card>
   );
 };
