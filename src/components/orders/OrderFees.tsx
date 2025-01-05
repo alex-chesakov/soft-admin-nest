@@ -5,6 +5,7 @@ import { ProductSearchBar } from "./ProductSearchBar";
 import { loadDictionaryItems } from "@/utils/dictionaryStorage";
 import { useToast } from "@/hooks/use-toast";
 import { OrderItemComponent } from "./OrderItem";
+import { Button } from "@/components/ui/button";
 
 interface OrderFeesProps {
   items: OrderItemType[];
@@ -103,6 +104,13 @@ export const OrderFees = ({ items, fees, total, onItemsChange }: OrderFeesProps)
     }
   };
 
+  const handleChargeClient = () => {
+    toast({
+      title: "Processing charge",
+      description: "Client charge initiated",
+    });
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -143,6 +151,14 @@ export const OrderFees = ({ items, fees, total, onItemsChange }: OrderFeesProps)
             <div className="flex justify-between font-bold pt-2 border-t">
               <p>Estimated Total</p>
               <p>${total.toFixed(2)}</p>
+            </div>
+            <div className="flex justify-end pt-2">
+              <Button 
+                onClick={handleChargeClient}
+                className="bg-[#ea384c] hover:bg-[#ea384c]/90 text-white h-8 text-sm px-3"
+              >
+                Charge Client
+              </Button>
             </div>
           </div>
         </div>

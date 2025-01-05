@@ -10,7 +10,6 @@ import CollectorInformation from "@/components/orders/CollectorInformation";
 import { RequirementsSummary } from "@/components/orders/RequirementsSummary";
 import { saveOrderProducts, getOrderProducts } from "@/utils/productStorage";
 import { OrderItem } from "@/types/order";
-import { Button } from "@/components/ui/button";
 
 const OrderDetails = () => {
   const { id } = useParams();
@@ -162,15 +161,6 @@ const OrderDetails = () => {
             onSave={handleCollectorInfoUpdate}
           />
         </div>
-      </div>
-      
-      <div className="flex justify-end pt-6">
-        <Button 
-          onClick={handleChargeClient}
-          className="bg-[#ea384c] hover:bg-[#ea384c]/90 text-white"
-        >
-          Charge Client
-        </Button>
       </div>
     </div>
   );
