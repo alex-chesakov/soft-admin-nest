@@ -18,15 +18,16 @@ const OrderDetails = () => {
 
   useEffect(() => {
     if (id) {
-      // Load products from localStorage when component mounts
       const savedProducts = getOrderProducts(id);
       if (savedProducts.length > 0) {
         setOrderDetails(prev => ({
           ...prev,
-          items: savedProducts as OrderItem[]
+          items: savedProducts.map(item => ({
+            ...item,
+            id: String(item.id)
+          })) as OrderItem[]
         }));
       } else {
-        // If no saved products exist, save the current ones
         saveOrderProducts(id, orderDetails.items);
       }
     }
@@ -99,7 +100,6 @@ const OrderDetails = () => {
 
   return (
     <div className="flex gap-6">
-      {/* Main Content */}
       <div className="flex-1 space-y-6">
         <OrderStatusSection 
           id={id || ''} 
@@ -110,7 +110,7 @@ const OrderDetails = () => {
         <OrderDetailsSummary
           deliveryDate={orderDetails.deliveryDate}
           deliveryWindow={orderDetails.deliveryWindow}
-          paymentStatus={orderDetails.paymentStatus as 'paid' | 'pending' | 'failed'}
+          paymentStatus={orderDetails.paymentStatus}
           itemsCount={orderDetails.items.length}
           pickupLocations={orderDetails.pickupLocations}
           deliveryLocation={orderDetails.deliveryLocation}
@@ -118,8 +118,8 @@ const OrderDetails = () => {
         />
 
         <OrderFees
-          items={orderDetails.items}
-          fees={orderDetails.fees || { subtotal: 0, serviceFee: 0, creditCardFee: 0 }}
+          items={orderDetails.items as OrderItem[]}
+          fees={orderDetails.fees}
           total={orderDetails.total}
           onItemsChange={(items) => {
             setOrderDetails(prev => ({
@@ -133,7 +133,6 @@ const OrderDetails = () => {
         />
       </div>
 
-      {/* Right Sidebar */}
       <div className="w-80 space-y-6">
         <RequirementsSummary
           requirements={orderDetails.requirements || []}

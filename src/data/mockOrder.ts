@@ -7,13 +7,13 @@ export const mockOrder = {
   status: "pending",
   total: 2499.91,
   items: [
-    { id: 1, productName: "Premium Laptop", quantity: 1, price: 1299.99 },
-    { id: 2, productName: "Wireless Mouse", quantity: 2, price: 49.99 },
-    { id: 3, productName: "Laptop Stand", quantity: 1, price: 79.99 },
-    { id: 4, productName: "External SSD 1TB", quantity: 1, price: 159.99 },
-    { id: 5, productName: "USB-C Hub", quantity: 1, price: 69.99 },
-    { id: 6, productName: "Laptop Backpack", quantity: 1, price: 89.99 },
-    { id: 7, productName: "Wireless Keyboard", quantity: 1, price: 129.99 }
+    { id: "1", productName: "Premium Laptop", quantity: 1, price: 1299.99 },
+    { id: "2", productName: "Wireless Mouse", quantity: 2, price: 49.99 },
+    { id: "3", productName: "Laptop Stand", quantity: 1, price: 79.99 },
+    { id: "4", productName: "External SSD 1TB", quantity: 1, price: 159.99 },
+    { id: "5", productName: "USB-C Hub", quantity: 1, price: 69.99 },
+    { id: "6", productName: "Laptop Backpack", quantity: 1, price: 89.99 },
+    { id: "7", productName: "Wireless Keyboard", quantity: 1, price: 129.99 }
   ],
   requirements: ["Handle with care", "Signature required"],
   location: "New York",
