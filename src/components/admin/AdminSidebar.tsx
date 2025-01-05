@@ -15,27 +15,25 @@ import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
 // For demo purposes, we'll hardcode the role. In a real app, this would come from auth context
+const adminMenuItems = [
+  { title: "Dashboard", icon: Home, url: "/" },
+  { title: "Products", icon: Package, url: "/products" },
+  { title: "Orders", icon: ClipboardList, url: "/orders" },
+  { title: "Customers", icon: Users, url: "/customers" },
+  { title: "Users", icon: Users, url: "/users" },
+  { title: "Locations", icon: MapPin, url: "/locations" },
+  { title: "Dictionaries", icon: BookOpen, url: "/dictionaries" },
+  { title: "Analytics", icon: BarChart2, url: "/analytics" },
+  { title: "Settings", icon: Settings, url: "/settings" },
+];
+
+const collectorMenuItems = [
+  { title: "Dashboard", icon: Home, url: "/" },
+  { title: "Orders", icon: ClipboardList, url: "/orders" },
+];
+
 const getMenuItems = (role: UserRole) => {
-  const baseItems = [
-    { title: "Dashboard", icon: Home, url: "/" },
-  ];
-
-  const collectorItems = [
-    { title: "Orders", icon: ClipboardList, url: "/orders" },
-  ];
-
-  const adminItems = [
-    { title: "Products", icon: Package, url: "/products" },
-    { title: "Orders", icon: ClipboardList, url: "/orders" },
-    { title: "Customers", icon: Users, url: "/customers" },
-    { title: "Users", icon: Users, url: "/users" },
-    { title: "Locations", icon: MapPin, url: "/locations" },
-    { title: "Dictionaries", icon: BookOpen, url: "/dictionaries" },
-    { title: "Analytics", icon: BarChart2, url: "/analytics" },
-    { title: "Settings", icon: Settings, url: "/settings" },
-  ];
-
-  return [...baseItems, ...(role === 'admin' ? adminItems : collectorItems)];
+  return role === 'admin' ? adminMenuItems : collectorMenuItems;
 };
 
 export function AdminSidebar() {
