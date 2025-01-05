@@ -1,7 +1,6 @@
 interface DictionaryItem {
   id: string;
   name: string;
-  description: string;
 }
 
 const STORAGE_KEY_PREFIX = 'dictionary_';
