@@ -22,7 +22,7 @@ export const mockOrder = {
     phone: "+1987654321",
     email: "alice@example.com"
   },
-  paymentStatus: "paid",
+  paymentStatus: "paid" as const,
   deliveryDate: "2024-02-22",
   deliveryWindow: "09:00 AM - 12:00 PM",
   shippingAddress: {
