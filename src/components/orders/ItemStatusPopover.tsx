@@ -60,7 +60,7 @@ export const ItemStatusPopover = ({
   const handleConfirmStatusChange = () => {
     if (selectedStatus === "Collected Adjusted") {
       onStatusChange(selectedStatus, Number(newQty || adjustedQty));
-      setAdjustedQty("");
+      setAdjustedQty(newQty || adjustedQty); // Update the displayed adjusted quantity
       setNewQty("");
       setShowQtyInput(false);
     } else {
