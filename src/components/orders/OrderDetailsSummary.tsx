@@ -1,6 +1,5 @@
 import { Info } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { OrderDetailsEditDialog } from "./OrderDetailsEditDialog";
 import { LocationsEditDialog } from "./LocationsEditDialog";
 
@@ -73,13 +72,17 @@ export const OrderDetailsSummary = ({
       <CardContent>
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-x-6 gap-y-3">
-            <div>
-              <p className="text-sm text-muted-foreground">Collection Window</p>
-              <p className="font-medium">{collectionWindow || 'Not set'}</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Delivery Window</p>
-              <p className="font-medium">{deliveryWindow}</p>
+            <div className="col-span-2 border-b pb-2">
+              <div className="grid grid-cols-2 gap-x-6">
+                <div>
+                  <p className="text-sm text-muted-foreground">Collection Window</p>
+                  <p className="font-medium">{collectionWindow || 'Not set'}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Delivery Window</p>
+                  <p className="font-medium">{deliveryWindow}</p>
+                </div>
+              </div>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Delivery Date</p>
