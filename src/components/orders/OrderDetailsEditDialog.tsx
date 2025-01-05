@@ -9,6 +9,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Edit2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { loadDictionaryItems } from "@/utils/dictionaryStorage";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface OrderDetailsEditDialogProps {
   deliveryDate: string;
@@ -27,6 +36,13 @@ export const OrderDetailsEditDialog = ({
   paymentStatus,
   onSave,
 }: OrderDetailsEditDialogProps) => {
+  const [deliveryWindows, setDeliveryWindows] = useState<{ id: string; name: string }[]>([]);
+
+  useEffect(() => {
+    const windows = loadDictionaryItems('delivery-windows');
+    setDeliveryWindows(windows);
+  }, []);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -59,11 +75,18 @@ export const OrderDetailsEditDialog = ({
           </div>
           <div className="grid gap-2">
             <Label htmlFor="deliveryWindow">Delivery Window</Label>
-            <Input
-              id="deliveryWindow"
-              name="deliveryWindow"
-              defaultValue={deliveryWindow}
-            />
+            <Select name="deliveryWindow" defaultValue={deliveryWindow}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select delivery window" />
+              </SelectTrigger>
+              <SelectContent>
+                {deliveryWindows.map((window) => (
+                  <SelectItem key={window.id} value={window.name}>
+                    {window.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <div className="grid gap-2">
             <Label htmlFor="paymentStatus">Payment Status</Label>
