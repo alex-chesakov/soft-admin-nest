@@ -13,6 +13,19 @@ interface OrderDetailsSummaryProps {
   deliveryLocation: { name: string; address: string };
 }
 
+const getPaymentStatusVariant = (status: string) => {
+  switch (status) {
+    case 'paid':
+      return 'success';
+    case 'pending':
+      return 'warning';
+    case 'failed':
+      return 'destructive';
+    default:
+      return 'default';
+  }
+};
+
 export const OrderDetailsSummary = ({
   deliveryDate,
   deliveryWindow,
@@ -66,7 +79,7 @@ export const OrderDetailsSummary = ({
             <div>
               <p className="text-sm text-muted-foreground">Payment Status</p>
               <Badge 
-                variant={paymentStatus === 'paid' ? 'default' : 'secondary'}
+                variant={getPaymentStatusVariant(paymentStatus)}
                 className="mt-0.5"
               >
                 {paymentStatus}
