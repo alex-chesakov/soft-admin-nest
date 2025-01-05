@@ -72,7 +72,7 @@ const OrderDetails = () => {
   const { id } = useParams();
   
   return (
-    <div className="flex flex-row-reverse gap-6">
+    <div className="flex flex-row-reverse gap-6 pr-64">
       {/* Left Content (now on the right) */}
       <div className="w-1/3 space-y-6">
         <OrderRequirements requirements={mockOrder.requirements} />
