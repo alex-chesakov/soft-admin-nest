@@ -1,24 +1,24 @@
-import { Info } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { OrderDetailsEditDialog } from "./OrderDetailsEditDialog";
-import { LocationsEditDialog } from "./LocationsEditDialog";
+import { useState } from "react";
+import { ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface OrderDetailsSummaryProps {
   deliveryDate: string;
   deliveryWindow: string;
-  paymentStatus: 'paid' | 'pending' | 'failed';
+  paymentStatus: string;
   itemsCount: number;
   pickupLocations: { name: string; address: string }[];
   deliveryLocation: { name: string; address: string };
-  onDeliveryLocationUpdate?: (location: { name: string; address: string }) => void;
-  shippingAddress?: {
+  onDeliveryLocationUpdate: (location: { name: string; address: string }) => void;
+  shippingAddress: {
     street: string;
     city: string;
     state: string;
     zip: string;
     country: string;
   };
-  role?: 'admin' | 'collector';
+  role: 'admin' | 'collector';
   collectionWindow?: string;
 }
 
@@ -31,112 +31,83 @@ export const OrderDetailsSummary = ({
   deliveryLocation,
   onDeliveryLocationUpdate,
   shippingAddress,
-  role = 'admin',
+  role,
   collectionWindow,
 }: OrderDetailsSummaryProps) => {
-  const handleOrderDetailsUpdate = (data: {
-    deliveryDate: string;
-    deliveryWindow: string;
-    paymentStatus: 'paid' | 'pending' | 'failed';
-  }) => {
-    console.log('Updating order details:', data);
-    // TODO: Implement the update logic
-  };
-
-  const handleLocationsUpdate = (data: {
-    pickupLocations: { name: string; address: string }[];
-    deliveryLocation: { name: string; address: string };
-  }) => {
-    console.log('Updating locations:', data);
-    if (onDeliveryLocationUpdate) {
-      onDeliveryLocationUpdate(data.deliveryLocation);
-    }
-  };
+  const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-lg font-medium">
-          <Info className="h-5 w-5 text-muted-foreground" />
-          Order Details
-          {role === 'admin' && (
-            <OrderDetailsEditDialog
-              deliveryDate={deliveryDate}
-              deliveryWindow={deliveryWindow}
-              paymentStatus={paymentStatus}
-              onSave={handleOrderDetailsUpdate}
+    <div className="bg-white rounded-lg shadow p-6">
+      <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold">Order Details</h2>
+          <CollapsibleTrigger className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+            <ChevronDown 
+              className={cn(
+                "h-5 w-5 text-gray-600 transition-transform duration-200",
+                isOpen ? "transform rotate-180" : ""
+              )} 
             />
-          )}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          <div className="grid gap-x-6 gap-y-3">
-            <div className="border-b pb-4">
-              <div className="grid grid-cols-2 gap-x-6">
-                <div>
-                  <p className="text-sm text-muted-foreground">Delivery Date</p>
-                  <p className="font-medium">{deliveryDate}</p>
-                </div>
-                <div className="space-y-3">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Collection Window</p>
-                    <p className="font-medium">{collectionWindow || 'Not set'}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Delivery Window</p>
-                    <p className="font-medium">{deliveryWindow}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-x-6">
+          </CollapsibleTrigger>
+        </div>
+        <CollapsibleContent>
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-muted-foreground">Payment Status</p>
+                <p className="text-sm text-gray-600">Delivery Date</p>
+                <p className="font-medium">{deliveryDate}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Delivery Window</p>
+                <p className="font-medium">{deliveryWindow}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Payment Status</p>
                 <p className="font-medium">{paymentStatus}</p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Total Items</p>
+                <p className="text-sm text-gray-600">Items Count</p>
                 <p className="font-medium">{itemsCount}</p>
               </div>
+              {role === 'collector' && collectionWindow && (
+                <div>
+                  <p className="text-sm text-gray-600">Collection Window</p>
+                  <p className="font-medium">{collectionWindow}</p>
+                </div>
+              )}
             </div>
-          </div>
 
-          <div className="grid grid-cols-2 gap-6 pt-2 border-t">
-            <div>
-              <p className="text-sm font-medium mb-2">Delivery from:</p>
+            <div className="mt-6">
+              <h3 className="text-lg font-medium mb-2">Pickup Locations</h3>
               <div className="space-y-2">
                 {pickupLocations.map((location, index) => (
-                  <div key={index} className="text-sm">
-                    <p className="font-medium text-primary">{location.name}</p>
-                    <p className="text-muted-foreground">{location.address}</p>
+                  <div key={index} className="p-3 bg-gray-50 rounded">
+                    <p className="font-medium">{location.name}</p>
+                    <p className="text-sm text-gray-600">{location.address}</p>
                   </div>
                 ))}
               </div>
             </div>
-            <div>
-              <p className="text-sm font-medium mb-2">Delivery to:</p>
-              <div className="text-sm">
-                {shippingAddress ? (
-                  <>
-                    <p className="font-medium text-primary">{deliveryLocation.name}</p>
-                    <p className="text-muted-foreground">{shippingAddress.street}</p>
-                    <p className="text-muted-foreground">
-                      {shippingAddress.city}, {shippingAddress.state} {shippingAddress.zip}
-                    </p>
-                    <p className="text-muted-foreground">{shippingAddress.country}</p>
-                  </>
-                ) : (
-                  <>
-                    <p className="font-medium text-primary">{deliveryLocation.name}</p>
-                    <p className="text-muted-foreground">{deliveryLocation.address}</p>
-                  </>
-                )}
+
+            <div className="mt-6">
+              <h3 className="text-lg font-medium mb-2">Delivery Location</h3>
+              <div className="p-3 bg-gray-50 rounded">
+                <p className="font-medium">{deliveryLocation.name}</p>
+                <p className="text-sm text-gray-600">{deliveryLocation.address}</p>
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <h3 className="text-lg font-medium mb-2">Shipping Address</h3>
+              <div className="p-3 bg-gray-50 rounded">
+                <p className="text-sm text-gray-600">
+                  {shippingAddress.street}, {shippingAddress.city}, {shippingAddress.state} {shippingAddress.zip}, {shippingAddress.country}
+                </p>
               </div>
             </div>
           </div>
-        </div>
-      </CardContent>
-    </Card>
+        </CollapsibleContent>
+      </Collapsible>
+    </div>
   );
 };
