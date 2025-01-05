@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { UserCog } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { UserCog, UserPlus } from "lucide-react";
 import { CollectorInfoEditDialog } from "./CollectorInfoEditDialog";
 import ProofOfCollection from "./ProofOfCollection";
 
@@ -33,7 +34,7 @@ const CollectorInformation = ({
               <UserCog className="h-5 w-5" />
               Collector Information
             </div>
-            {role === 'admin' && (
+            {role === 'admin' && collector && (
               <CollectorInfoEditDialog collector={collector} onSave={onSave} />
             )}
           </CardTitle>
@@ -49,7 +50,19 @@ const CollectorInformation = ({
               )}
             </div>
           ) : (
-            <p className="text-gray-500">No collector assigned</p>
+            <div className="space-y-4">
+              <p className="text-gray-500">No collector assigned</p>
+              {role === 'admin' && (
+                <CollectorInfoEditDialog
+                  onSave={onSave}
+                >
+                  <Button variant="secondary" className="w-full">
+                    <UserPlus className="h-4 w-4 mr-2" />
+                    Assign Collector
+                  </Button>
+                </CollectorInfoEditDialog>
+              )}
+            </div>
           )}
         </CardContent>
       </Card>

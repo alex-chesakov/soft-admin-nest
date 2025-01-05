@@ -34,11 +34,13 @@ interface CollectorInfoEditDialogProps {
     email: string;
     collectionWindow?: string;
   }) => void;
+  children?: React.ReactNode;
 }
 
 export const CollectorInfoEditDialog = ({
   collector,
   onSave,
+  children,
 }: CollectorInfoEditDialogProps) => {
   const [collectors, setCollectors] = useState<Collector[]>([]);
   const [selectedCollector, setSelectedCollector] = useState<string>("");
@@ -112,13 +114,17 @@ export const CollectorInfoEditDialog = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <Edit2 className="h-4 w-4" />
-        </Button>
+        {children || (
+          <Button variant="ghost" size="icon">
+            <Edit2 className="h-4 w-4" />
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit Collector Information</DialogTitle>
+          <DialogTitle>
+            {collector ? 'Edit Collector Information' : 'Assign Collector'}
+          </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid gap-2">
