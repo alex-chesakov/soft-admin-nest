@@ -16,7 +16,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useState } from "react";
+import ProofOfCollection from "./ProofOfCollection";
 
 interface OrderFeesProps {
   items: OrderItemType[];
@@ -123,8 +130,14 @@ export const OrderFees = ({ items, fees, total, onItemsChange }: OrderFeesProps)
       description: "Client charge initiated",
     });
   };
+  const [isProofDialogOpen, setIsProofDialogOpen] = useState(false);
 
   const handleCollectionComplete = () => {
+    setIsProofDialogOpen(true);
+  };
+
+  const handleProofComplete = () => {
+    setIsProofDialogOpen(false);
     toast({
       title: "Collection Complete",
       description: "Collection has been marked as complete",
@@ -206,6 +219,15 @@ export const OrderFees = ({ items, fees, total, onItemsChange }: OrderFeesProps)
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <Dialog open={isProofDialogOpen} onOpenChange={setIsProofDialogOpen}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle>Upload Proof of Collection</DialogTitle>
+          </DialogHeader>
+          <ProofOfCollection onComplete={handleProofComplete} />
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 };
