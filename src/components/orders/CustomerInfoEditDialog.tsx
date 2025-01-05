@@ -65,12 +65,14 @@ export const CustomerInfoEditDialog = ({
       try {
         const customers = JSON.parse(storedCustomers);
         const currentCustomer = customers.find((c: any) => c.name === selectedCustomer);
-        if (currentCustomer && currentCustomer.locations) {
+        if (currentCustomer && Array.isArray(currentCustomer.locations)) {
           setLocations(currentCustomer.locations);
           // Set first location as default if none selected
           if (!selectedLocation && currentCustomer.locations.length > 0) {
             setSelectedLocation(currentCustomer.locations[0].name);
           }
+        } else {
+          setLocations([]);
         }
       } catch (error) {
         console.error("Error parsing customers:", error);

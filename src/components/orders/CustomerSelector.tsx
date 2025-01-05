@@ -51,15 +51,13 @@ export function CustomerSelector({ value = '', onChange }: CustomerSelectorProps
 
     try {
       const storedCustomers = localStorage.getItem("customers");
-      if (storedCustomers) {
-        const parsedCustomers = JSON.parse(storedCustomers);
-        setCustomers(Array.isArray(parsedCustomers) && parsedCustomers.length > 0 
-          ? parsedCustomers 
-          : defaultCustomers
-        );
-      } else {
-        setCustomers(defaultCustomers);
-      }
+      const parsedCustomers = storedCustomers ? JSON.parse(storedCustomers) : [];
+      
+      // Ensure we always have an array of customers
+      setCustomers(Array.isArray(parsedCustomers) && parsedCustomers.length > 0 
+        ? parsedCustomers 
+        : defaultCustomers
+      );
     } catch (error) {
       console.error("Error loading customers:", error);
       setCustomers(defaultCustomers);
@@ -68,21 +66,23 @@ export function CustomerSelector({ value = '', onChange }: CustomerSelectorProps
     }
   }, []);
 
-  // Ensure we're working with a valid array
-  const safeCustomers = Array.isArray(customers) && customers.length > 0 
-    ? customers 
-    : [];
+  // Ensure we're working with a valid array and valid customer objects
+  const safeCustomers = (Array.isArray(customers) ? customers : []).filter(customer => 
+    customer && 
+    typeof customer === 'object' && 
+    typeof customer.name === 'string' &&
+    typeof customer.email === 'string' &&
+    typeof customer.phone === 'string'
+  );
 
   // Safe filtering with null checks
   const filteredCustomers = safeCustomers.filter(customer => {
-    if (!customer || typeof customer !== 'object') return false;
-    
     const searchLower = searchValue.toLowerCase();
-    const nameMatch = customer.name?.toLowerCase()?.includes(searchLower) ?? false;
-    const emailMatch = customer.email?.toLowerCase()?.includes(searchLower) ?? false;
-    const phoneMatch = customer.phone?.toLowerCase()?.includes(searchLower) ?? false;
-    
-    return nameMatch || emailMatch || phoneMatch;
+    return (
+      customer.name.toLowerCase().includes(searchLower) ||
+      customer.email.toLowerCase().includes(searchLower) ||
+      customer.phone.toLowerCase().includes(searchLower)
+    );
   });
 
   if (isLoading) {
