@@ -43,6 +43,23 @@ export const OrdersTable = ({ orders }: OrdersTableProps) => {
     }
   };
 
+  const getStatusVariant = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "delivered":
+        return "success";
+      case "cancelled":
+        return "destructive";
+      case "in transit":
+      case "in progress":
+      case "collector assigned":
+        return "warning";
+      case "new order":
+        return "secondary";
+      default:
+        return "default";
+    }
+  };
+
   return (
     <Table>
       <TableHeader>
@@ -71,24 +88,12 @@ export const OrdersTable = ({ orders }: OrdersTableProps) => {
             <TableCell>{order.customerName}</TableCell>
             <TableCell>{new Date(order.date).toLocaleDateString()}</TableCell>
             <TableCell>
-              <Badge
-                variant={
-                  order.status === "completed"
-                    ? "default"
-                    : order.status === "pending"
-                    ? "secondary"
-                    : order.status === "processing"
-                    ? "outline"
-                    : "destructive"
-                }
-              >
+              <Badge variant={getStatusVariant(order.status)}>
                 {order.status}
               </Badge>
             </TableCell>
             <TableCell>
-              <Badge
-                variant={getPaymentStatusVariant(order.paymentStatus)}
-              >
+              <Badge variant={getPaymentStatusVariant(order.paymentStatus)}>
                 {order.paymentStatus}
               </Badge>
             </TableCell>
