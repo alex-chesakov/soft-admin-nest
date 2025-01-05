@@ -60,7 +60,12 @@ export const OrderHeader = ({
   return (
     <div className="flex justify-between items-center">
       <div>
-        <h1 className="text-2xl font-bold">Order {id}</h1>
+        <div className="flex items-center gap-2">
+          <h1 className="text-2xl font-bold">Order {id}</h1>
+          <Badge variant={getStatusVariant(status)}>
+            {status}
+          </Badge>
+        </div>
         <p className="text-gray-500">Placed on {date}</p>
       </div>
       <div className="flex items-center gap-4">
@@ -74,9 +79,6 @@ export const OrderHeader = ({
             Start Collection
           </Button>
         )}
-        <Badge variant={getStatusVariant(status)}>
-          {status}
-        </Badge>
         {role === 'admin' && (
           <OrderStatusEditDialog status={status} onSave={handleStatusUpdate} />
         )}
