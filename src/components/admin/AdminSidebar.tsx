@@ -54,10 +54,13 @@ export function AdminSidebar() {
       description: `Switched to ${newRole} view`,
     });
     
-    // Navigate to Orders page when switching to Admin view
+    // Navigate to Orders page when switching roles
     if (newRole === 'admin') {
       navigate('/orders');
     }
+    
+    // Force a page refresh to update all components
+    window.location.reload();
   };
 
   return (
