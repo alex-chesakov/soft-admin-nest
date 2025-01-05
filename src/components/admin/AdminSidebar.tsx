@@ -11,7 +11,7 @@ import {
   SidebarFooter,
 } from "@/components/ui/sidebar";
 import { UserRole } from "@/types/user";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
 // For demo purposes, we'll hardcode the role. In a real app, this would come from auth context
@@ -39,12 +39,17 @@ const getMenuItems = (role: UserRole) => {
 };
 
 export function AdminSidebar() {
-  const [currentRole, setCurrentRole] = useState<UserRole>('admin');
+  const [currentRole, setCurrentRole] = useState<UserRole>(() => {
+    const savedRole = localStorage.getItem('userRole');
+    return (savedRole as UserRole) || 'admin';
+  });
+  
   const { toast } = useToast();
   const menuItems = getMenuItems(currentRole);
 
   const handleRoleChange = (newRole: UserRole) => {
     setCurrentRole(newRole);
+    localStorage.setItem('userRole', newRole);
     toast({
       title: "View Changed",
       description: `Switched to ${newRole} view`,
