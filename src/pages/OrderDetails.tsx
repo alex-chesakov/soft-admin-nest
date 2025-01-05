@@ -107,10 +107,10 @@ const OrderDetails = () => {
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
       <div className="flex justify-end mb-4">
-        <CollapsibleTrigger>
+        <CollapsibleTrigger className="p-2 hover:bg-gray-100 rounded-full transition-colors">
           <ChevronDown 
             className={cn(
-              "h-6 w-6 transition-transform duration-200",
+              "h-6 w-6 text-gray-600 transition-transform duration-200",
               isOpen ? "transform rotate-180" : ""
             )} 
           />
