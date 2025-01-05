@@ -27,6 +27,7 @@ export interface Order {
     phone: string;
     email: string;
   };
+  location: string; // Added this property
   deliveryDate: string;
   deliveryWindow: string;
   paymentStatus: 'paid' | 'pending' | 'failed';
