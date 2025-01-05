@@ -14,6 +14,7 @@ import Analytics from "@/pages/Analytics";
 import Admins from "@/pages/users/Admins";
 import Collectors from "@/pages/users/Collectors";
 import Locations from "@/pages/Locations";
+import Dictionaries from "@/pages/Dictionaries";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,7 @@ function App() {
             <Route path="/settings" element={<Settings />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/locations" element={<Locations />} />
+            <Route path="/dictionaries" element={<Dictionaries />} />
           </Routes>
         </MainLayout>
         <Toaster />
