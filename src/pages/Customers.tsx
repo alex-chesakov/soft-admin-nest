@@ -35,12 +35,16 @@ const mockCustomers: Customer[] = [
     lastOrder: "2024-02-20",
     locations: [
       {
-        name: "San Francisco HQ",
-        address: "123 Market Street, San Francisco, CA 94105"
+        name: "Home Office",
+        address: "123 Main St, San Francisco, CA 94105"
       },
       {
-        name: "Silicon Valley Office",
-        address: "456 Castro Street, Mountain View, CA 94041"
+        name: "Downtown Branch",
+        address: "456 Market St, San Francisco, CA 94103"
+      },
+      {
+        name: "South Bay Office",
+        address: "789 Castro St, Mountain View, CA 94041"
       }
     ]
   },
@@ -54,16 +58,16 @@ const mockCustomers: Customer[] = [
     lastOrder: "2024-02-19",
     locations: [
       {
-        name: "LA Downtown",
-        address: "789 Broadway, Los Angeles, CA 90012"
+        name: "Fashion District Store",
+        address: "123 Fashion Ave, Los Angeles, CA 90015"
       },
       {
-        name: "Santa Monica Branch",
-        address: "321 Ocean Avenue, Santa Monica, CA 90401"
+        name: "Beverly Hills Boutique",
+        address: "456 Rodeo Dr, Beverly Hills, CA 90210"
       },
       {
-        name: "Pasadena Store",
-        address: "567 Colorado Blvd, Pasadena, CA 91101"
+        name: "Venice Beach Shop",
+        address: "789 Ocean Front Walk, Venice, CA 90291"
       }
     ]
   },
@@ -77,12 +81,16 @@ const mockCustomers: Customer[] = [
     lastOrder: "2024-02-21",
     locations: [
       {
-        name: "San Diego Main",
-        address: "890 Harbor Drive, San Diego, CA 92101"
+        name: "Gaslamp Quarter Office",
+        address: "321 Fifth Ave, San Diego, CA 92101"
       },
       {
-        name: "La Jolla Office",
-        address: "234 Prospect Street, La Jolla, CA 92037"
+        name: "Mission Valley Center",
+        address: "654 Mission Center Rd, San Diego, CA 92108"
+      },
+      {
+        name: "Coronado Branch",
+        address: "987 Orange Ave, Coronado, CA 92118"
       }
     ]
   },
@@ -96,16 +104,16 @@ const mockCustomers: Customer[] = [
     lastOrder: "2024-02-18",
     locations: [
       {
-        name: "Sacramento Central",
-        address: "432 Capitol Mall, Sacramento, CA 95814"
+        name: "Midtown Headquarters",
+        address: "741 J St, Sacramento, CA 95814"
       },
       {
-        name: "Folsom Branch",
-        address: "765 Blue Ravine Road, Folsom, CA 95630"
+        name: "Arden Fair Location",
+        address: "852 Arden Way, Sacramento, CA 95815"
       },
       {
-        name: "Davis Location",
-        address: "543 University Avenue, Davis, CA 95616"
+        name: "Natomas Branch",
+        address: "963 Truxel Rd, Sacramento, CA 95834"
       }
     ]
   },
@@ -119,12 +127,16 @@ const mockCustomers: Customer[] = [
     lastOrder: "2024-02-22",
     locations: [
       {
-        name: "Oakland Office",
-        address: "876 Broadway, Oakland, CA 94607"
+        name: "Jack London Square",
+        address: "147 Water St, Oakland, CA 94607"
       },
       {
-        name: "Berkeley Store",
-        address: "198 Shattuck Avenue, Berkeley, CA 94704"
+        name: "Rockridge District",
+        address: "258 College Ave, Oakland, CA 94618"
+      },
+      {
+        name: "Temescal Store",
+        address: "369 Telegraph Ave, Oakland, CA 94609"
       }
     ]
   },
@@ -138,16 +150,16 @@ const mockCustomers: Customer[] = [
     lastOrder: "2024-02-17",
     locations: [
       {
-        name: "San Jose Main",
-        address: "321 First Street, San Jose, CA 95113"
+        name: "Santana Row Office",
+        address: "159 Santana Row, San Jose, CA 95128"
       },
       {
-        name: "Palo Alto Branch",
-        address: "654 University Avenue, Palo Alto, CA 94301"
+        name: "Downtown SJ Branch",
+        address: "357 Santa Clara St, San Jose, CA 95113"
       },
       {
-        name: "Cupertino Store",
-        address: "987 Stevens Creek Blvd, Cupertino, CA 95014"
+        name: "Willow Glen Store",
+        address: "753 Lincoln Ave, San Jose, CA 95125"
       }
     ]
   },
@@ -161,12 +173,16 @@ const mockCustomers: Customer[] = [
     lastOrder: "2024-02-23",
     locations: [
       {
-        name: "Fresno Headquarters",
-        address: "543 Van Ness Avenue, Fresno, CA 93721"
+        name: "Tower District Office",
+        address: "951 Olive Ave, Fresno, CA 93728"
       },
       {
-        name: "Clovis Branch",
-        address: "876 Shaw Avenue, Clovis, CA 93612"
+        name: "River Park Branch",
+        address: "753 Nees Ave, Fresno, CA 93720"
+      },
+      {
+        name: "Fashion Fair Location",
+        address: "357 Shaw Ave, Fresno, CA 93710"
       }
     ]
   }
