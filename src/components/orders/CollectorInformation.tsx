@@ -34,13 +34,13 @@ const CollectorInformation = ({
               <UserCog className="h-5 w-5" />
               Collector Information
             </div>
-            {role === 'admin' && collector && (
+            {role === 'admin' && collector?.name && (
               <CollectorInfoEditDialog collector={collector} onSave={onSave} />
             )}
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {collector ? (
+          {collector?.name ? (
             <div className="space-y-2">
               <p className="font-medium">{collector.name}</p>
               <p className="text-sm text-gray-500">{collector.email}</p>
