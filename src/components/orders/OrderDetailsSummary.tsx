@@ -99,6 +99,7 @@ export const OrderDetailsSummary = ({
                   pickupLocations={pickupLocations}
                   deliveryLocation={deliveryLocation}
                   onSave={handleLocationsUpdate}
+                  mode="create"
                 />
               </div>
               <div className="space-y-2">

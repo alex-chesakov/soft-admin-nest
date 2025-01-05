@@ -27,8 +27,8 @@ interface LocationsEditDialogProps {
 }
 
 export const LocationsEditDialog = ({
-  pickupLocations,
-  deliveryLocation,
+  pickupLocations = [],
+  deliveryLocation = { name: '', address: '' },
   onSave,
   mode = 'create',
   trigger,
