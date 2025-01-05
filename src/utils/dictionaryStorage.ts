@@ -25,7 +25,7 @@ const DEFAULT_DICTIONARIES: Record<string, DictionaryItem[]> = {
     { id: '2', name: 'In Progress' },
     { id: '3', name: 'Collector Assigned' },
     { id: '4', name: 'In Transit' },
-    { id: '5', name: 'Delivered' },
+    { id: '5', name: 'Collected' },
     { id: '6', name: 'Cancelled' }
   ]
 };
