@@ -10,9 +10,7 @@ import CollectorInformation from "@/components/orders/CollectorInformation";
 import { RequirementsSummary } from "@/components/orders/RequirementsSummary";
 import { saveOrderProducts, getOrderProducts } from "@/utils/productStorage";
 import { OrderItem, Order } from "@/types/order";
-import { ChevronDown } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 
 const OrderDetails = () => {
   const { id } = useParams();
@@ -106,16 +104,6 @@ const OrderDetails = () => {
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-      <div className="flex justify-end mb-4">
-        <CollapsibleTrigger className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-          <ChevronDown 
-            className={cn(
-              "h-6 w-6 text-gray-600 transition-transform duration-200",
-              isOpen ? "transform rotate-180" : ""
-            )} 
-          />
-        </CollapsibleTrigger>
-      </div>
       <CollapsibleContent>
         <div className="space-y-6">
           <div className="flex gap-6">
