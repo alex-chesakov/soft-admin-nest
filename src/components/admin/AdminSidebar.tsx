@@ -13,8 +13,8 @@ import {
 import { UserRole } from "@/types/user";
 import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
 
-// For demo purposes, we'll hardcode the role. In a real app, this would come from auth context
 const adminMenuItems = [
   { title: "Dashboard", icon: Home, url: "/" },
   { title: "Products", icon: Package, url: "/products" },
@@ -43,6 +43,7 @@ export function AdminSidebar() {
   });
   
   const { toast } = useToast();
+  const navigate = useNavigate();
   const menuItems = getMenuItems(currentRole);
 
   const handleRoleChange = (newRole: UserRole) => {
@@ -52,6 +53,11 @@ export function AdminSidebar() {
       title: "View Changed",
       description: `Switched to ${newRole} view`,
     });
+    
+    // Navigate to Orders page when switching to Admin view
+    if (newRole === 'admin') {
+      navigate('/orders');
+    }
   };
 
   return (
