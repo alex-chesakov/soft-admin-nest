@@ -8,11 +8,13 @@ interface CollectorInformationProps {
     name: string;
     phone: string;
     email: string;
+    collectionWindow?: string;
   };
   onSave: (data: {
     name: string;
     phone: string;
     email: string;
+    collectionWindow?: string;
   }) => void;
   role?: 'admin' | 'collector';
 }
@@ -42,6 +44,9 @@ const CollectorInformation = ({
               <p className="font-medium">{collector.name}</p>
               <p className="text-sm text-gray-500">{collector.email}</p>
               <p className="text-sm text-gray-500">{collector.phone}</p>
+              {collector.collectionWindow && (
+                <p className="text-sm text-gray-500">Collection Window: {collector.collectionWindow}</p>
+              )}
             </div>
           ) : (
             <p className="text-gray-500">No collector assigned</p>

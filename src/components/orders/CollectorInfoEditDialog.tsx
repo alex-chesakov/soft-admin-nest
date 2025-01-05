@@ -26,11 +26,13 @@ interface CollectorInfoEditDialogProps {
     name: string;
     phone: string;
     email: string;
+    collectionWindow?: string;
   };
   onSave: (data: {
     name: string;
     phone: string;
     email: string;
+    collectionWindow?: string;
   }) => void;
 }
 
@@ -43,7 +45,7 @@ export const CollectorInfoEditDialog = ({
   const [phone, setPhone] = useState(collector?.phone || "");
   const [email, setEmail] = useState(collector?.email || "");
   const [collectionWindows, setCollectionWindows] = useState<{ id: string; name: string }[]>([]);
-  const [selectedWindow, setSelectedWindow] = useState<string>("");
+  const [selectedWindow, setSelectedWindow] = useState<string>(collector?.collectionWindow || "");
   const { toast } = useToast();
 
   useEffect(() => {
@@ -80,6 +82,7 @@ export const CollectorInfoEditDialog = ({
         name: `${selectedCollectorData.name} ${selectedCollectorData.lastName}`,
         phone: selectedCollectorData.phone,
         email: selectedCollectorData.email,
+        collectionWindow: selectedWindow,
       });
     }
   };
@@ -98,6 +101,7 @@ export const CollectorInfoEditDialog = ({
       name: "",
       phone: "",
       email: "",
+      collectionWindow: "",
     });
     toast({
       title: "Collector removed",
