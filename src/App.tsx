@@ -8,6 +8,7 @@ import ProductDetails from "@/pages/ProductDetails";
 import Orders from "@/pages/Orders";
 import OrderDetails from "@/pages/OrderDetails";
 import Customers from "@/pages/Customers";
+import CustomerDetails from "@/pages/CustomerDetails";
 import Users from "@/pages/Users";
 import Settings from "@/pages/Settings";
 import Analytics from "@/pages/Analytics";
@@ -30,6 +31,7 @@ function App() {
             <Route path="/orders" element={<Orders />} />
             <Route path="/orders/:id" element={<OrderDetails />} />
             <Route path="/customers" element={<Customers />} />
+            <Route path="/customers/:id" element={<CustomerDetails />} />
             <Route path="/users" element={<Users />} />
             <Route path="/users/admins" element={<Admins />} />
             <Route path="/users/collectors" element={<Collectors />} />
