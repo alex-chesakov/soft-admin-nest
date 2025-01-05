@@ -71,6 +71,14 @@ const OrderDetails = () => {
     });
   };
 
+  const handleDeliveryLocationUpdate = (location: { name: string; address: string }) => {
+    const updatedOrder = {
+      ...orderDetails,
+      deliveryLocation: location,
+    };
+    setOrderDetails(updatedOrder);
+  };
+
   return (
     <div className="flex gap-6">
       {/* Main Content */}
@@ -88,6 +96,7 @@ const OrderDetails = () => {
           itemsCount={orderDetails.items.length}
           pickupLocations={orderDetails.pickupLocations}
           deliveryLocation={orderDetails.deliveryLocation}
+          onDeliveryLocationUpdate={handleDeliveryLocationUpdate}
         />
 
         <OrderFees
@@ -137,6 +146,7 @@ const OrderDetails = () => {
                 phone={orderDetails.phone}
                 shippingAddress={orderDetails.shippingAddress}
                 onSave={handleCustomerInfoUpdate}
+                onLocationUpdate={handleDeliveryLocationUpdate}
               />
             </CardTitle>
           </CardHeader>
