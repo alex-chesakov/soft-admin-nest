@@ -396,6 +396,7 @@ const statuses = ["All Statuses", "new order", "collector assigned", "in progres
 
 const Orders = () => {
   const [selectedStatus, setSelectedStatus] = useState<string>("All Statuses");
+  const role = localStorage.getItem('userRole') || 'admin'; // Get user role
 
   const { data: orders, isLoading } = useQuery({
     queryKey: ["orders"],
@@ -433,6 +434,7 @@ const Orders = () => {
             collectors={collectors}
             statuses={statuses}
             onStatusChange={setSelectedStatus}
+            role={role as 'admin' | 'collector'} // Pass the role to OrderFilters
           />
         </CardContent>
       </Card>
