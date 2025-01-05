@@ -6,10 +6,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Edit2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { loadDictionaryItems } from "@/utils/dictionaryStorage";
+import { useToast } from "@/hooks/use-toast";
 
 interface RequirementsEditDialogProps {
   requirements: string[];
@@ -21,10 +28,23 @@ export const RequirementsEditDialog = ({
   onSave,
 }: RequirementsEditDialogProps) => {
   const [localRequirements, setLocalRequirements] = useState(requirements);
+  const [dictionaryItems, setDictionaryItems] = useState<Array<{ id: string; name: string }>>([]);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const items = loadDictionaryItems("order-requirements");
+    setDictionaryItems(items);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSave(localRequirements.filter(req => req.trim() !== ''));
+    const filteredRequirements = localRequirements.filter(req => req.trim() !== '');
+    onSave(filteredRequirements);
+    localStorage.setItem(`order-requirements-${requirements}`, JSON.stringify(filteredRequirements));
+    toast({
+      title: "Requirements updated",
+      description: "Changes have been saved successfully",
+    });
   };
 
   const addRequirement = () => {
@@ -55,11 +75,21 @@ export const RequirementsEditDialog = ({
         <form onSubmit={handleSubmit} className="space-y-4">
           {localRequirements.map((req, index) => (
             <div key={index} className="flex gap-2">
-              <Input
+              <Select
                 value={req}
-                onChange={(e) => updateRequirement(index, e.target.value)}
-                placeholder="Enter requirement"
-              />
+                onValueChange={(value) => updateRequirement(index, value)}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select requirement" />
+                </SelectTrigger>
+                <SelectContent>
+                  {dictionaryItems.map((item) => (
+                    <SelectItem key={item.id} value={item.name}>
+                      {item.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <Button
                 type="button"
                 variant="outline"
