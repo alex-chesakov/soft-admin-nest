@@ -87,20 +87,6 @@ export function CustomerSelector({ value = '', onChange }: CustomerSelectorProps
     );
   }
 
-  if (!safeCustomers.length) {
-    return (
-      <Button
-        variant="outline"
-        role="combobox"
-        className="w-full justify-between"
-        disabled
-      >
-        No customers available
-        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-      </Button>
-    );
-  }
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
