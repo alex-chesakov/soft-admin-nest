@@ -27,7 +27,9 @@ export const RequirementsEditDialog = ({
   requirements,
   onSave,
 }: RequirementsEditDialogProps) => {
-  const [localRequirements, setLocalRequirements] = useState(requirements);
+  const [localRequirements, setLocalRequirements] = useState<string[]>(
+    requirements.filter(req => req.trim() !== '')
+  );
   const [dictionaryItems, setDictionaryItems] = useState<Array<{ id: string; name: string }>>([]);
   const { toast } = useToast();
 
@@ -48,7 +50,9 @@ export const RequirementsEditDialog = ({
   };
 
   const addRequirement = () => {
-    setLocalRequirements([...localRequirements, '']);
+    if (localRequirements.every(req => req.trim() !== '')) {
+      setLocalRequirements([...localRequirements, '']);
+    }
   };
 
   const removeRequirement = (index: number) => {
