@@ -19,6 +19,7 @@ interface OrderDetailsSummaryProps {
     zip: string;
     country: string;
   };
+  role?: 'admin' | 'collector';
 }
 
 export const OrderDetailsSummary = ({
@@ -30,6 +31,7 @@ export const OrderDetailsSummary = ({
   deliveryLocation,
   onDeliveryLocationUpdate,
   shippingAddress,
+  role = 'admin',
 }: OrderDetailsSummaryProps) => {
   const handleOrderDetailsUpdate = (data: {
     deliveryDate: string;
@@ -56,12 +58,14 @@ export const OrderDetailsSummary = ({
         <CardTitle className="flex items-center gap-2 text-lg font-medium">
           <Info className="h-5 w-5 text-muted-foreground" />
           Order Details
-          <OrderDetailsEditDialog
-            deliveryDate={deliveryDate}
-            deliveryWindow={deliveryWindow}
-            paymentStatus={paymentStatus}
-            onSave={handleOrderDetailsUpdate}
-          />
+          {role === 'admin' && (
+            <OrderDetailsEditDialog
+              deliveryDate={deliveryDate}
+              deliveryWindow={deliveryWindow}
+              paymentStatus={paymentStatus}
+              onSave={handleOrderDetailsUpdate}
+            />
+          )}
         </CardTitle>
       </CardHeader>
       <CardContent>

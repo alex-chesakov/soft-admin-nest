@@ -34,9 +34,10 @@ interface OrderFeesProps {
   };
   total: number;
   onItemsChange?: (items: OrderItemType[]) => void;
+  role?: 'admin' | 'collector';
 }
 
-export const OrderFees = ({ items, fees, total, onItemsChange }: OrderFeesProps) => {
+export const OrderFees = ({ items, fees, total, onItemsChange, role = 'admin' }: OrderFeesProps) => {
   const itemStatuses = loadDictionaryItems('item-statuses');
   const { toast } = useToast();
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
@@ -152,7 +153,7 @@ export const OrderFees = ({ items, fees, total, onItemsChange }: OrderFeesProps)
             <Package2 className="h-5 w-5" />
             Order Items
           </CardTitle>
-          <ProductSearchBar onProductSelect={handleProductSelect} />
+          {role === 'admin' && <ProductSearchBar onProductSelect={handleProductSelect} />}
         </div>
       </CardHeader>
       <CardContent>

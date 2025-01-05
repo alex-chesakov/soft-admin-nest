@@ -5,9 +5,10 @@ interface OrderStatusSectionProps {
   id: string;
   date: string;
   initialStatus: string;
+  role?: 'admin' | 'collector';
 }
 
-export const OrderStatusSection = ({ id, date, initialStatus }: OrderStatusSectionProps) => {
+export const OrderStatusSection = ({ id, date, initialStatus, role = 'admin' }: OrderStatusSectionProps) => {
   const [status, setStatus] = useState(() => {
     // Try to get saved status from localStorage, fallback to initialStatus
     const savedStatus = localStorage.getItem(`order-status-${id}`);
@@ -35,6 +36,7 @@ export const OrderStatusSection = ({ id, date, initialStatus }: OrderStatusSecti
       date={date} 
       status={status}
       onStatusUpdate={handleStatusUpdate}
+      role={role}
     />
   );
 };
