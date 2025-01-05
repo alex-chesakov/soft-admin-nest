@@ -30,6 +30,7 @@ export interface Order {
     name: string;
     phone: string;
     email: string;
+    collectionWindow?: string;
   };
   location: string;
   deliveryDate: string;

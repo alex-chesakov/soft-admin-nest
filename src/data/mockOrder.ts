@@ -20,7 +20,8 @@ export const mockOrder = {
   collector: {
     name: "Alice Smith",
     phone: "+1987654321",
-    email: "alice@example.com"
+    email: "alice@example.com",
+    collectionWindow: "09:00 AM - 11:00 AM"
   },
   paymentStatus: "paid" as const,
   deliveryDate: "2024-02-22",
