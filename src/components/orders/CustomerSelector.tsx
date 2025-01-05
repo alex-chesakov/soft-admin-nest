@@ -13,15 +13,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { mockCustomers } from "@/data/mockCustomers";
-
-interface Customer {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-}
 
 interface CustomerSelectorProps {
   value: string;
@@ -30,8 +23,18 @@ interface CustomerSelectorProps {
 
 export function CustomerSelector({ value = '', onChange }: CustomerSelectorProps) {
   const [open, setOpen] = useState(false);
-  const [customers] = useState<Customer[]>(mockCustomers);
   const [searchValue, setSearchValue] = useState("");
+
+  // Filter customers based on search value
+  const filteredCustomers = mockCustomers.filter(customer => {
+    if (!searchValue) return true;
+    const searchLower = searchValue.toLowerCase();
+    return (
+      customer.name.toLowerCase().includes(searchLower) ||
+      customer.email.toLowerCase().includes(searchLower) ||
+      customer.phone.toLowerCase().includes(searchLower)
+    );
+  });
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -46,25 +49,17 @@ export function CustomerSelector({ value = '', onChange }: CustomerSelectorProps
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0">
-        <Command shouldFilter={false}>
-          <CommandInput 
-            placeholder="Search customers..." 
-            value={searchValue}
-            onValueChange={setSearchValue}
-          />
-          <CommandEmpty>No customer found.</CommandEmpty>
-          <CommandGroup>
-            {customers
-              .filter(customer => {
-                const searchLower = searchValue.toLowerCase();
-                return (
-                  customer.name.toLowerCase().includes(searchLower) ||
-                  customer.email.toLowerCase().includes(searchLower) ||
-                  customer.phone.toLowerCase().includes(searchLower)
-                );
-              })
-              .map((customer) => (
+      {open && (
+        <PopoverContent className="w-full p-0" align="start">
+          <Command className="w-full">
+            <CommandInput 
+              placeholder="Search customers..." 
+              value={searchValue}
+              onValueChange={setSearchValue}
+            />
+            <CommandEmpty>No customer found.</CommandEmpty>
+            <CommandGroup>
+              {filteredCustomers.map((customer) => (
                 <CommandItem
                   key={customer.id}
                   value={customer.name}
@@ -82,9 +77,10 @@ export function CustomerSelector({ value = '', onChange }: CustomerSelectorProps
                   {customer.name}
                 </CommandItem>
               ))}
-          </CommandGroup>
-        </Command>
-      </PopoverContent>
+            </CommandGroup>
+          </Command>
+        </PopoverContent>
+      )}
     </Popover>
   );
 }
