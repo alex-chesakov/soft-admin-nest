@@ -19,16 +19,16 @@ export const OrdersTable = ({ orders }: OrdersTableProps) => {
 
   const getStatusVariant = (status: string) => {
     switch (status.toLowerCase()) {
-      case "delivered":
+      case "collected":
         return "success";
       case "cancelled":
         return "destructive";
-      case "in transit":
       case "in progress":
-      case "collector assigned":
         return "warning";
-      case "new order":
+      case "collector assigned":
         return "secondary";
+      case "new order":
+        return "default";
       default:
         return "default";
     }
