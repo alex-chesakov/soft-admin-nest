@@ -10,6 +10,13 @@ import {
 import { OrderItem } from "@/types/order";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const products = [
   { id: "8", name: "Wireless Headphones", price: 199.99 },
@@ -29,6 +36,7 @@ interface ProductSearchBarProps {
 export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => {
   const [value, setValue] = useState("");
   const [selectedUnits, setSelectedUnits] = useState<Record<string, "unit" | "case">>({});
+  const [open, setOpen] = useState(false);
 
   const filteredProducts = products.filter((product) =>
     product.name.toLowerCase().includes(value.toLowerCase())
@@ -45,6 +53,7 @@ export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => 
         unit: selectedUnits[product.id] === "case" ? "Case" : "Unit"
       });
       setValue("");
+      setOpen(false);
     }
   };
 
@@ -56,58 +65,69 @@ export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => 
   };
 
   return (
-    <div className="relative w-96">
-      <Command className="border rounded-md">
-        <CommandInput
-          placeholder="Add product..."
-          value={value}
-          onValueChange={setValue}
-        />
-        <div className="absolute left-0 right-0 top-[100%] mt-1 z-50">
-          <CommandList className={value ? "visible bg-popover border rounded-md shadow-md" : "hidden"}>
-            <CommandEmpty>No products found.</CommandEmpty>
-            <CommandGroup>
-              {filteredProducts.map((product) => (
-                <CommandItem
-                  key={product.id}
-                  value={product.name}
-                  className="flex justify-between items-center"
-                >
-                  <div className="flex items-center gap-2 flex-1 mr-4">
-                    <span>{product.name}</span>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button>
+          <Plus className="mr-2 h-4 w-4" />
+          Add Product
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Add Product</DialogTitle>
+        </DialogHeader>
+        <div className="relative w-full">
+          <Command className="border rounded-md">
+            <CommandInput
+              placeholder="Search products..."
+              value={value}
+              onValueChange={setValue}
+            />
+            <CommandList>
+              <CommandEmpty>No products found.</CommandEmpty>
+              <CommandGroup>
+                {filteredProducts.map((product) => (
+                  <CommandItem
+                    key={product.id}
+                    value={product.name}
+                    className="flex justify-between items-center"
+                  >
+                    <div className="flex items-center gap-2 flex-1 mr-4">
+                      <span>{product.name}</span>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-6 px-2 text-xs"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          toggleUnit(product.id);
+                        }}
+                      >
+                        {selectedUnits[product.id] === "case" ? "Case" : "Unit"}
+                      </Button>
+                      <span className="ml-auto">
+                        ${selectedUnits[product.id] === "case" ? (product.price * 6).toFixed(2) : product.price.toFixed(2)}
+                      </span>
+                    </div>
                     <Button
                       size="sm"
-                      variant="outline"
-                      className="h-6 px-2 text-xs"
+                      variant="ghost"
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        toggleUnit(product.id);
+                        handleProductSelect(product.id);
                       }}
                     >
-                      {selectedUnits[product.id] === "case" ? "Case" : "Unit"}
+                      <Plus className="h-4 w-4" />
                     </Button>
-                    <span className="ml-auto">
-                      ${selectedUnits[product.id] === "case" ? (product.price * 6).toFixed(2) : product.price.toFixed(2)}
-                    </span>
-                  </div>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleProductSelect(product.id);
-                    }}
-                  >
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
         </div>
-      </Command>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 };
