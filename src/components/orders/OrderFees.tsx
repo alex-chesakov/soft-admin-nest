@@ -167,6 +167,7 @@ export const OrderFees = ({ items, fees, total, onItemsChange, role = 'admin' }:
               onStatusChange={handleStatusChange}
               onDelete={handleDeleteItem}
               itemStatuses={itemStatuses}
+              role={role}
             />
           ))}
           <div className="pt-4 space-y-2 border-t">
