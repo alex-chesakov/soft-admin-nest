@@ -43,7 +43,7 @@ export const ItemStatusPopover = ({
       return;
     }
     setSelectedStatus(newStatus);
-    setIsConfirmOpen(true);
+    onStatusChange(newStatus);
     setIsOpen(false);
   };
 
@@ -56,13 +56,9 @@ export const ItemStatusPopover = ({
   };
 
   const handleConfirmStatusChange = () => {
-    if (selectedStatus === "Collected Adjusted") {
-      onStatusChange(selectedStatus, Number(adjustedQty));
-      setAdjustedQty("");
-      setShowQtyInput(false);
-    } else {
-      onStatusChange(selectedStatus);
-    }
+    onStatusChange(selectedStatus, Number(adjustedQty));
+    setAdjustedQty("");
+    setShowQtyInput(false);
     setIsOpen(false);
     setIsConfirmOpen(false);
     setSelectedStatus("");
@@ -122,9 +118,7 @@ export const ItemStatusPopover = ({
           <AlertDialogHeader>
             <AlertDialogTitle>Confirm Status Change</AlertDialogTitle>
             <AlertDialogDescription>
-              {selectedStatus === "Collected Adjusted" 
-                ? "Update Quantity"
-                : `Are you sure you want to change the status to ${selectedStatus}?`}
+              Update Quantity
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
