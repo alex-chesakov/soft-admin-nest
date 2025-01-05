@@ -71,6 +71,7 @@ export function CustomerSelector({ value, onChange }: CustomerSelectorProps) {
         disabled
       >
         No customers available
+        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
       </Button>
     );
   }
