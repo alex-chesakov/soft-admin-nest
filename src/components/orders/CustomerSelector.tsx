@@ -35,7 +35,13 @@ export function CustomerSelector({ value, onChange }: CustomerSelectorProps) {
     // Get customers from localStorage (as stored in the Customers page)
     const storedCustomers = localStorage.getItem("customers");
     if (storedCustomers) {
-      setCustomers(JSON.parse(storedCustomers));
+      try {
+        const parsedCustomers = JSON.parse(storedCustomers);
+        setCustomers(Array.isArray(parsedCustomers) ? parsedCustomers : []);
+      } catch (error) {
+        console.error("Error parsing customers from localStorage:", error);
+        setCustomers([]);
+      }
     } else {
       // If no customers in localStorage, use mock data
       setCustomers([
@@ -55,12 +61,14 @@ export function CustomerSelector({ value, onChange }: CustomerSelectorProps) {
     }
   }, []);
 
+  // If customers array is empty, show a disabled button
   if (!customers.length) {
     return (
       <Button
         variant="outline"
         role="combobox"
         className="w-full justify-between"
+        disabled
       >
         No customers available
       </Button>
