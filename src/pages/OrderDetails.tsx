@@ -74,7 +74,7 @@ const OrderDetails = () => {
   return (
     <div className="flex flex-row-reverse gap-6">
       {/* Left Content (now on the right) */}
-      <div className="w-1/3 space-y-6 fixed right-8 top-8 bottom-8 overflow-y-auto">
+      <div className="w-1/3 space-y-6">
         <OrderRequirements requirements={mockOrder.requirements} />
         <CustomerInformation customer={mockOrder} />
         <CollectorInformation collector={mockOrder.collector} />

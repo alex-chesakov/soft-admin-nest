@@ -9,12 +9,10 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-gray-100">
-        <main className="flex-1 p-8 pr-[calc(25%+2rem)]">
+        <main className="flex-1 p-8">
           {children}
         </main>
-        <div className="fixed right-0 top-0 h-full">
-          <AdminSidebar />
-        </div>
+        <AdminSidebar />
       </div>
     </SidebarProvider>
   );
