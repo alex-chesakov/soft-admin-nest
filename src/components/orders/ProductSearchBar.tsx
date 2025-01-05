@@ -1,6 +1,15 @@
 import { useState } from "react";
+import {
+  Command,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+} from "@/components/ui/command";
+import { OrderItem } from "@/types/order";
+import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Dialog,
   DialogContent,
@@ -8,63 +17,51 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  status: "In Stock" | "Low Stock" | "Out of Stock";
-}
-
-const mockProducts: Product[] = [
-  { id: "P1", name: "Premium Laptop", price: 1299.99, status: "In Stock" },
-  { id: "P2", name: "Wireless Mouse", price: 49.99, status: "Low Stock" },
-  { id: "P3", name: "Laptop Stand", price: 79.99, status: "Out of Stock" },
-  { id: "P4", name: "External SSD 1TB", price: 159.99, status: "In Stock" },
-  { id: "P5", name: "USB-C Hub", price: 69.99, status: "In Stock" },
+const products = [
+  { id: "8", name: "Wireless Headphones", price: 199.99 },
+  { id: "9", name: "Mechanical Keyboard", price: 149.99 },
+  { id: "10", name: "Gaming Mouse", price: 79.99 },
+  { id: "11", name: "Monitor Stand", price: 49.99 },
+  { id: "12", name: "USB Microphone", price: 129.99 },
+  { id: "13", name: "Webcam HD", price: 89.99 },
+  { id: "14", name: "Desk Mat", price: 29.99 },
+  { id: "15", name: "Cable Management Kit", price: 19.99 },
 ];
 
 interface ProductSearchBarProps {
-  onProductSelect: (product: {
-    id: string;
-    productName: string;
-    quantity: number;
-    price: number;
-  }) => void;
+  onProductSelect: (product: OrderItem) => void;
 }
 
 export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [value, setValue] = useState("");
+  const [selectedUnits, setSelectedUnits] = useState<Record<string, "unit" | "case">>({});
   const [open, setOpen] = useState(false);
 
-  const filteredProducts = mockProducts.filter((product) =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(value.toLowerCase())
   );
 
-  const handleProductSelect = (product: Product) => {
-    onProductSelect({
-      id: product.id,
-      productName: product.name,
-      quantity: 1,
-      price: product.price,
-    });
-    setSearchTerm("");
-    setOpen(false);
+  const handleProductSelect = (productId: string) => {
+    const product = products.find((p) => p.id === productId);
+    if (product) {
+      onProductSelect({
+        id: product.id,
+        productName: product.name,
+        price: selectedUnits[product.id] === "case" ? product.price * 6 : product.price,
+        quantity: 1,
+        unit: selectedUnits[product.id] === "case" ? "Case" : "Unit"
+      });
+      setValue("");
+      setOpen(false);
+    }
   };
 
-  const getStatusColor = (status: Product["status"]) => {
-    switch (status) {
-      case "In Stock":
-        return "bg-green-100 text-green-800";
-      case "Low Stock":
-        return "bg-yellow-100 text-yellow-800";
-      case "Out of Stock":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
+  const toggleUnit = (productId: string) => {
+    setSelectedUnits(prev => ({
+      ...prev,
+      [productId]: prev[productId] === "case" ? "unit" : "case"
+    }));
   };
 
   return (
@@ -75,35 +72,60 @@ export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => 
           Add Product
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Search Products</DialogTitle>
+          <DialogTitle>Add Product</DialogTitle>
         </DialogHeader>
-        <div className="space-y-4">
-          <Input
-            placeholder="Search products..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <div className="space-y-2">
-            {filteredProducts.map((product) => (
-              <div
-                key={product.id}
-                className="flex items-center justify-between p-2 hover:bg-gray-100 rounded cursor-pointer"
-                onClick={() => handleProductSelect(product)}
-              >
-                <div>
-                  <p className="font-medium">{product.name}</p>
-                  <p className="text-sm text-gray-500">
-                    ${product.price.toFixed(2)}
-                  </p>
-                </div>
-                <Badge className={getStatusColor(product.status)}>
-                  {product.status}
-                </Badge>
-              </div>
-            ))}
-          </div>
+        <div className="relative w-full">
+          <Command className="border rounded-md">
+            <CommandInput
+              placeholder="Search products..."
+              value={value}
+              onValueChange={setValue}
+            />
+            <CommandList>
+              <CommandEmpty>No products found.</CommandEmpty>
+              <CommandGroup>
+                {filteredProducts.map((product) => (
+                  <CommandItem
+                    key={product.id}
+                    value={product.name}
+                    className="flex justify-between items-center"
+                  >
+                    <div className="flex items-center gap-2 flex-1 mr-4">
+                      <span>{product.name}</span>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-6 px-2 text-xs"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          toggleUnit(product.id);
+                        }}
+                      >
+                        {selectedUnits[product.id] === "case" ? "Case" : "Unit"}
+                      </Button>
+                      <span className="ml-auto">
+                        ${selectedUnits[product.id] === "case" ? (product.price * 6).toFixed(2) : product.price.toFixed(2)}
+                      </span>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleProductSelect(product.id);
+                      }}
+                    >
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
         </div>
       </DialogContent>
     </Dialog>
