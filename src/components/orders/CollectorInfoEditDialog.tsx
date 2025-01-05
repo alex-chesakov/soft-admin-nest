@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Edit2 } from "lucide-react";
+import { Edit2, Trash2 } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/select";
 import { useEffect, useState } from "react";
 import { Collector } from "@/types/user";
+import { loadDictionaryItems } from "@/utils/dictionaryStorage";
+import { useToast } from "@/hooks/use-toast";
 
 interface CollectorInfoEditDialogProps {
   collector?: {
@@ -40,6 +42,9 @@ export const CollectorInfoEditDialog = ({
   const [selectedCollector, setSelectedCollector] = useState<string>("");
   const [phone, setPhone] = useState(collector?.phone || "");
   const [email, setEmail] = useState(collector?.email || "");
+  const [collectionWindows, setCollectionWindows] = useState<{ id: string; name: string }[]>([]);
+  const [selectedWindow, setSelectedWindow] = useState<string>("");
+  const { toast } = useToast();
 
   useEffect(() => {
     // Load collectors from localStorage
@@ -60,6 +65,10 @@ export const CollectorInfoEditDialog = ({
         }
       }
     }
+
+    // Load collection windows from dictionary
+    const windows = loadDictionaryItems('collection-windows');
+    setCollectionWindows(windows);
   }, [collector]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -82,6 +91,18 @@ export const CollectorInfoEditDialog = ({
       setPhone(selectedCollectorData.phone);
       setEmail(selectedCollectorData.email);
     }
+  };
+
+  const handleRemoveCollector = () => {
+    onSave({
+      name: "",
+      phone: "",
+      email: "",
+    });
+    toast({
+      title: "Collector removed",
+      description: "The collector has been removed from this order",
+    });
   };
 
   return (
@@ -133,7 +154,36 @@ export const CollectorInfoEditDialog = ({
               disabled
             />
           </div>
-          <Button type="submit" className="w-full">Save Changes</Button>
+          <div className="grid gap-2">
+            <Label htmlFor="collectionWindow">Collection Window</Label>
+            <Select
+              value={selectedWindow}
+              onValueChange={setSelectedWindow}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select collection window" />
+              </SelectTrigger>
+              <SelectContent>
+                {collectionWindows.map((window) => (
+                  <SelectItem key={window.id} value={window.name}>
+                    {window.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Button type="submit" className="w-full">Save Changes</Button>
+            <Button 
+              type="button" 
+              variant="destructive" 
+              className="w-full"
+              onClick={handleRemoveCollector}
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              Remove Collector
+            </Button>
+          </div>
         </form>
       </DialogContent>
     </Dialog>
