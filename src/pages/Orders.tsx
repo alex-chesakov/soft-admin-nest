@@ -14,10 +14,15 @@ const mockOrders: Order[] = [
     phone: "+1234567890",
     date: "2024-02-20",
     status: "pending",
-    total: 599.97,
+    total: 2499.91,
     items: [
-      { id: 1, productName: "Premium Laptop", quantity: 1, price: 499.99 },
-      { id: 2, productName: "Wireless Mouse", quantity: 2, price: 49.99 }
+      { id: 1, productName: "Premium Laptop", quantity: 1, price: 1299.99 },
+      { id: 2, productName: "Wireless Mouse", quantity: 2, price: 49.99 },
+      { id: 3, productName: "Laptop Stand", quantity: 1, price: 79.99 },
+      { id: 4, productName: "External SSD 1TB", quantity: 1, price: 159.99 },
+      { id: 5, productName: "USB-C Hub", quantity: 1, price: 69.99 },
+      { id: 6, productName: "Laptop Backpack", quantity: 1, price: 89.99 },
+      { id: 7, productName: "Wireless Keyboard", quantity: 1, price: 129.99 }
     ],
     location: "New York",
     collector: {
@@ -45,10 +50,14 @@ const mockOrders: Order[] = [
     phone: "+1234567891",
     date: "2024-02-19",
     status: "completed",
-    total: 849.97,
+    total: 2199.92,
     items: [
-      { id: 3, productName: "4K Monitor", quantity: 1, price: 699.99 },
-      { id: 4, productName: "Mechanical Keyboard", quantity: 1, price: 149.98 }
+      { id: 8, productName: "4K Gaming Monitor", quantity: 1, price: 699.99 },
+      { id: 9, productName: "Gaming Chair", quantity: 1, price: 299.99 },
+      { id: 10, productName: "RGB Mechanical Keyboard", quantity: 1, price: 199.99 },
+      { id: 11, productName: "Gaming Mouse", quantity: 1, price: 79.99 },
+      { id: 12, productName: "Mousepad XL", quantity: 2, price: 29.99 },
+      { id: 13, productName: "Gaming Headset", quantity: 1, price: 149.99 }
     ],
     location: "Los Angeles",
     collector: {
@@ -76,11 +85,15 @@ const mockOrders: Order[] = [
     phone: "+1234567892",
     date: "2024-02-18",
     status: "in transit",
-    total: 1299.97,
+    total: 2899.91,
     items: [
-      { id: 5, productName: "Gaming Console", quantity: 1, price: 499.99 },
-      { id: 6, productName: "Gaming Controller", quantity: 2, price: 59.99 },
-      { id: 7, productName: "Gaming Headset", quantity: 1, price: 179.99 }
+      { id: 14, productName: "Gaming Console PS5", quantity: 1, price: 499.99 },
+      { id: 15, productName: "Extra Controller", quantity: 2, price: 69.99 },
+      { id: 16, productName: "Racing Wheel", quantity: 1, price: 299.99 },
+      { id: 17, productName: "VR Headset", quantity: 1, price: 399.99 },
+      { id: 18, productName: "Gaming Monitor 27\"", quantity: 1, price: 349.99 },
+      { id: 19, productName: "Console Stand", quantity: 1, price: 39.99 },
+      { id: 20, productName: "Game Bundle", quantity: 3, price: 59.99 }
     ],
     location: "Chicago",
     collector: {
@@ -108,11 +121,15 @@ const mockOrders: Order[] = [
     phone: "+1234567893",
     date: "2024-02-17",
     status: "collector assigned",
-    total: 899.96,
+    total: 1899.91,
     items: [
-      { id: 8, productName: "Smart Watch", quantity: 2, price: 299.99 },
-      { id: 9, productName: "Watch Band", quantity: 3, price: 29.99 },
-      { id: 10, productName: "Screen Protector", quantity: 4, price: 9.99 }
+      { id: 21, productName: "Smart Watch Pro", quantity: 2, price: 399.99 },
+      { id: 22, productName: "Leather Band", quantity: 3, price: 49.99 },
+      { id: 23, productName: "Screen Protector Pack", quantity: 4, price: 9.99 },
+      { id: 24, productName: "Wireless Earbuds", quantity: 1, price: 199.99 },
+      { id: 25, productName: "Charging Dock", quantity: 1, price: 79.99 },
+      { id: 26, productName: "Sports Band", quantity: 2, price: 29.99 },
+      { id: 27, productName: "Travel Case", quantity: 1, price: 39.99 }
     ],
     location: "Miami",
     collector: {
@@ -140,10 +157,15 @@ const mockOrders: Order[] = [
     phone: "+1234567894",
     date: "2024-02-16",
     status: "new order",
-    total: 1499.95,
+    total: 3499.91,
     items: [
-      { id: 11, productName: "Professional Camera", quantity: 1, price: 1299.99 },
-      { id: 12, productName: "Camera Lens", quantity: 1, price: 199.96 }
+      { id: 28, productName: "Professional Camera Body", quantity: 1, price: 1999.99 },
+      { id: 29, productName: "50mm Prime Lens", quantity: 1, price: 499.99 },
+      { id: 30, productName: "Camera Bag", quantity: 1, price: 149.99 },
+      { id: 31, productName: "Tripod", quantity: 1, price: 199.99 },
+      { id: 32, productName: "Memory Card 128GB", quantity: 2, price: 79.99 },
+      { id: 33, productName: "External Flash", quantity: 1, price: 299.99 },
+      { id: 34, productName: "Battery Grip", quantity: 1, price: 189.99 }
     ],
     location: "Boston",
     collector: null,
@@ -378,7 +400,6 @@ const Orders = () => {
   const { data: orders, isLoading } = useQuery({
     queryKey: ["orders"],
     queryFn: async () => {
-      // Simulate API call
       const ordersWithSavedStatus = mockOrders.map(order => {
         const savedStatus = localStorage.getItem(`order-status-${order.id}`);
         return savedStatus ? { ...order, status: savedStatus as Order['status'] } : order;
