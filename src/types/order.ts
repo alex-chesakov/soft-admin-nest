@@ -15,7 +15,7 @@ export interface Order {
   email: string;
   phone: string;
   date: string;
-  status: "pending" | "processing" | "completed" | "cancelled" | "in transit" | "collector assigned" | "new order" | "delivered" | "in progress";
+  status: "new order" | "in progress" | "collector assigned" | "in transit" | "collected" | "cancelled" | "delivered";
   total: number;
   items: OrderItem[];
   requirements?: string[];

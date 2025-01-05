@@ -4,7 +4,7 @@ export const mockOrder = {
   email: "john@example.com",
   phone: "+1234567890",
   date: "2024-02-20",
-  status: "pending",
+  status: "in progress",
   total: 2499.91,
   items: [
     { id: "1", productName: "Premium Laptop", quantity: 1, price: 1299.99 },
