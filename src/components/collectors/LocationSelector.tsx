@@ -66,8 +66,10 @@ export const LocationSelector = ({
                   <CommandItem
                     key={`location-${city}`}
                     value={city}
-                    onSelect={() => handleLocationSelect(city)}
-                    className="cursor-pointer hover:bg-accent"
+                    onSelect={(currentValue) => {
+                      handleLocationSelect(currentValue);
+                    }}
+                    className="cursor-pointer"
                   >
                     <Check
                       className={cn(
