@@ -49,28 +49,29 @@ export function CustomerSelector({ value = '', onChange }: CustomerSelectorProps
       },
     ];
 
-    const storedCustomers = localStorage.getItem("customers");
-    if (storedCustomers) {
-      try {
+    try {
+      const storedCustomers = localStorage.getItem("customers");
+      if (storedCustomers) {
         const parsedCustomers = JSON.parse(storedCustomers);
         setCustomers(Array.isArray(parsedCustomers) ? parsedCustomers : defaultCustomers);
-      } catch (error) {
-        console.error("Error parsing customers from localStorage:", error);
+      } else {
         setCustomers(defaultCustomers);
       }
-    } else {
+    } catch (error) {
+      console.error("Error loading customers:", error);
       setCustomers(defaultCustomers);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }, []);
 
   // Ensure we're working with an array and handle null/undefined cases
   const safeCustomers = Array.isArray(customers) ? customers : [];
 
   const filteredCustomers = safeCustomers.filter(customer =>
-    customer.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-    customer.email.toLowerCase().includes(searchValue.toLowerCase()) ||
-    customer.phone.toLowerCase().includes(searchValue.toLowerCase())
+    customer?.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
+    customer?.email?.toLowerCase().includes(searchValue.toLowerCase()) ||
+    customer?.phone?.toLowerCase().includes(searchValue.toLowerCase())
   );
 
   if (isLoading) {
