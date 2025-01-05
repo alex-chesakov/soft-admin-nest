@@ -72,15 +72,15 @@ const OrderDetails = () => {
   const { id } = useParams();
   
   return (
-    <div className="flex gap-6">
-      {/* Left Sidebar */}
+    <div className="flex flex-row-reverse gap-6">
+      {/* Left Content (now on the right) */}
       <div className="w-1/3 space-y-6">
         <OrderRequirements requirements={mockOrder.requirements} />
         <CustomerInformation customer={mockOrder} />
         <CollectorInformation collector={mockOrder.collector} />
       </div>
 
-      {/* Main Content */}
+      {/* Main Content (now on the left) */}
       <div className="flex-1 space-y-6">
         <div className="flex justify-between items-center">
           <div>
