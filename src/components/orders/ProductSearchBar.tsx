@@ -3,7 +3,6 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Search, Plus } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { OrderItem } from "@/types/order";
 
 // Sample products data - in a real app, this would come from an API or database
@@ -29,22 +28,25 @@ interface ProductSearchBarProps {
 
 export const ProductSearchBar = ({ onProductAdd, existingItems }: ProductSearchBarProps) => {
   const [open, setOpen] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
+  const [value, setValue] = useState("");
 
   // Filter out products that are already in the order
   const availableProductsFiltered = availableProducts.filter(
     (product) => !existingItems.some((item) => item.productName === product.name)
   );
 
-  const handleProductSelect = (product: typeof availableProducts[0]) => {
-    onProductAdd({
-      id: product.id,
-      productName: product.name,
-      quantity: 1,
-      price: product.price,
-    });
-    setOpen(false);
-    setSearchValue("");
+  const handleProductSelect = (productName: string) => {
+    const product = availableProducts.find((p) => p.name === productName);
+    if (product) {
+      onProductAdd({
+        id: product.id,
+        productName: product.name,
+        quantity: 1,
+        price: product.price,
+      });
+      setOpen(false);
+      setValue("");
+    }
   };
 
   return (
@@ -58,27 +60,27 @@ export const ProductSearchBar = ({ onProductAdd, existingItems }: ProductSearchB
             className="w-full justify-between"
           >
             <Search className="mr-2 h-4 w-4" />
-            {searchValue || "Search products..."}
+            {value || "Search products..."}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[400px] p-0" align="start">
           <Command>
             <CommandInput 
               placeholder="Search products..." 
-              value={searchValue}
-              onValueChange={setSearchValue}
+              value={value}
+              onValueChange={setValue}
             />
             <CommandEmpty>No products found.</CommandEmpty>
             <CommandGroup>
               {availableProductsFiltered
                 .filter((product) =>
-                  product.name.toLowerCase().includes(searchValue.toLowerCase())
+                  product.name.toLowerCase().includes(value.toLowerCase())
                 )
                 .map((product) => (
                   <CommandItem
                     key={product.id}
                     value={product.name}
-                    onSelect={() => handleProductSelect(product)}
+                    onSelect={handleProductSelect}
                     className="cursor-pointer"
                   >
                     <Plus className="mr-2 h-4 w-4" />
