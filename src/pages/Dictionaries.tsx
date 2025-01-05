@@ -12,7 +12,7 @@ import { Save } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { DictionaryTable } from "@/components/dictionaries/DictionaryTable";
 import { AddItemDialog } from "@/components/dictionaries/AddItemDialog";
-import { loadDictionaryItems, saveDictionaryItems } from "@/utils/dictionaryStorage";
+import { loadDictionaryItems, saveDictionaryItems, getNextId } from "@/utils/dictionaryStorage";
 
 interface DictionaryItem {
   id: string;
@@ -43,7 +43,7 @@ const Dictionaries = () => {
 
   const handleAddItem = (name: string) => {
     const newItem: DictionaryItem = {
-      id: `${selectedDictionary}-${Date.now()}`,
+      id: getNextId(items),
       name,
     };
     setItems([...items, newItem]);
