@@ -1,8 +1,10 @@
 export interface OrderItem {
-  id: number;
+  id: number | string;
   productName: string;
   quantity: number;
   price: number;
+  status?: string;
+  unit?: "Unit" | "Case";
 }
 
 export interface Order {
