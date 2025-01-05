@@ -30,6 +30,19 @@ interface OrdersTableProps {
 export const OrdersTable = ({ orders }: OrdersTableProps) => {
   const navigate = useNavigate();
 
+  const getPaymentStatusVariant = (status: string) => {
+    switch (status) {
+      case 'paid':
+        return 'success';
+      case 'pending':
+        return 'warning';
+      case 'failed':
+        return 'destructive';
+      default:
+        return 'default';
+    }
+  };
+
   return (
     <Table>
       <TableHeader>
@@ -74,13 +87,7 @@ export const OrdersTable = ({ orders }: OrdersTableProps) => {
             </TableCell>
             <TableCell>
               <Badge
-                variant={
-                  order.paymentStatus === "paid"
-                    ? "default"
-                    : order.paymentStatus === "pending"
-                    ? "secondary"
-                    : "destructive"
-                }
+                variant={getPaymentStatusVariant(order.paymentStatus)}
               >
                 {order.paymentStatus}
               </Badge>
