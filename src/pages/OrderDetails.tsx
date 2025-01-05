@@ -125,7 +125,9 @@ const OrderDetails = () => {
             pickupLocations={orderDetails.pickupLocations}
             deliveryLocation={orderDetails.deliveryLocation}
             onDeliveryLocationUpdate={handleDeliveryLocationUpdate}
+            shippingAddress={orderDetails.shippingAddress}
             role={role as 'admin' | 'collector'}
+            collectionWindow={orderDetails.collector?.collectionWindow}
           />
 
           <OrderFees
