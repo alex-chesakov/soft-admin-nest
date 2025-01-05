@@ -1,11 +1,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Package2 } from "lucide-react";
+import { Package2, Plus, Minus, Trash2 } from "lucide-react";
 import { OrderItem } from "@/types/order";
 import { ProductSearchBar } from "./ProductSearchBar";
 import { loadDictionaryItems, getItemStatusColor } from "@/utils/dictionaryStorage";
 import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface OrderFeesProps {
   items: OrderItem[];
@@ -35,24 +41,27 @@ export const OrderFees = ({ items, fees, total, onItemsChange }: OrderFeesProps)
         );
         onItemsChange(updatedItems);
       } else {
-        // Randomly select a status from the dictionary
         const randomStatus = itemStatuses[Math.floor(Math.random() * itemStatuses.length)];
         const productWithStatus: OrderItem = {
           ...newProduct,
           id: "CRT006",
           status: randomStatus.name,
-          unit: "Unit" as const // Explicitly type as "Unit"
+          unit: "Unit" as const
         };
         onItemsChange([...items, productWithStatus]);
       }
     }
   };
 
-  const handleQuantityChange = (itemId: string, newQuantity: number) => {
-    if (onItemsChange && newQuantity >= 0) {
-      const updatedItems = items.map((item) =>
-        item.id === itemId ? { ...item, quantity: newQuantity } : item
-      );
+  const handleQuantityChange = (itemId: string, change: number) => {
+    if (onItemsChange) {
+      const updatedItems = items.map((item) => {
+        if (item.id === itemId) {
+          const newQuantity = Math.max(0, item.quantity + change);
+          return { ...item, quantity: newQuantity };
+        }
+        return item;
+      });
       onItemsChange(updatedItems);
     }
   };
@@ -62,6 +71,13 @@ export const OrderFees = ({ items, fees, total, onItemsChange }: OrderFeesProps)
       const updatedItems = items.map((item) =>
         item.id === itemId ? { ...item, unit } : item
       );
+      onItemsChange(updatedItems);
+    }
+  };
+
+  const handleDeleteItem = (itemId: string) => {
+    if (onItemsChange) {
+      const updatedItems = items.filter((item) => item.id !== itemId);
       onItemsChange(updatedItems);
     }
   };
@@ -80,49 +96,73 @@ export const OrderFees = ({ items, fees, total, onItemsChange }: OrderFeesProps)
       <CardContent>
         <div className="space-y-4">
           {items.map((item) => (
-            <div key={item.id} className="flex justify-between items-center border-b pb-4 last:border-0">
+            <div key={item.id} className="flex justify-between items-start border-b pb-4 last:border-0">
               <div className="space-y-1 flex-1">
-                <div className="flex items-center gap-2">
-                  <p className="font-medium">{item.productName}</p>
-                  <span 
-                    className="text-xs px-2 py-1 rounded"
-                    style={{ 
-                      backgroundColor: getItemStatusColor(item.status || 'Not collected'),
-                      color: 'white'
-                    }}
-                  >
-                    {item.status || 'Not collected'}
-                  </span>
-                </div>
+                <p className="font-medium">{item.productName}</p>
                 <p className="text-sm text-gray-500">ID: {item.id}</p>
-                <p className="text-sm text-gray-500">Price: ${item.price.toFixed(2)}/{item.unit || 'Unit'}</p>
                 <div className="flex items-center gap-4 mt-2">
                   <div className="flex items-center gap-2">
                     <label className="text-sm text-gray-500">Booked Qty:</label>
-                    <Input
-                      type="number"
-                      value={item.quantity}
-                      onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value) || 0)}
-                      className="w-20 h-8"
-                    />
+                    <div className="flex items-center">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-8 w-8 rounded-r-none"
+                        onClick={() => handleQuantityChange(item.id, -1)}
+                      >
+                        <Minus className="h-4 w-4" />
+                      </Button>
+                      <Input
+                        type="number"
+                        value={item.quantity}
+                        onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value) - item.quantity)}
+                        className="w-16 h-8 rounded-none text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      />
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-8 w-8 rounded-l-none"
+                        onClick={() => handleQuantityChange(item.id, 1)}
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
-                  <RadioGroup
+                  <Select
                     value={item.unit || "Unit"}
                     onValueChange={(value) => handleUnitChange(item.id, value as "Unit" | "Case")}
-                    className="flex items-center gap-2"
                   >
-                    <div className="flex items-center gap-1">
-                      <RadioGroupItem value="Unit" id={`unit-${item.id}`} />
-                      <Label htmlFor={`unit-${item.id}`}>Unit</Label>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <RadioGroupItem value="Case" id={`case-${item.id}`} />
-                      <Label htmlFor={`case-${item.id}`}>Case</Label>
-                    </div>
-                  </RadioGroup>
+                    <SelectTrigger className="w-24 h-8">
+                      <SelectValue placeholder="Select unit" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Unit">Unit</SelectItem>
+                      <SelectItem value="Case">Case</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
-              <p className="font-medium ml-4">${(item.price * item.quantity).toFixed(2)}</p>
+              <div className="text-right space-y-2">
+                <span 
+                  className="text-xs px-2 py-1 rounded inline-block"
+                  style={{ 
+                    backgroundColor: getItemStatusColor(item.status || 'Not collected'),
+                    color: 'white'
+                  }}
+                >
+                  {item.status || 'Not collected'}
+                </span>
+                <p className="font-medium">${(item.price * item.quantity).toFixed(2)}</p>
+                <p className="text-sm text-gray-500">Price: ${item.price.toFixed(2)}/{item.unit || 'Unit'}</p>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 text-red-500 hover:text-red-600 hover:bg-red-50"
+                  onClick={() => handleDeleteItem(item.id)}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           ))}
           <div className="pt-4 space-y-2 border-t">
