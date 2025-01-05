@@ -35,42 +35,30 @@ export const ItemStatusPopover = ({
   const [isOpen, setIsOpen] = useState(false);
   const [showQtyInput, setShowQtyInput] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState<string>("");
-  const [newQty, setNewQty] = useState<string>("");
 
   const handleStatusClick = (newStatus: string) => {
     if (newStatus === "Collected Adjusted") {
-      setSelectedStatus(newStatus);
-      setIsConfirmOpen(true);
-      setIsOpen(false);
+      setShowQtyInput(true);
       return;
     }
-    setSelectedStatus(newStatus);
-    setIsConfirmOpen(true);
+    setShowQtyInput(false);
+    onStatusChange(newStatus);
     setIsOpen(false);
   };
 
   const handleAdjustedQtySave = () => {
     if (adjustedQty) {
-      setSelectedStatus("Collected Adjusted");
-      setNewQty(adjustedQty);
       setIsConfirmOpen(true);
-      setIsOpen(false);
+      setIsOpen(false); // Close the popover when showing confirmation
     }
   };
 
-  const handleConfirmStatusChange = () => {
-    if (selectedStatus === "Collected Adjusted") {
-      onStatusChange(selectedStatus, Number(newQty || adjustedQty));
-      setAdjustedQty(newQty || adjustedQty); // Update the displayed adjusted quantity
-      setNewQty("");
-      setShowQtyInput(false);
-    } else {
-      onStatusChange(selectedStatus);
-    }
+  const handleConfirmAdjustedQty = () => {
+    onStatusChange("Collected Adjusted", Number(adjustedQty));
+    setAdjustedQty("");
+    setShowQtyInput(false);
     setIsOpen(false);
     setIsConfirmOpen(false);
-    setSelectedStatus("");
   };
 
   return (
@@ -85,9 +73,6 @@ export const ItemStatusPopover = ({
             }}
           >
             {status}
-            {status === "Collected Adjusted" && adjustedQty && (
-              <span className="ml-1">(Adjusted Qty: {adjustedQty})</span>
-            )}
             <ChevronDown className="h-3 w-3" />
           </button>
         </PopoverTrigger>
@@ -128,33 +113,20 @@ export const ItemStatusPopover = ({
       <AlertDialog open={isConfirmOpen} onOpenChange={setIsConfirmOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Confirm Status Change</AlertDialogTitle>
+            <AlertDialogTitle>Confirm Adjusted Quantity</AlertDialogTitle>
             <AlertDialogDescription>
-              {selectedStatus === "Collected Adjusted" ? (
-                <div className="space-y-4">
-                  <p>Please enter the adjusted quantity:</p>
-                  <Input
-                    type="number"
-                    value={newQty || adjustedQty}
-                    onChange={(e) => setNewQty(e.target.value)}
-                    className="w-full"
-                    placeholder="Enter new quantity"
-                  />
-                </div>
-              ) : (
-                `Are you sure you want to change the status to ${selectedStatus}?`
-              )}
+              Are you sure you want to set the adjusted quantity to {adjustedQty}?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={() => {
               setIsConfirmOpen(false);
-              setIsOpen(true);
+              setIsOpen(true); // Reopen the popover when canceling
               }}>
               Cancel
             </AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirmStatusChange}>
-              {selectedStatus === "Collected Adjusted" ? "Adjust" : "Confirm"}
+            <AlertDialogAction onClick={handleConfirmAdjustedQty}>
+              Confirm
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
