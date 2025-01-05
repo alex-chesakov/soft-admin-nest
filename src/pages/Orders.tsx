@@ -14,10 +14,10 @@ const mockOrders: Order[] = [
     phone: "+1234567890",
     date: "2024-02-20",
     status: "pending",
-    total: 299.99,
+    total: 599.97,
     items: [
-      { id: 1, productName: "Product 1", quantity: 2, price: 149.99 },
-      { id: 2, productName: "Product 2", quantity: 1, price: 149.99 }
+      { id: 1, productName: "Premium Laptop", quantity: 1, price: 499.99 },
+      { id: 2, productName: "Wireless Mouse", quantity: 2, price: 49.99 }
     ],
     location: "New York",
     collector: {
@@ -45,9 +45,10 @@ const mockOrders: Order[] = [
     phone: "+1234567891",
     date: "2024-02-19",
     status: "completed",
-    total: 159.99,
+    total: 849.97,
     items: [
-      { id: 3, productName: "Product 3", quantity: 1, price: 159.99 }
+      { id: 3, productName: "4K Monitor", quantity: 1, price: 699.99 },
+      { id: 4, productName: "Mechanical Keyboard", quantity: 1, price: 149.98 }
     ],
     location: "Los Angeles",
     collector: {
@@ -75,9 +76,11 @@ const mockOrders: Order[] = [
     phone: "+1234567892",
     date: "2024-02-18",
     status: "in transit",
-    total: 429.99,
+    total: 1299.97,
     items: [
-      { id: 4, productName: "Product 4", quantity: 3, price: 143.33 }
+      { id: 5, productName: "Gaming Console", quantity: 1, price: 499.99 },
+      { id: 6, productName: "Gaming Controller", quantity: 2, price: 59.99 },
+      { id: 7, productName: "Gaming Headset", quantity: 1, price: 179.99 }
     ],
     location: "Chicago",
     collector: {
@@ -105,9 +108,11 @@ const mockOrders: Order[] = [
     phone: "+1234567893",
     date: "2024-02-17",
     status: "collector assigned",
-    total: 699.99,
+    total: 899.96,
     items: [
-      { id: 5, productName: "Product 5", quantity: 1, price: 699.99 }
+      { id: 8, productName: "Smart Watch", quantity: 2, price: 299.99 },
+      { id: 9, productName: "Watch Band", quantity: 3, price: 29.99 },
+      { id: 10, productName: "Screen Protector", quantity: 4, price: 9.99 }
     ],
     location: "Miami",
     collector: {
@@ -135,9 +140,10 @@ const mockOrders: Order[] = [
     phone: "+1234567894",
     date: "2024-02-16",
     status: "new order",
-    total: 249.99,
+    total: 1499.95,
     items: [
-      { id: 6, productName: "Product 6", quantity: 2, price: 124.99 }
+      { id: 11, productName: "Professional Camera", quantity: 1, price: 1299.99 },
+      { id: 12, productName: "Camera Lens", quantity: 1, price: 199.96 }
     ],
     location: "Boston",
     collector: null,
