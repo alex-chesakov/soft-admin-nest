@@ -12,14 +12,14 @@ import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const products = [
-  { id: 8, name: "Wireless Headphones", price: 199.99 },
-  { id: 9, name: "Mechanical Keyboard", price: 149.99 },
-  { id: 10, name: "Gaming Mouse", price: 79.99 },
-  { id: 11, name: "Monitor Stand", price: 49.99 },
-  { id: 12, name: "USB Microphone", price: 129.99 },
-  { id: 13, name: "Webcam HD", price: 89.99 },
-  { id: 14, name: "Desk Mat", price: 29.99 },
-  { id: 15, name: "Cable Management Kit", price: 19.99 },
+  { id: "8", name: "Wireless Headphones", price: 199.99 },
+  { id: "9", name: "Mechanical Keyboard", price: 149.99 },
+  { id: "10", name: "Gaming Mouse", price: 79.99 },
+  { id: "11", name: "Monitor Stand", price: 49.99 },
+  { id: "12", name: "USB Microphone", price: 129.99 },
+  { id: "13", name: "Webcam HD", price: 89.99 },
+  { id: "14", name: "Desk Mat", price: 29.99 },
+  { id: "15", name: "Cable Management Kit", price: 19.99 },
 ];
 
 interface ProductSearchBarProps {
@@ -28,13 +28,13 @@ interface ProductSearchBarProps {
 
 export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => {
   const [value, setValue] = useState("");
-  const [selectedUnits, setSelectedUnits] = useState<Record<number, "unit" | "case">>({});
+  const [selectedUnits, setSelectedUnits] = useState<Record<string, "unit" | "case">>({});
 
   const filteredProducts = products.filter((product) =>
     product.name.toLowerCase().includes(value.toLowerCase())
   );
 
-  const handleProductSelect = (productId: number) => {
+  const handleProductSelect = (productId: string) => {
     const product = products.find((p) => p.id === productId);
     if (product) {
       onProductSelect({
@@ -42,12 +42,13 @@ export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => 
         productName: product.name,
         price: selectedUnits[product.id] === "case" ? product.price * 6 : product.price,
         quantity: 1,
+        unit: selectedUnits[product.id] === "case" ? "Case" : "Unit"
       });
       setValue("");
     }
   };
 
-  const toggleUnit = (productId: number) => {
+  const toggleUnit = (productId: string) => {
     setSelectedUnits(prev => ({
       ...prev,
       [productId]: prev[productId] === "case" ? "unit" : "case"

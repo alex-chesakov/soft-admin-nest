@@ -37,18 +37,18 @@ export const OrderFees = ({ items, fees, total, onItemsChange }: OrderFeesProps)
       } else {
         // Randomly select a status from the dictionary
         const randomStatus = itemStatuses[Math.floor(Math.random() * itemStatuses.length)];
-        const productWithStatus = {
+        const productWithStatus: OrderItem = {
           ...newProduct,
           id: "CRT006",
           status: randomStatus.name,
-          unit: "Unit"
+          unit: "Unit" as const // Explicitly type as "Unit"
         };
         onItemsChange([...items, productWithStatus]);
       }
     }
   };
 
-  const handleQuantityChange = (itemId: number | string, newQuantity: number) => {
+  const handleQuantityChange = (itemId: string, newQuantity: number) => {
     if (onItemsChange && newQuantity >= 0) {
       const updatedItems = items.map((item) =>
         item.id === itemId ? { ...item, quantity: newQuantity } : item
@@ -57,7 +57,7 @@ export const OrderFees = ({ items, fees, total, onItemsChange }: OrderFeesProps)
     }
   };
 
-  const handleUnitChange = (itemId: number | string, unit: "Unit" | "Case") => {
+  const handleUnitChange = (itemId: string, unit: "Unit" | "Case") => {
     if (onItemsChange) {
       const updatedItems = items.map((item) =>
         item.id === itemId ? { ...item, unit } : item
