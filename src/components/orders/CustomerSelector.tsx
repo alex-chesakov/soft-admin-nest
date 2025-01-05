@@ -30,10 +30,10 @@ interface CustomerSelectorProps {
 export function CustomerSelector({ value, onChange }: CustomerSelectorProps) {
   const [open, setOpen] = useState(false);
   const [customers, setCustomers] = useState<Customer[]>([]);
+  const [searchValue, setSearchValue] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Get customers from localStorage (as stored in the Customers page)
     const storedCustomers = localStorage.getItem("customers");
     if (storedCustomers) {
       try {
@@ -44,7 +44,6 @@ export function CustomerSelector({ value, onChange }: CustomerSelectorProps) {
         setCustomers([]);
       }
     } else {
-      // If no customers in localStorage, use mock data
       setCustomers([
         {
           id: "CUST-001",
@@ -63,6 +62,12 @@ export function CustomerSelector({ value, onChange }: CustomerSelectorProps) {
     setIsLoading(false);
   }, []);
 
+  const filteredCustomers = customers.filter(customer =>
+    customer.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+    customer.email.toLowerCase().includes(searchValue.toLowerCase()) ||
+    customer.phone.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
   if (isLoading) {
     return (
       <Button
@@ -77,7 +82,6 @@ export function CustomerSelector({ value, onChange }: CustomerSelectorProps) {
     );
   }
 
-  // If customers array is empty, show a disabled button
   if (!customers.length) {
     return (
       <Button
@@ -107,10 +111,14 @@ export function CustomerSelector({ value, onChange }: CustomerSelectorProps) {
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
         <Command>
-          <CommandInput placeholder="Search customers..." />
+          <CommandInput 
+            placeholder="Search customers..." 
+            value={searchValue}
+            onValueChange={setSearchValue}
+          />
           <CommandEmpty>No customer found.</CommandEmpty>
           <CommandGroup>
-            {customers.map((customer) => (
+            {filteredCustomers.map((customer) => (
               <CommandItem
                 key={customer.id}
                 value={customer.name}
