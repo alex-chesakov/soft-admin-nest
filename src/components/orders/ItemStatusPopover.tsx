@@ -49,6 +49,7 @@ export const ItemStatusPopover = ({
   const handleAdjustedQtySave = () => {
     if (adjustedQty) {
       setIsConfirmOpen(true);
+      setIsOpen(false); // Close the popover when showing confirmation
     }
   };
 
@@ -118,7 +119,12 @@ export const ItemStatusPopover = ({
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel onClick={() => {
+              setIsConfirmOpen(false);
+              setIsOpen(true); // Reopen the popover when canceling
+              }}>
+              Cancel
+            </AlertDialogCancel>
             <AlertDialogAction onClick={handleConfirmAdjustedQty}>
               Confirm
             </AlertDialogAction>
