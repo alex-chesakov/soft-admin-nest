@@ -55,8 +55,13 @@ const Orders = () => {
   const { data: orders, isLoading } = useQuery({
     queryKey: ["orders"],
     queryFn: async () => {
+      // Simulate API call
+      const ordersWithSavedStatus = mockOrders.map(order => {
+        const savedStatus = localStorage.getItem(`order-status-${order.id}`);
+        return savedStatus ? { ...order, status: savedStatus } : order;
+      });
       return new Promise<Order[]>((resolve) => {
-        setTimeout(() => resolve(mockOrders), 1000);
+        setTimeout(() => resolve(ordersWithSavedStatus), 1000);
       });
     },
   });
