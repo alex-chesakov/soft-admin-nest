@@ -56,7 +56,7 @@ export const OrderItemComponent = ({
             </Badge>
           )}
         </div>
-        <p className="text-sm text-gray-500">ID: {item.id}</p>
+        <p className="text-sm text-gray-500">BIN: {item.id}</p>
         <p className="text-sm text-gray-500 mt-2">Price: ${displayPrice.toFixed(2)}/{item.unit || 'Unit'}</p>
         <div className="flex items-center gap-4 mt-2">
           <div className="flex items-center gap-2">

@@ -6,6 +6,7 @@ export interface OrderItem {
   status?: string;
   unit?: "Unit" | "Case";
   adjustedQuantity?: number;
+  productStatus?: string;
 }
 
 export interface Order {
