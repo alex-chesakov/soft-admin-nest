@@ -43,6 +43,8 @@ export const OrderItemComponent = ({
     }
   };
 
+  const displayPrice = item.unit === "Case" ? item.price * 10 : item.price;
+
   return (
     <div className="flex justify-between items-start border-b pb-4 last:border-0">
       <div className="space-y-1 flex-1">
@@ -55,7 +57,7 @@ export const OrderItemComponent = ({
           )}
         </div>
         <p className="text-sm text-gray-500">ID: {item.id}</p>
-        <p className="text-sm text-gray-500 mt-2">Price: ${item.price.toFixed(2)}/{item.unit || 'Unit'}</p>
+        <p className="text-sm text-gray-500 mt-2">Price: ${displayPrice.toFixed(2)}/{item.unit || 'Unit'}</p>
         <div className="flex items-center gap-4 mt-2">
           <div className="flex items-center gap-2">
             <label className="text-sm text-gray-500">Booked Qty:</label>
@@ -111,7 +113,7 @@ export const OrderItemComponent = ({
           onStatusChange={(newStatus, adjustedQty) => onStatusChange(item.id, newStatus, adjustedQty)}
           statuses={itemStatuses}
         />
-        <p className="font-medium">${(item.price * item.quantity).toFixed(2)}</p>
+        <p className="font-medium">${(displayPrice * item.quantity).toFixed(2)}</p>
         <Button
           variant="ghost"
           size="icon"
