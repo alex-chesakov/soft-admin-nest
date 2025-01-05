@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 
 interface OrderDetailsEditDialogProps {
   deliveryDate: string;
@@ -29,6 +30,19 @@ interface OrderDetailsEditDialogProps {
     paymentStatus: 'paid' | 'pending' | 'failed';
   }) => void;
 }
+
+const getPaymentStatusColor = (status: string) => {
+  switch (status) {
+    case 'paid':
+      return 'bg-green-50 text-green-700 border-green-200';
+    case 'pending':
+      return 'bg-orange-50 text-orange-700 border-orange-200';
+    case 'failed':
+      return 'bg-red-50 text-red-700 border-red-200';
+    default:
+      return '';
+  }
+};
 
 export const OrderDetailsEditDialog = ({
   deliveryDate,
@@ -94,11 +108,14 @@ export const OrderDetailsEditDialog = ({
               id="paymentStatus"
               name="paymentStatus"
               defaultValue={paymentStatus}
-              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1"
+              className={cn(
+                "flex h-9 w-full rounded-md border px-3 py-1",
+                getPaymentStatusColor(paymentStatus)
+              )}
             >
-              <option value="paid">Paid</option>
-              <option value="pending">Pending</option>
-              <option value="failed">Failed</option>
+              <option value="paid" className="bg-green-50 text-green-700">Paid</option>
+              <option value="pending" className="bg-orange-50 text-orange-700">Pending</option>
+              <option value="failed" className="bg-red-50 text-red-700">Failed</option>
             </select>
           </div>
           <Button type="submit" className="w-full">Save Changes</Button>
