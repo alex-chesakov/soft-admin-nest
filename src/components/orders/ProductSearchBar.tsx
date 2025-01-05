@@ -28,6 +28,10 @@ export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
 
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(value.toLowerCase())
+  );
+
   const handleProductSelect = (productName: string) => {
     const product = products.find((p) => p.name === productName);
     if (product) {
@@ -43,7 +47,7 @@ export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => 
   };
 
   return (
-    <Command className="border rounded-md w-72" shouldFilter={false}>
+    <Command className="border rounded-md w-72">
       <CommandInput
         placeholder="Search products..."
         value={value}
@@ -52,26 +56,22 @@ export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => 
           setOpen(newValue.length > 0);
         }}
       />
-      {open && (
+      {open && filteredProducts.length > 0 && (
         <CommandList>
           <CommandEmpty>No products found.</CommandEmpty>
           <CommandGroup>
-            {products
-              .filter((product) =>
-                product.name.toLowerCase().includes(value.toLowerCase())
-              )
-              .map((product) => (
-                <CommandItem
-                  key={product.id}
-                  value={product.name}
-                  onSelect={handleProductSelect}
-                >
-                  <div className="flex justify-between w-full">
-                    <span>{product.name}</span>
-                    <span>${product.price}</span>
-                  </div>
-                </CommandItem>
-              ))}
+            {filteredProducts.map((product) => (
+              <CommandItem
+                key={product.id}
+                value={product.name}
+                onSelect={handleProductSelect}
+              >
+                <div className="flex justify-between w-full">
+                  <span>{product.name}</span>
+                  <span>${product.price}</span>
+                </div>
+              </CommandItem>
+            ))}
           </CommandGroup>
         </CommandList>
       )}
