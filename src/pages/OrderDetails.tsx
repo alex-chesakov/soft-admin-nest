@@ -99,11 +99,6 @@ const OrderDetails = () => {
           onDeliveryLocationUpdate={handleDeliveryLocationUpdate}
         />
 
-        <RequirementsSummary
-          requirements={orderDetails.requirements || []}
-          onUpdate={handleRequirementsUpdate}
-        />
-
         <OrderFees
           items={orderDetails.items}
           fees={orderDetails.fees || { subtotal: 0, serviceFee: 0, creditCardFee: 0 }}
@@ -113,6 +108,11 @@ const OrderDetails = () => {
 
       {/* Right Sidebar */}
       <div className="w-80 space-y-6">
+        <RequirementsSummary
+          requirements={orderDetails.requirements || []}
+          onUpdate={handleRequirementsUpdate}
+        />
+
         <CustomerInformation
           customerName={orderDetails.customerName}
           email={orderDetails.email}
