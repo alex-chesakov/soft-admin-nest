@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/select";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Save, Trash2 } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -25,6 +25,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 
 interface DictionaryItem {
   id: string;
@@ -37,14 +38,22 @@ const Dictionaries = () => {
   const [items, setItems] = useState<DictionaryItem[]>([]);
   const [newItemName, setNewItemName] = useState("");
   const [newItemDescription, setNewItemDescription] = useState("");
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const { toast } = useToast();
 
   const handleDictionaryChange = (value: string) => {
+    if (hasUnsavedChanges) {
+      const confirmed = window.confirm("You have unsaved changes. Are you sure you want to switch dictionaries?");
+      if (!confirmed) return;
+    }
+    
     setSelectedDictionary(value);
     // Mock data - in a real app, this would fetch from an API
     setItems([
       { id: "1", name: "Item 1", description: "Description 1" },
       { id: "2", name: "Item 2", description: "Description 2" },
     ]);
+    setHasUnsavedChanges(false);
   };
 
   const handleAddItem = () => {
@@ -57,11 +66,33 @@ const Dictionaries = () => {
       setItems([...items, newItem]);
       setNewItemName("");
       setNewItemDescription("");
+      setHasUnsavedChanges(true);
     }
   };
 
   const handleDeleteItem = (id: string) => {
     setItems(items.filter(item => item.id !== id));
+    setHasUnsavedChanges(true);
+  };
+
+  const handleSave = async () => {
+    try {
+      // Mock API call - in a real app, this would save to a backend
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      toast({
+        title: "Changes saved successfully",
+        description: `Updated ${selectedDictionary} dictionary`,
+      });
+      
+      setHasUnsavedChanges(false);
+    } catch (error) {
+      toast({
+        title: "Error saving changes",
+        description: "Please try again later",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -157,6 +188,17 @@ const Dictionaries = () => {
                   ))}
                 </TableBody>
               </Table>
+
+              <div className="flex justify-end mt-6">
+                <Button
+                  onClick={handleSave}
+                  disabled={!hasUnsavedChanges}
+                  className="flex items-center gap-2"
+                >
+                  <Save className="h-4 w-4" />
+                  Save Changes
+                </Button>
+              </div>
             </div>
           )}
         </CardContent>
