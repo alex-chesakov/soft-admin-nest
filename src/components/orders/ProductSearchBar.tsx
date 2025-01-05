@@ -49,7 +49,7 @@ export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => 
   return (
     <Command className="border rounded-md w-72">
       <CommandInput
-        placeholder="Search products..."
+        placeholder="Add product..."
         value={value}
         onValueChange={(newValue) => {
           setValue(newValue);
