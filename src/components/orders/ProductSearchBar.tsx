@@ -25,7 +25,6 @@ interface ProductSearchBarProps {
 }
 
 export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => {
-  const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
 
   const filteredProducts = products.filter((product) =>
@@ -42,39 +41,39 @@ export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => 
         quantity: 1,
       });
       setValue("");
-      setOpen(false);
     }
   };
 
   return (
-    <Command className="border rounded-md w-72">
-      <CommandInput
-        placeholder="Add product..."
-        value={value}
-        onValueChange={(newValue) => {
-          setValue(newValue);
-          setOpen(newValue.length > 0);
-        }}
-      />
-      {open && filteredProducts.length > 0 && (
-        <CommandList>
-          <CommandEmpty>No products found.</CommandEmpty>
-          <CommandGroup>
-            {filteredProducts.map((product) => (
-              <CommandItem
-                key={product.id}
-                value={product.name}
-                onSelect={handleProductSelect}
-              >
-                <div className="flex justify-between w-full">
-                  <span>{product.name}</span>
-                  <span>${product.price}</span>
-                </div>
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </CommandList>
-      )}
-    </Command>
+    <div className="relative w-72">
+      <Command className="border rounded-md">
+        <CommandInput
+          placeholder="Add product..."
+          value={value}
+          onValueChange={setValue}
+        />
+        {value && (
+          <div className="absolute w-full bg-popover border rounded-md mt-1 shadow-md z-50">
+            <CommandList>
+              <CommandEmpty>No products found.</CommandEmpty>
+              <CommandGroup>
+                {filteredProducts.map((product) => (
+                  <CommandItem
+                    key={product.id}
+                    value={product.name}
+                    onSelect={handleProductSelect}
+                  >
+                    <div className="flex justify-between w-full">
+                      <span>{product.name}</span>
+                      <span>${product.price}</span>
+                    </div>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </div>
+        )}
+      </Command>
+    </div>
   );
 };
