@@ -91,10 +91,7 @@ export const OrderItemComponent = ({
                 </div>
               </>
             ) : (
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-500">Quantity:</span>
-                <span className="text-sm font-medium">{item.quantity}</span>
-              </div>
+              <p className="text-sm font-medium">{item.quantity}</p>
             )}
           </div>
           {item.adjustedQuantity !== undefined && (
@@ -103,20 +100,18 @@ export const OrderItemComponent = ({
               <span className="text-sm font-medium">{item.adjustedQuantity}</span>
             </div>
           )}
-          {role === 'admin' && (
-            <Select
-              value={item.unit || "Unit"}
-              onValueChange={(value) => onUnitChange(item.id, value as "Unit" | "Case")}
-            >
-              <SelectTrigger className="w-24 h-8">
-                <SelectValue placeholder="Select unit" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Unit">Unit</SelectItem>
-                <SelectItem value="Case">Case</SelectItem>
-              </SelectContent>
-            </Select>
-          )}
+          <Select
+            value={item.unit || "Unit"}
+            onValueChange={(value) => onUnitChange(item.id, value as "Unit" | "Case")}
+          >
+            <SelectTrigger className="w-24 h-8">
+              <SelectValue placeholder="Select unit" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Unit">Unit</SelectItem>
+              <SelectItem value="Case">Case</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
       <div className="text-right space-y-2">
@@ -127,16 +122,14 @@ export const OrderItemComponent = ({
           statuses={itemStatuses}
         />
         <p className="font-medium">${(displayPrice * item.quantity).toFixed(2)}</p>
-        {role === 'admin' && (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 text-red-500 hover:text-red-600 hover:bg-red-50"
-            onClick={() => onDelete(item.id)}
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        )}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8 text-red-500 hover:text-red-600 hover:bg-red-50"
+          onClick={() => onDelete(item.id)}
+        >
+          <Trash2 className="h-4 w-4" />
+        </Button>
       </div>
     </div>
   );
