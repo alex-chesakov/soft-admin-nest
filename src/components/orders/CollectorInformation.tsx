@@ -46,7 +46,10 @@ const CollectorInformation = ({
               <p className="text-sm text-gray-500">{collector.email}</p>
               <p className="text-sm text-gray-500">{collector.phone}</p>
               {collector.collectionWindow && (
-                <p className="text-sm text-gray-500">Collection Window: {collector.collectionWindow}</p>
+                <div className="mt-4">
+                  <h3 className="font-bold text-base mb-1">Collection Window</h3>
+                  <p className="text-sm text-gray-500">{collector.collectionWindow}</p>
+                </div>
               )}
             </div>
           ) : (
