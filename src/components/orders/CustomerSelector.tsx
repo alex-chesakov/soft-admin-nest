@@ -30,6 +30,7 @@ interface CustomerSelectorProps {
 export function CustomerSelector({ value, onChange }: CustomerSelectorProps) {
   const [open, setOpen] = useState(false);
   const [customers, setCustomers] = useState<Customer[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Get customers from localStorage (as stored in the Customers page)
@@ -59,7 +60,22 @@ export function CustomerSelector({ value, onChange }: CustomerSelectorProps) {
         },
       ]);
     }
+    setIsLoading(false);
   }, []);
+
+  if (isLoading) {
+    return (
+      <Button
+        variant="outline"
+        role="combobox"
+        className="w-full justify-between"
+        disabled
+      >
+        Loading customers...
+        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+      </Button>
+    );
+  }
 
   // If customers array is empty, show a disabled button
   if (!customers.length) {
