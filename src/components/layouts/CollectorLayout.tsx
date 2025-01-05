@@ -8,7 +8,7 @@ interface CollectorLayoutProps {
 
 export const CollectorLayout = ({ children }: CollectorLayoutProps) => {
   const location = useLocation();
-  const isOrdersRoute = location.pathname === "/orders";
+  const isOrdersRoute = location.pathname.startsWith("/orders");
 
   return (
     <SidebarProvider>
