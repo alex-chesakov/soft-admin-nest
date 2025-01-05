@@ -47,7 +47,12 @@ export const LocationsEditDialog = ({
 
     const updatedLocations = [...locations, newLocation];
     setLocations(updatedLocations);
+    onSave({
+      pickupLocations: updatedLocations.slice(0, -1),
+      deliveryLocation: updatedLocations[updatedLocations.length - 1] || { name: '', address: '' }
+    });
     setNewLocation({ name: '', address: '' });
+    setOpen(false);
     
     toast({
       title: "Success",
@@ -69,7 +74,12 @@ export const LocationsEditDialog = ({
     );
     
     setLocations(updatedLocations);
+    onSave({
+      pickupLocations: updatedLocations.slice(0, -1),
+      deliveryLocation: updatedLocations[updatedLocations.length - 1] || { name: '', address: '' }
+    });
     setEditingLocation(null);
+    setOpen(false);
     
     toast({
       title: "Success",
@@ -82,19 +92,15 @@ export const LocationsEditDialog = ({
       (loc) => !(loc.name === locationToDelete.name && loc.address === locationToDelete.address)
     );
     setLocations(updatedLocations);
+    onSave({
+      pickupLocations: updatedLocations.slice(0, -1),
+      deliveryLocation: updatedLocations[updatedLocations.length - 1] || { name: '', address: '' }
+    });
     
     toast({
       title: "Success",
       description: "Location deleted successfully",
     });
-  };
-
-  const handleSave = () => {
-    onSave({
-      pickupLocations: locations.slice(0, -1),
-      deliveryLocation: locations[locations.length - 1] || { name: '', address: '' }
-    });
-    setOpen(false);
   };
 
   return (
@@ -107,9 +113,9 @@ export const LocationsEditDialog = ({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Manage Locations</DialogTitle>
+          <DialogTitle>Add New Location</DialogTitle>
           <DialogDescription>
-            Add, edit, or remove locations from the list.
+            Fill in the location details below.
           </DialogDescription>
         </DialogHeader>
         
@@ -161,39 +167,6 @@ export const LocationsEditDialog = ({
             </div>
           </div>
         )}
-
-        {/* Locations List */}
-        <div className="mt-6">
-          <Label>Current Locations</Label>
-          <div className="mt-2 space-y-2">
-            {locations.map((location, index) => (
-              <div key={index} className="flex items-center justify-between p-2 border rounded-md">
-                <div>
-                  <p className="font-medium">{location.name}</p>
-                  <p className="text-sm text-muted-foreground">{location.address}</p>
-                </div>
-                <div className="flex gap-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleEditLocation(location)}
-                  >
-                    <Edit2 className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleDeleteLocation(location)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <Button onClick={handleSave} className="mt-4">Save Changes</Button>
       </DialogContent>
     </Dialog>
   );
