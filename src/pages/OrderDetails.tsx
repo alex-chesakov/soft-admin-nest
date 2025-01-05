@@ -166,10 +166,6 @@ const OrderDetails = () => {
                 </p>
                 <p className="text-sm text-gray-500">{orderDetails.shippingAddress.country}</p>
               </div>
-              <div>
-                <p className="font-medium mb-1">Location</p>
-                <p className="text-sm text-gray-500">{orderDetails.deliveryLocation.name}</p>
-              </div>
             </div>
           </CardContent>
         </Card>
