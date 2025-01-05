@@ -74,6 +74,21 @@ const Dictionaries = () => {
     }
   };
 
+  const getDictionaryDisplayName = (value: string) => {
+    switch (value) {
+      case "order-requirements":
+        return "Order Requirements";
+      case "delivery-windows":
+        return "Delivery Windows";
+      case "order-statuses":
+        return "Order Statuses";
+      case "item-statuses":
+        return "Item Statuses";
+      default:
+        return value;
+    }
+  };
+
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">Dictionaries</h1>
@@ -94,6 +109,7 @@ const Dictionaries = () => {
                 <SelectItem value="order-requirements">Order Requirements</SelectItem>
                 <SelectItem value="delivery-windows">Delivery Windows</SelectItem>
                 <SelectItem value="order-statuses">Order Statuses</SelectItem>
+                <SelectItem value="item-statuses">Item Statuses</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -102,7 +118,7 @@ const Dictionaries = () => {
             <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <h3 className="text-lg font-semibold">
-                  {selectedDictionary === "order-requirements" ? "Order Requirements" : selectedDictionary === "order-statuses" ? "Order Statuses" : "Delivery Windows"}
+                  {getDictionaryDisplayName(selectedDictionary)}
                 </h3>
                 <AddItemDialog onAdd={handleAddItem} />
               </div>
