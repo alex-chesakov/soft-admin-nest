@@ -26,6 +26,7 @@ interface CustomerInformationProps {
     };
   }) => void;
   onLocationUpdate: (location: { name: string; address: string }) => void;
+  role?: 'admin' | 'collector';
 }
 
 const CustomerInformation = ({
@@ -35,6 +36,7 @@ const CustomerInformation = ({
   shippingAddress,
   onSave,
   onLocationUpdate,
+  role = 'admin',
 }: CustomerInformationProps) => {
   return (
     <Card>
@@ -44,14 +46,16 @@ const CustomerInformation = ({
             <User className="h-5 w-5" />
             Customer Information
           </div>
-          <CustomerInfoEditDialog
-            customerName={customerName}
-            email={email}
-            phone={phone}
-            shippingAddress={shippingAddress}
-            onSave={onSave}
-            onLocationUpdate={onLocationUpdate}
-          />
+          {role === 'admin' && (
+            <CustomerInfoEditDialog
+              customerName={customerName}
+              email={email}
+              phone={phone}
+              shippingAddress={shippingAddress}
+              onSave={onSave}
+              onLocationUpdate={onLocationUpdate}
+            />
+          )}
         </CardTitle>
       </CardHeader>
       <CardContent>

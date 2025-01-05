@@ -8,9 +8,16 @@ interface OrderHeaderProps {
   date: string;
   status: string;
   onStatusUpdate: (status: string) => void;
+  role?: 'admin' | 'collector';
 }
 
-export const OrderHeader = ({ id, date, status: initialStatus, onStatusUpdate }: OrderHeaderProps) => {
+export const OrderHeader = ({ 
+  id, 
+  date, 
+  status: initialStatus, 
+  onStatusUpdate,
+  role = 'admin',
+}: OrderHeaderProps) => {
   const [status, setStatus] = useState(initialStatus);
   const { toast } = useToast();
 
@@ -50,7 +57,9 @@ export const OrderHeader = ({ id, date, status: initialStatus, onStatusUpdate }:
         <Badge variant={getStatusVariant(status)}>
           {status}
         </Badge>
-        <OrderStatusEditDialog status={status} onSave={handleStatusUpdate} />
+        {role === 'admin' && (
+          <OrderStatusEditDialog status={status} onSave={handleStatusUpdate} />
+        )}
       </div>
     </div>
   );

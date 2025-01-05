@@ -5,11 +5,13 @@ import { RequirementsEditDialog } from "./RequirementsEditDialog";
 interface RequirementsSummaryProps {
   requirements: string[];
   onUpdate: (requirements: string[]) => void;
+  role?: 'admin' | 'collector';
 }
 
 export const RequirementsSummary = ({
   requirements,
   onUpdate,
+  role = 'admin',
 }: RequirementsSummaryProps) => {
   const handleRequirementsUpdate = (updatedRequirements: string[]) => {
     console.log('Updating requirements:', updatedRequirements);
@@ -22,10 +24,12 @@ export const RequirementsSummary = ({
         <CardTitle className="flex items-center gap-2 text-lg font-medium">
           <Info className="h-5 w-5 text-muted-foreground" />
           Order Requirements
-          <RequirementsEditDialog
-            requirements={requirements}
-            onSave={handleRequirementsUpdate}
-          />
+          {role === 'admin' && (
+            <RequirementsEditDialog
+              requirements={requirements}
+              onSave={handleRequirementsUpdate}
+            />
+          )}
         </CardTitle>
       </CardHeader>
       <CardContent>

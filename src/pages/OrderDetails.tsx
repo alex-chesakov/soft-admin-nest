@@ -114,6 +114,7 @@ const OrderDetails = () => {
             id={id || ''} 
             date={orderDetails.date} 
             initialStatus={orderDetails.status}
+            role={role as 'admin' | 'collector'}
           />
 
           <OrderDetailsSummary
@@ -124,6 +125,7 @@ const OrderDetails = () => {
             pickupLocations={orderDetails.pickupLocations}
             deliveryLocation={orderDetails.deliveryLocation}
             onDeliveryLocationUpdate={handleDeliveryLocationUpdate}
+            role={role as 'admin' | 'collector'}
           />
 
           <OrderFees
@@ -139,6 +141,7 @@ const OrderDetails = () => {
                 saveOrderProducts(id, items);
               }
             }}
+            role={role as 'admin' | 'collector'}
           />
         </div>
 
@@ -146,6 +149,7 @@ const OrderDetails = () => {
           <RequirementsSummary
             requirements={orderDetails.requirements || []}
             onUpdate={handleRequirementsUpdate}
+            role={role as 'admin' | 'collector'}
           />
 
           <CustomerInformation
@@ -155,6 +159,7 @@ const OrderDetails = () => {
             shippingAddress={orderDetails.shippingAddress}
             onSave={handleCustomerInfoUpdate}
             onLocationUpdate={handleDeliveryLocationUpdate}
+            role={role as 'admin' | 'collector'}
           />
 
           <CollectorInformation
