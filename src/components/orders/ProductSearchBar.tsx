@@ -41,33 +41,35 @@ export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => 
   };
 
   return (
-    <Command className="border rounded-md">
+    <Command className="border rounded-md w-72">
       <CommandInput
         placeholder="Search products..."
         value={value}
         onValueChange={setValue}
       />
-      <CommandList>
-        <CommandEmpty>No products found.</CommandEmpty>
-        <CommandGroup>
-          {products
-            .filter((product) =>
-              product.name.toLowerCase().includes(value.toLowerCase())
-            )
-            .map((product) => (
-              <CommandItem
-                key={product.id}
-                value={product.name}
-                onSelect={handleProductSelect}
-              >
-                <div className="flex justify-between w-full">
-                  <span>{product.name}</span>
-                  <span>${product.price}</span>
-                </div>
-              </CommandItem>
-            ))}
-        </CommandGroup>
-      </CommandList>
+      {value.length > 0 && (
+        <CommandList>
+          <CommandEmpty>No products found.</CommandEmpty>
+          <CommandGroup>
+            {products
+              .filter((product) =>
+                product.name.toLowerCase().includes(value.toLowerCase())
+              )
+              .map((product) => (
+                <CommandItem
+                  key={product.id}
+                  value={product.name}
+                  onSelect={handleProductSelect}
+                >
+                  <div className="flex justify-between w-full">
+                    <span>{product.name}</span>
+                    <span>${product.price}</span>
+                  </div>
+                </CommandItem>
+              ))}
+          </CommandGroup>
+        </CommandList>
+      )}
     </Command>
   );
 };

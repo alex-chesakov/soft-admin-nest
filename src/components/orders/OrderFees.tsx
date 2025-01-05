@@ -37,15 +37,16 @@ export const OrderFees = ({ items, fees, total, onItemsChange }: OrderFeesProps)
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Package2 className="h-5 w-5" />
-          Order Items
-        </CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center gap-2">
+            <Package2 className="h-5 w-5" />
+            Order Items
+          </CardTitle>
+          <ProductSearchBar onProductSelect={handleProductSelect} />
+        </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <ProductSearchBar onProductSelect={handleProductSelect} />
-          
           {items.map((item) => (
             <div key={item.id} className="flex justify-between items-center border-b pb-4 last:border-0">
               <div>
