@@ -20,7 +20,6 @@ interface OrderItemProps {
   onStatusChange: (itemId: string, newStatus: string, adjustedQty?: number) => void;
   onDelete: (itemId: string) => void;
   itemStatuses: Array<{ id: string; name: string }>;
-  role?: 'admin' | 'collector';
 }
 
 export const OrderItemComponent = ({
@@ -30,7 +29,6 @@ export const OrderItemComponent = ({
   onStatusChange,
   onDelete,
   itemStatuses,
-  role = 'admin'
 }: OrderItemProps) => {
   const getStatusBadgeVariant = (status: string) => {
     switch (status?.toLowerCase()) {
@@ -62,37 +60,31 @@ export const OrderItemComponent = ({
         <p className="text-sm text-gray-500 mt-2">Price: ${displayPrice.toFixed(2)}/{item.unit || 'Unit'}</p>
         <div className="flex items-center gap-4 mt-2">
           <div className="flex items-center gap-2">
-            {role === 'admin' ? (
-              <>
-                <label className="text-sm text-gray-500">Booked Qty:</label>
-                <div className="flex items-center">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="h-8 w-8 rounded-r-none"
-                    onClick={() => onQuantityChange(item.id, -1)}
-                  >
-                    <Minus className="h-4 w-4" />
-                  </Button>
-                  <Input
-                    type="number"
-                    value={item.quantity}
-                    onChange={(e) => onQuantityChange(item.id, parseInt(e.target.value) - item.quantity)}
-                    className="w-16 h-8 rounded-none text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                  />
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="h-8 w-8 rounded-l-none"
-                    onClick={() => onQuantityChange(item.id, 1)}
-                  >
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
-              </>
-            ) : (
-              <p className="text-sm font-medium">{item.quantity}</p>
-            )}
+            <label className="text-sm text-gray-500">Booked Qty:</label>
+            <div className="flex items-center">
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8 rounded-r-none"
+                onClick={() => onQuantityChange(item.id, -1)}
+              >
+                <Minus className="h-4 w-4" />
+              </Button>
+              <Input
+                type="number"
+                value={item.quantity}
+                onChange={(e) => onQuantityChange(item.id, parseInt(e.target.value) - item.quantity)}
+                className="w-16 h-8 rounded-none text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              />
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8 rounded-l-none"
+                onClick={() => onQuantityChange(item.id, 1)}
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
           {item.adjustedQuantity !== undefined && (
             <div className="flex items-center gap-2">
