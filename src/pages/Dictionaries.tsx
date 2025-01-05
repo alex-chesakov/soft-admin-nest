@@ -6,26 +6,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus, Save, Trash2 } from "lucide-react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
+import { Save } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { DictionaryTable } from "@/components/dictionaries/DictionaryTable";
+import { AddItemDialog } from "@/components/dictionaries/AddItemDialog";
+import { loadDictionaryItems, saveDictionaryItems } from "@/utils/dictionaryStorage";
 
 interface DictionaryItem {
   id: string;
@@ -36,38 +23,33 @@ interface DictionaryItem {
 const Dictionaries = () => {
   const [selectedDictionary, setSelectedDictionary] = useState<string>("");
   const [items, setItems] = useState<DictionaryItem[]>([]);
-  const [newItemName, setNewItemName] = useState("");
-  const [newItemDescription, setNewItemDescription] = useState("");
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (selectedDictionary) {
+      const savedItems = loadDictionaryItems(selectedDictionary);
+      setItems(savedItems);
+      setHasUnsavedChanges(false);
+    }
+  }, [selectedDictionary]);
 
   const handleDictionaryChange = (value: string) => {
     if (hasUnsavedChanges) {
       const confirmed = window.confirm("You have unsaved changes. Are you sure you want to switch dictionaries?");
       if (!confirmed) return;
     }
-    
     setSelectedDictionary(value);
-    // Mock data - in a real app, this would fetch from an API
-    setItems([
-      { id: "1", name: "Item 1", description: "Description 1" },
-      { id: "2", name: "Item 2", description: "Description 2" },
-    ]);
-    setHasUnsavedChanges(false);
   };
 
-  const handleAddItem = () => {
-    if (newItemName && newItemDescription) {
-      const newItem: DictionaryItem = {
-        id: Date.now().toString(),
-        name: newItemName,
-        description: newItemDescription,
-      };
-      setItems([...items, newItem]);
-      setNewItemName("");
-      setNewItemDescription("");
-      setHasUnsavedChanges(true);
-    }
+  const handleAddItem = (name: string, description: string) => {
+    const newItem: DictionaryItem = {
+      id: Date.now().toString(),
+      name,
+      description,
+    };
+    setItems([...items, newItem]);
+    setHasUnsavedChanges(true);
   };
 
   const handleDeleteItem = (id: string) => {
@@ -77,8 +59,7 @@ const Dictionaries = () => {
 
   const handleSave = async () => {
     try {
-      // Mock API call - in a real app, this would save to a backend
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      saveDictionaryItems(selectedDictionary, items);
       
       toast({
         title: "Changes saved successfully",
@@ -124,70 +105,10 @@ const Dictionaries = () => {
                 <h3 className="text-lg font-semibold">
                   {selectedDictionary === "order-requirements" ? "Order Requirements" : "Delivery Windows"}
                 </h3>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button>
-                      <Plus className="mr-2 h-4 w-4" />
-                      Add New Item
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Add New Dictionary Item</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-4 py-4">
-                      <div className="space-y-2">
-                        <label htmlFor="name">Name</label>
-                        <Input
-                          id="name"
-                          value={newItemName}
-                          onChange={(e) => setNewItemName(e.target.value)}
-                          placeholder="Enter item name"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label htmlFor="description">Description</label>
-                        <Input
-                          id="description"
-                          value={newItemDescription}
-                          onChange={(e) => setNewItemDescription(e.target.value)}
-                          placeholder="Enter item description"
-                        />
-                      </div>
-                      <Button onClick={handleAddItem} className="w-full">
-                        Add Item
-                      </Button>
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                <AddItemDialog onAdd={handleAddItem} />
               </div>
 
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Description</TableHead>
-                    <TableHead className="w-[100px]">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {items.map((item) => (
-                    <TableRow key={item.id}>
-                      <TableCell>{item.name}</TableCell>
-                      <TableCell>{item.description}</TableCell>
-                      <TableCell>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleDeleteItem(item.id)}
-                        >
-                          <Trash2 className="h-4 w-4 text-red-500" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+              <DictionaryTable items={items} onDelete={handleDeleteItem} />
 
               <div className="flex justify-end mt-6">
                 <Button
