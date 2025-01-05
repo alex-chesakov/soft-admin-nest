@@ -14,6 +14,59 @@ import { useToast } from "@/components/ui/use-toast";
 import { CollectorForm } from "@/components/collectors/CollectorForm";
 import { CollectorsList } from "@/components/collectors/CollectorsList";
 
+const defaultCollectors: Collector[] = [
+  {
+    id: "1",
+    role: "collector",
+    name: "John",
+    lastName: "Smith",
+    email: "john.smith@example.com",
+    phone: "+1 (555) 123-4567",
+    password: "password123",
+    locations: ["New York", "Brooklyn"]
+  },
+  {
+    id: "2",
+    role: "collector",
+    name: "Maria",
+    lastName: "Garcia",
+    email: "maria.garcia@example.com",
+    phone: "+1 (555) 234-5678",
+    password: "password123",
+    locations: ["Los Angeles", "San Diego"]
+  },
+  {
+    id: "3",
+    role: "collector",
+    name: "David",
+    lastName: "Johnson",
+    email: "david.johnson@example.com",
+    phone: "+1 (555) 345-6789",
+    password: "password123",
+    locations: ["Chicago", "Milwaukee"]
+  },
+  {
+    id: "4",
+    role: "collector",
+    name: "Sarah",
+    lastName: "Wilson",
+    email: "sarah.wilson@example.com",
+    phone: "+1 (555) 456-7890",
+    password: "password123",
+    locations: ["Miami", "Orlando"]
+  },
+  {
+    id: "5",
+    role: "collector",
+    name: "Michael",
+    lastName: "Brown",
+    email: "michael.brown@example.com",
+    phone: "+1 (555) 567-8901",
+    password: "password123",
+    locations: ["Seattle", "Portland"]
+  }
+];
+
 const Collectors = () => {
   const [collectors, setCollectors] = useState<Collector[]>([]);
   const [open, setOpen] = useState(false);
@@ -32,6 +85,10 @@ const Collectors = () => {
     const savedCollectors = localStorage.getItem("collectors");
     if (savedCollectors) {
       setCollectors(JSON.parse(savedCollectors));
+    } else {
+      // If no collectors exist in localStorage, initialize with default collectors
+      setCollectors(defaultCollectors);
+      localStorage.setItem("collectors", JSON.stringify(defaultCollectors));
     }
   }, []);
 
