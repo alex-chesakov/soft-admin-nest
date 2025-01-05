@@ -3,16 +3,33 @@ import { OrderDetailsSummary } from "@/components/orders/OrderDetailsSummary";
 import { OrderFees } from "@/components/orders/OrderFees";
 import { useParams } from "react-router-dom";
 import { mockOrder } from "@/data/mockOrder";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import CustomerInformation from "@/components/orders/CustomerInformation";
 import CollectorInformation from "@/components/orders/CollectorInformation";
 import { RequirementsSummary } from "@/components/orders/RequirementsSummary";
+import { saveOrderProducts, getOrderProducts } from "@/utils/productStorage";
 
 const OrderDetails = () => {
   const { id } = useParams();
   const { toast } = useToast();
   const [orderDetails, setOrderDetails] = useState(mockOrder);
+
+  useEffect(() => {
+    if (id) {
+      // Load products from localStorage when component mounts
+      const savedProducts = getOrderProducts(id);
+      if (savedProducts.length > 0) {
+        setOrderDetails(prev => ({
+          ...prev,
+          items: savedProducts
+        }));
+      } else {
+        // If no saved products exist, save the current ones
+        saveOrderProducts(id, orderDetails.items);
+      }
+    }
+  }, [id]);
 
   const handleCustomerInfoUpdate = (data: {
     customerName: string;
@@ -92,7 +109,7 @@ const OrderDetails = () => {
         <OrderDetailsSummary
           deliveryDate={orderDetails.deliveryDate}
           deliveryWindow={orderDetails.deliveryWindow}
-          paymentStatus={orderDetails.paymentStatus}
+          paymentStatus={orderDetails.paymentStatus as 'paid' | 'pending' | 'failed'}
           itemsCount={orderDetails.items.length}
           pickupLocations={orderDetails.pickupLocations}
           deliveryLocation={orderDetails.deliveryLocation}
