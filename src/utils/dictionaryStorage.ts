@@ -27,6 +27,13 @@ const DEFAULT_DICTIONARIES: Record<string, DictionaryItem[]> = {
     { id: '4', name: 'In Transit' },
     { id: '5', name: 'Collected' },
     { id: '6', name: 'Cancelled' }
+  ],
+  'item-statuses': [
+    { id: '1', name: 'Not collected' },
+    { id: '2', name: 'Collected adjusted' },
+    { id: '3', name: 'Collected' },
+    { id: '4', name: 'Out of Stock' },
+    { id: '5', name: 'Substituted' }
   ]
 };
 
@@ -60,4 +67,21 @@ export const getNextId = (items: DictionaryItem[]): string => {
   if (items.length === 0) return "1";
   const maxId = Math.max(...items.map(item => parseInt(item.id)));
   return (maxId + 1).toString();
+};
+
+// Helper function to get the color for an item status
+export const getItemStatusColor = (status: string): string => {
+  switch (status.toLowerCase()) {
+    case 'not collected':
+      return '#888888'; // Gray
+    case 'collected adjusted':
+    case 'collected':
+      return '#22c55e'; // Green
+    case 'out of stock':
+      return '#ea384c'; // Red
+    case 'substituted':
+      return '#0EA5E9'; // Blue
+    default:
+      return '#888888'; // Default gray
+  }
 };
