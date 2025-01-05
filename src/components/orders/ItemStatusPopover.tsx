@@ -40,7 +40,9 @@ export const ItemStatusPopover = ({
 
   const handleStatusClick = (newStatus: string) => {
     if (newStatus === "Collected Adjusted") {
-      setShowQtyInput(true);
+      setSelectedStatus(newStatus);
+      setIsConfirmOpen(true);
+      setIsOpen(false);
       return;
     }
     setSelectedStatus(newStatus);
@@ -130,7 +132,7 @@ export const ItemStatusPopover = ({
             <AlertDialogDescription>
               {selectedStatus === "Collected Adjusted" ? (
                 <div className="space-y-4">
-                  <p>Please confirm the adjusted quantity:</p>
+                  <p>Please enter the adjusted quantity:</p>
                   <Input
                     type="number"
                     value={newQty || adjustedQty}
