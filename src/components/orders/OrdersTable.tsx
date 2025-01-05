@@ -7,7 +7,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { useNavigate } from "react-router-dom";
 
 interface Order {
   id: string;
@@ -28,8 +27,6 @@ interface OrdersTableProps {
 }
 
 export const OrdersTable = ({ orders }: OrdersTableProps) => {
-  const navigate = useNavigate();
-
   return (
     <Table>
       <TableHeader>
@@ -49,11 +46,7 @@ export const OrdersTable = ({ orders }: OrdersTableProps) => {
       </TableHeader>
       <TableBody>
         {orders?.map((order) => (
-          <TableRow 
-            key={order.id}
-            className="cursor-pointer hover:bg-muted/50"
-            onClick={() => navigate(`/orders/${order.id}`)}
-          >
+          <TableRow key={order.id}>
             <TableCell className="font-medium">{order.id}</TableCell>
             <TableCell>{order.customerName}</TableCell>
             <TableCell>{new Date(order.date).toLocaleDateString()}</TableCell>
