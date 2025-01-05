@@ -11,7 +11,7 @@ export interface Order {
   email: string;
   phone: string;
   date: string;
-  status: "pending" | "processing" | "completed" | "cancelled";
+  status: "pending" | "processing" | "completed" | "cancelled" | "in transit" | "collector assigned" | "new order" | "delivered" | "in progress";
   total: number;
   items: OrderItem[];
   requirements?: string[];
@@ -27,7 +27,7 @@ export interface Order {
     phone: string;
     email: string;
   };
-  location: string; // Added this property
+  location: string;
   deliveryDate: string;
   deliveryWindow: string;
   paymentStatus: 'paid' | 'pending' | 'failed';
