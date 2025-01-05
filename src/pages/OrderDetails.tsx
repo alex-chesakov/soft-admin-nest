@@ -7,13 +7,23 @@ import { CustomerInfoEditDialog } from "@/components/orders/CustomerInfoEditDial
 import { CollectorInfoEditDialog } from "@/components/orders/CollectorInfoEditDialog";
 import { useParams } from "react-router-dom";
 import { mockOrder } from "@/data/mockOrder";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const OrderDetails = () => {
   const { id } = useParams();
+  const { toast } = useToast();
+  const [requirements, setRequirements] = useState(mockOrder.requirements || []);
 
-  const handleRequirementsUpdate = (requirements: string[]) => {
-    console.log('Updating requirements:', requirements);
-    // TODO: Implement the update logic
+  const handleRequirementsUpdate = (updatedRequirements: string[]) => {
+    setRequirements(updatedRequirements);
+    // Save to localStorage for persistence
+    localStorage.setItem(`order-requirements-${id}`, JSON.stringify(updatedRequirements));
+    
+    toast({
+      title: "Requirements updated",
+      description: "Order requirements have been successfully updated",
+    });
   };
 
   const handleCustomerInfoUpdate = (data: {
@@ -110,17 +120,21 @@ const OrderDetails = () => {
             <CardTitle className="flex items-center justify-between text-lg">
               <span>Order Requirements</span>
               <RequirementsEditDialog
-                requirements={mockOrder.requirements || []}
+                requirements={requirements}
                 onSave={handleRequirementsUpdate}
               />
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ul className="list-disc list-inside space-y-2">
-              {mockOrder.requirements?.map((req, index) => (
-                <li key={index} className="text-gray-600">{req}</li>
-              ))}
-            </ul>
+            {requirements.length > 0 ? (
+              <ul className="list-disc list-inside space-y-2">
+                {requirements.map((req, index) => (
+                  <li key={index} className="text-gray-600">{req}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-500">No requirements specified</p>
+            )}
           </CardContent>
         </Card>
 
