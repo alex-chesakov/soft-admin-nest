@@ -25,6 +25,7 @@ interface ProductSearchBarProps {
 }
 
 export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => {
+  const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
 
   const handleProductSelect = (productName: string) => {
@@ -37,17 +38,21 @@ export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => 
         quantity: 1,
       });
       setValue("");
+      setOpen(false);
     }
   };
 
   return (
-    <Command className="border rounded-md w-72">
+    <Command className="border rounded-md w-72" shouldFilter={false}>
       <CommandInput
         placeholder="Search products..."
         value={value}
-        onValueChange={setValue}
+        onValueChange={(newValue) => {
+          setValue(newValue);
+          setOpen(newValue.length > 0);
+        }}
       />
-      {value.length > 0 && (
+      {open && (
         <CommandList>
           <CommandEmpty>No products found.</CommandEmpty>
           <CommandGroup>
