@@ -160,7 +160,7 @@ const mockOrders: Order[] = [
     email: "emily@example.com",
     phone: "+1234567895",
     date: "2024-02-15",
-    status: "delivered",
+    status: "collected", // Changed from "delivered"
     total: 899.99,
     items: [
       { id: 7, productName: "Product 7", quantity: 1, price: 899.99 }
@@ -280,7 +280,7 @@ const mockOrders: Order[] = [
     email: "emma.r@example.com",
     phone: "+1234567899",
     date: "2024-02-11",
-    status: "delivered",
+    status: "collected", // Changed from "delivered"
     total: 449.99,
     items: [
       { id: 11, productName: "Product 11", quantity: 1, price: 449.99 }
