@@ -123,7 +123,7 @@ export const ItemStatusPopover = ({
             <AlertDialogTitle>Confirm Status Change</AlertDialogTitle>
             <AlertDialogDescription>
               {selectedStatus === "Collected Adjusted" 
-                ? `Are you sure you want to set the adjusted quantity to ${adjustedQty}?`
+                ? "Update Quantity"
                 : `Are you sure you want to change the status to ${selectedStatus}?`}
             </AlertDialogDescription>
           </AlertDialogHeader>
