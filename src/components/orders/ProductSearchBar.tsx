@@ -28,84 +28,85 @@ interface ProductSearchBarProps {
 
 export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => {
   const [value, setValue] = useState("");
-  const [selectedUnit, setSelectedUnit] = useState<"unit" | "case">("unit");
+  const [selectedUnits, setSelectedUnits] = useState<Record<number, "unit" | "case">>({});
 
   const filteredProducts = products.filter((product) =>
     product.name.toLowerCase().includes(value.toLowerCase())
   );
 
-  const handleProductSelect = (productName: string) => {
-    const product = products.find((p) => p.name === productName);
+  const handleProductSelect = (productId: number) => {
+    const product = products.find((p) => p.id === productId);
     if (product) {
       onProductSelect({
         id: product.id,
         productName: product.name,
-        price: selectedUnit === "case" ? product.price * 6 : product.price, // Assuming a case contains 6 units
+        price: selectedUnits[product.id] === "case" ? product.price * 6 : product.price,
         quantity: 1,
       });
       setValue("");
     }
   };
 
+  const toggleUnit = (productId: number) => {
+    setSelectedUnits(prev => ({
+      ...prev,
+      [productId]: prev[productId] === "case" ? "unit" : "case"
+    }));
+  };
+
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex gap-2 items-center">
-        <div className="relative w-96">
-          <Command className="border rounded-md">
-            <CommandInput
-              placeholder="Add product..."
-              value={value}
-              onValueChange={setValue}
-            />
-            <div className="absolute left-0 right-0 top-[100%] mt-1 z-50">
-              <CommandList className={value ? "visible bg-popover border rounded-md shadow-md" : "hidden"}>
-                <CommandEmpty>No products found.</CommandEmpty>
-                <CommandGroup>
-                  {filteredProducts.map((product) => (
-                    <CommandItem
-                      key={product.id}
-                      value={product.name}
-                      className="flex justify-between items-center"
+    <div className="relative w-96">
+      <Command className="border rounded-md">
+        <CommandInput
+          placeholder="Add product..."
+          value={value}
+          onValueChange={setValue}
+        />
+        <div className="absolute left-0 right-0 top-[100%] mt-1 z-50">
+          <CommandList className={value ? "visible bg-popover border rounded-md shadow-md" : "hidden"}>
+            <CommandEmpty>No products found.</CommandEmpty>
+            <CommandGroup>
+              {filteredProducts.map((product) => (
+                <CommandItem
+                  key={product.id}
+                  value={product.name}
+                  className="flex justify-between items-center"
+                >
+                  <div className="flex items-center gap-2 flex-1 mr-4">
+                    <span>{product.name}</span>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-6 px-2 text-xs"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleUnit(product.id);
+                      }}
                     >
-                      <div className="flex justify-between flex-1 mr-4">
-                        <span>{product.name}</span>
-                        <span>${selectedUnit === "case" ? (product.price * 6).toFixed(2) : product.price.toFixed(2)}</span>
-                      </div>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          handleProductSelect(product.name);
-                        }}
-                      >
-                        <Plus className="h-4 w-4" />
-                      </Button>
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </CommandList>
-            </div>
-          </Command>
+                      {selectedUnits[product.id] === "case" ? "Case" : "Unit"}
+                    </Button>
+                    <span className="ml-auto">
+                      ${selectedUnits[product.id] === "case" ? (product.price * 6).toFixed(2) : product.price.toFixed(2)}
+                    </span>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleProductSelect(product.id);
+                    }}
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
         </div>
-        <div className="flex rounded-md overflow-hidden">
-          <Button
-            variant={selectedUnit === "unit" ? "default" : "outline"}
-            className="rounded-r-none"
-            onClick={() => setSelectedUnit("unit")}
-          >
-            Unit
-          </Button>
-          <Button
-            variant={selectedUnit === "case" ? "default" : "outline"}
-            className="rounded-l-none"
-            onClick={() => setSelectedUnit("case")}
-          >
-            Case
-          </Button>
-        </div>
-      </div>
+      </Command>
     </div>
   );
 };
