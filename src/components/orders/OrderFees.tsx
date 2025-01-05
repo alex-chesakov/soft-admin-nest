@@ -1,7 +1,6 @@
-import { OrderItem } from "@/types/order";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ProductSearchBar } from "./ProductSearchBar";
-import { useToast } from "@/hooks/use-toast";
+import { Package2 } from "lucide-react";
+import { OrderItem } from "@/types/order";
 
 interface OrderFeesProps {
   items: OrderItem[];
@@ -11,67 +10,45 @@ interface OrderFeesProps {
     creditCardFee: number;
   };
   total: number;
-  onItemsUpdate?: (items: OrderItem[]) => void;
 }
 
-export const OrderFees = ({ items, fees, total, onItemsUpdate }: OrderFeesProps) => {
-  const { toast } = useToast();
-
-  const handleAddProduct = (newItem: OrderItem) => {
-    if (onItemsUpdate) {
-      const updatedItems = [...items, newItem];
-      onItemsUpdate(updatedItems);
-      
-      toast({
-        title: "Product added",
-        description: `${newItem.productName} has been added to the order.`,
-      });
-    }
-  };
-
+export const OrderFees = ({ items, fees, total }: OrderFeesProps) => {
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">Order Items & Fees</CardTitle>
-        <ProductSearchBar onProductAdd={handleAddProduct} existingItems={items} />
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Package2 className="h-5 w-5" />
+          Order Items
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {/* Items list */}
-          <div className="space-y-2">
-            {items.map((item, index) => (
-              <div
-                key={`${item.id}-${index}`}
-                className="flex items-center justify-between text-sm"
-              >
-                <span>
-                  {item.productName} (x{item.quantity})
-                </span>
-                <span>${(item.price * item.quantity).toFixed(2)}</span>
+          {items.map((item) => (
+            <div key={item.id} className="flex justify-between items-center border-b pb-4 last:border-0">
+              <div>
+                <p className="font-medium">{item.productName}</p>
+                <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
               </div>
-            ))}
-          </div>
-
-          {/* Fees */}
-          <div className="space-y-2 border-t pt-2">
+              <p className="font-medium">${(item.price * item.quantity).toFixed(2)}</p>
+            </div>
+          ))}
+          <div className="pt-4 space-y-2 border-t">
             <div className="flex justify-between text-sm">
-              <span>Subtotal</span>
-              <span>${fees.subtotal.toFixed(2)}</span>
+              <p className="text-gray-500">Subtotal</p>
+              <p>${fees.subtotal.toFixed(2)}</p>
             </div>
             <div className="flex justify-between text-sm">
-              <span>Service Fee</span>
-              <span>${fees.serviceFee.toFixed(2)}</span>
+              <p className="text-gray-500">Service Fee</p>
+              <p>${fees.serviceFee.toFixed(2)}</p>
             </div>
             <div className="flex justify-between text-sm">
-              <span>Credit Card Fee</span>
-              <span>${fees.creditCardFee.toFixed(2)}</span>
+              <p className="text-gray-500">Credit Card Fee (2.5%)</p>
+              <p>${fees.creditCardFee.toFixed(2)}</p>
             </div>
-          </div>
-
-          {/* Total */}
-          <div className="flex justify-between border-t pt-2 font-medium">
-            <span>Total</span>
-            <span>${total.toFixed(2)}</span>
+            <div className="flex justify-between font-bold pt-2 border-t">
+              <p>Estimated Total</p>
+              <p>${total.toFixed(2)}</p>
+            </div>
           </div>
         </div>
       </CardContent>

@@ -9,7 +9,6 @@ import CustomerInformation from "@/components/orders/CustomerInformation";
 import CollectorInformation from "@/components/orders/CollectorInformation";
 import { RequirementsSummary } from "@/components/orders/RequirementsSummary";
 import { saveOrderProducts, getOrderProducts } from "@/utils/productStorage";
-import { OrderItem } from "@/types/order";
 
 const OrderDetails = () => {
   const { id } = useParams();
@@ -18,6 +17,7 @@ const OrderDetails = () => {
 
   useEffect(() => {
     if (id) {
+      // Load products from localStorage when component mounts
       const savedProducts = getOrderProducts(id);
       if (savedProducts.length > 0) {
         setOrderDetails(prev => ({
@@ -25,34 +25,11 @@ const OrderDetails = () => {
           items: savedProducts
         }));
       } else {
+        // If no saved products exist, save the current ones
         saveOrderProducts(id, orderDetails.items);
       }
     }
   }, [id]);
-
-  const handleItemsUpdate = (updatedItems: OrderItem[]) => {
-    if (id) {
-      // Calculate new fees based on updated items
-      const subtotal = updatedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-      const serviceFee = subtotal * 0.1; // 10% service fee
-      const creditCardFee = subtotal * 0.03; // 3% credit card fee
-      const newTotal = subtotal + serviceFee + creditCardFee;
-
-      const updatedOrder = {
-        ...orderDetails,
-        items: updatedItems,
-        fees: {
-          subtotal,
-          serviceFee,
-          creditCardFee,
-        },
-        total: newTotal,
-      };
-
-      setOrderDetails(updatedOrder);
-      saveOrderProducts(id, updatedItems);
-    }
-  };
 
   const handleCustomerInfoUpdate = (data: {
     customerName: string;
@@ -132,7 +109,7 @@ const OrderDetails = () => {
         <OrderDetailsSummary
           deliveryDate={orderDetails.deliveryDate}
           deliveryWindow={orderDetails.deliveryWindow}
-          paymentStatus={orderDetails.paymentStatus}
+          paymentStatus={orderDetails.paymentStatus as 'paid' | 'pending' | 'failed'}
           itemsCount={orderDetails.items.length}
           pickupLocations={orderDetails.pickupLocations}
           deliveryLocation={orderDetails.deliveryLocation}
@@ -143,7 +120,6 @@ const OrderDetails = () => {
           items={orderDetails.items}
           fees={orderDetails.fees || { subtotal: 0, serviceFee: 0, creditCardFee: 0 }}
           total={orderDetails.total}
-          onItemsUpdate={handleItemsUpdate}
         />
       </div>
 
