@@ -59,18 +59,25 @@ export const CustomerInfoEditDialog = ({
   const [selectedLocation, setSelectedLocation] = useState("");
 
   useEffect(() => {
-    // Get locations from localStorage
-    const storedLocations = localStorage.getItem("customerLocations");
-    if (storedLocations) {
+    // Get customer locations from localStorage
+    const storedCustomers = localStorage.getItem("customers");
+    if (storedCustomers) {
       try {
-        const parsedLocations = JSON.parse(storedLocations);
-        setLocations(Array.isArray(parsedLocations) ? parsedLocations : []);
+        const customers = JSON.parse(storedCustomers);
+        const currentCustomer = customers.find((c: any) => c.name === selectedCustomer);
+        if (currentCustomer && currentCustomer.locations) {
+          setLocations(currentCustomer.locations);
+          // Set first location as default if none selected
+          if (!selectedLocation && currentCustomer.locations.length > 0) {
+            setSelectedLocation(currentCustomer.locations[0].name);
+          }
+        }
       } catch (error) {
-        console.error("Error parsing locations:", error);
+        console.error("Error parsing customers:", error);
         setLocations([]);
       }
     }
-  }, []);
+  }, [selectedCustomer]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
