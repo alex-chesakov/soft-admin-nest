@@ -1,56 +1,39 @@
-import { Order } from "@/types/order";
-
-export const mockOrder: Order = {
+export const mockOrder = {
   id: "ORD-001",
   customerName: "John Doe",
   email: "john@example.com",
-  phone: "+1 234 567 8900",
+  phone: "+1234567890",
   date: "2024-02-20",
-  status: "processing",
-  total: 599.99,
-  location: "New York",
+  status: "pending",
+  total: 599.97,
   items: [
-    {
-      id: 1,
-      productName: "Product 1",
-      quantity: 2,
-      price: 299.99,
-    },
+    { id: 1, productName: "Premium Laptop", quantity: 1, price: 499.99 },
+    { id: 2, productName: "Wireless Mouse", quantity: 2, price: 49.99 }
   ],
-  requirements: [
-    "Handle with care",
-    "Fragile items inside",
-    "Temperature controlled",
-    "Insurance required"
-  ],
-  fees: {
-    subtotal: 599.98,
-    serviceFee: 29.99,
-    creditCardFee: 15.75,
+  requirements: ["Handle with care", "Signature required"],
+  location: "New York",
+  collector: {
+    name: "Alice Smith",
+    phone: "+1987654321",
+    email: "alice@example.com"
   },
-  deliveryDate: "2024-02-25",
-  deliveryWindow: "9:00 AM - 12:00 PM",
   paymentStatus: "paid",
-  pickupLocations: [
-    {
-      name: "Warehouse A",
-      address: "123 Storage St",
-    },
-  ],
-  deliveryLocation: {
-    name: "Customer Address",
-    address: "123 Main St",
-  },
+  deliveryDate: "2024-02-22",
+  deliveryWindow: "09:00 AM - 12:00 PM",
   shippingAddress: {
     street: "123 Main St",
     city: "New York",
     state: "NY",
     zip: "10001",
-    country: "USA",
+    country: "USA"
   },
-  collector: {
-    name: "Jane Smith",
-    phone: "+1 234 567 8901",
-    email: "jane@example.com",
-  },
+  pickupLocations: [
+    { name: "Warehouse A", address: "456 Storage St" }
+  ],
+  deliveryLocation: { name: "Office", address: "789 Work Ave" },
+  fees: {
+    subtotal: 549.98,
+    serviceFee: 29.99,
+    creditCardFee: 20.00
+  }
 };
