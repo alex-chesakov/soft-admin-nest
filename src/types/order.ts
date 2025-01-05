@@ -1,10 +1,11 @@
 export interface OrderItem {
-  id: string;  // Changed to string only since we're using "CRT006" format
+  id: string;
   productName: string;
   quantity: number;
   price: number;
   status?: string;
-  unit?: "Unit" | "Case";  // Explicitly typed as union
+  unit?: "Unit" | "Case";
+  adjustedQuantity?: number;
 }
 
 export interface Order {
