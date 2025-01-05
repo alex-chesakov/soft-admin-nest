@@ -35,30 +35,37 @@ export const ItemStatusPopover = ({
   const [isOpen, setIsOpen] = useState(false);
   const [showQtyInput, setShowQtyInput] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState<string>("");
 
   const handleStatusClick = (newStatus: string) => {
     if (newStatus === "Collected Adjusted") {
       setShowQtyInput(true);
       return;
     }
-    setShowQtyInput(false);
-    onStatusChange(newStatus);
+    setSelectedStatus(newStatus);
+    setIsConfirmOpen(true);
     setIsOpen(false);
   };
 
   const handleAdjustedQtySave = () => {
     if (adjustedQty) {
+      setSelectedStatus("Collected Adjusted");
       setIsConfirmOpen(true);
-      setIsOpen(false); // Close the popover when showing confirmation
+      setIsOpen(false);
     }
   };
 
-  const handleConfirmAdjustedQty = () => {
-    onStatusChange("Collected Adjusted", Number(adjustedQty));
-    setAdjustedQty("");
-    setShowQtyInput(false);
+  const handleConfirmStatusChange = () => {
+    if (selectedStatus === "Collected Adjusted") {
+      onStatusChange(selectedStatus, Number(adjustedQty));
+      setAdjustedQty("");
+      setShowQtyInput(false);
+    } else {
+      onStatusChange(selectedStatus);
+    }
     setIsOpen(false);
     setIsConfirmOpen(false);
+    setSelectedStatus("");
   };
 
   return (
@@ -113,19 +120,21 @@ export const ItemStatusPopover = ({
       <AlertDialog open={isConfirmOpen} onOpenChange={setIsConfirmOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Confirm Adjusted Quantity</AlertDialogTitle>
+            <AlertDialogTitle>Confirm Status Change</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to set the adjusted quantity to {adjustedQty}?
+              {selectedStatus === "Collected Adjusted" 
+                ? `Are you sure you want to set the adjusted quantity to ${adjustedQty}?`
+                : `Are you sure you want to change the status to ${selectedStatus}?`}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={() => {
               setIsConfirmOpen(false);
-              setIsOpen(true); // Reopen the popover when canceling
+              setIsOpen(true);
               }}>
               Cancel
             </AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirmAdjustedQty}>
+            <AlertDialogAction onClick={handleConfirmStatusChange}>
               Confirm
             </AlertDialogAction>
           </AlertDialogFooter>
