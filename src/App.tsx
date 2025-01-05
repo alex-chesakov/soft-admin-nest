@@ -17,7 +17,15 @@ import Collectors from "@/pages/users/Collectors";
 import Locations from "@/pages/Locations";
 import Dictionaries from "@/pages/Dictionaries";
 
-const queryClient = new QueryClient();
+// Create a client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      retry: 1,
+    },
+  },
+});
 
 function App() {
   return (
