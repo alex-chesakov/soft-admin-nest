@@ -27,10 +27,9 @@ interface OrderSummaryProps {
   };
   total: number;
   role?: 'admin' | 'collector';
-  onStatusUpdate?: (status: string) => void;
 }
 
-export const OrderSummary = ({ fees, total, role = 'admin', onStatusUpdate }: OrderSummaryProps) => {
+export const OrderSummary = ({ fees, total, role = 'admin' }: OrderSummaryProps) => {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isProofDialogOpen, setIsProofDialogOpen] = useState(false);
   const { toast } = useToast();
@@ -49,9 +48,6 @@ export const OrderSummary = ({ fees, total, role = 'admin', onStatusUpdate }: Or
 
   const handleProofComplete = () => {
     setIsProofDialogOpen(false);
-    if (onStatusUpdate) {
-      onStatusUpdate("Collected");
-    }
     toast({
       title: "Collection Complete",
       description: "Collection has been marked as complete",
@@ -117,7 +113,7 @@ export const OrderSummary = ({ fees, total, role = 'admin', onStatusUpdate }: Or
           <DialogHeader>
             <DialogTitle>Upload Proof of Collection</DialogTitle>
           </DialogHeader>
-          <ProofOfCollection onComplete={handleProofComplete} role={role} />
+          <ProofOfCollection onComplete={handleProofComplete} />
         </DialogContent>
       </Dialog>
     </>

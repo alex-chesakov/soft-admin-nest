@@ -99,15 +99,10 @@ const OrderDetails = () => {
     });
   };
 
-  const handleStatusUpdate = (newStatus: string) => {
-    setOrderDetails(prev => ({
-      ...prev,
-      status: newStatus as typeof prev.status
-    }));
-    
+  const handleChargeClient = () => {
     toast({
-      title: "Order Status Updated",
-      description: `Status changed to ${newStatus}`,
+      title: "Processing charge",
+      description: "Client charge initiated",
     });
   };
 
@@ -146,7 +141,6 @@ const OrderDetails = () => {
                 saveOrderProducts(id, items);
               }
             }}
-            onStatusUpdate={handleStatusUpdate}
             role={role as 'admin' | 'collector'}
           />
         </div>

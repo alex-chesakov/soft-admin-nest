@@ -16,18 +16,10 @@ interface OrderFeesProps {
   };
   total: number;
   onItemsChange?: (items: OrderItemType[]) => void;
-  onStatusUpdate?: (status: string) => void;
   role?: 'admin' | 'collector';
 }
 
-export const OrderFees = ({ 
-  items, 
-  fees, 
-  total, 
-  onItemsChange,
-  onStatusUpdate,
-  role = 'admin' 
-}: OrderFeesProps) => {
+export const OrderFees = ({ items, fees, total, onItemsChange, role = 'admin' }: OrderFeesProps) => {
   const itemStatuses = loadDictionaryItems('item-statuses');
   const { toast } = useToast();
 
@@ -138,12 +130,7 @@ export const OrderFees = ({
               role={role}
             />
           ))}
-          <OrderSummary 
-            fees={fees} 
-            total={total} 
-            role={role} 
-            onStatusUpdate={onStatusUpdate}
-          />
+          <OrderSummary fees={fees} total={total} role={role} />
         </div>
       </CardContent>
     </Card>
