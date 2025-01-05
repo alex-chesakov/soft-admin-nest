@@ -50,6 +50,7 @@ export const OrderHeader = ({
   };
 
   const handleStartCollection = () => {
+    handleStatusUpdate("in progress");
     toast({
       title: "Collection Started",
       description: "You have started the collection process",
