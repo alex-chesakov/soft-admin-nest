@@ -65,6 +65,9 @@ export const OrderHeader = ({
           <Badge variant={getStatusVariant(status)}>
             {status}
           </Badge>
+          {role === 'admin' && (
+            <OrderStatusEditDialog status={status} onSave={handleStatusUpdate} />
+          )}
         </div>
         <p className="text-gray-500">Placed on {date}</p>
       </div>
@@ -78,9 +81,6 @@ export const OrderHeader = ({
             <Play className="mr-2 h-4 w-4" />
             Start Collection
           </Button>
-        )}
-        {role === 'admin' && (
-          <OrderStatusEditDialog status={status} onSave={handleStatusUpdate} />
         )}
       </div>
     </div>
