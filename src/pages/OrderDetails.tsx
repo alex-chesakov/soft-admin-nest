@@ -1,10 +1,10 @@
+import { Package2, UserCog } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Package2, User, UserCog } from "lucide-react";
 import { OrderStatusSection } from "@/components/orders/OrderStatusSection";
 import { OrderDetailsSummary } from "@/components/orders/OrderDetailsSummary";
 import { RequirementsEditDialog } from "@/components/orders/RequirementsEditDialog";
-import { CustomerInfoEditDialog } from "@/components/orders/CustomerInfoEditDialog";
 import { CollectorInfoEditDialog } from "@/components/orders/CollectorInfoEditDialog";
+import { CustomerInformation } from "@/components/orders/CustomerInformation";
 import { useParams } from "react-router-dom";
 import { mockOrder } from "@/data/mockOrder";
 import { useState } from "react";
@@ -17,7 +17,6 @@ const OrderDetails = () => {
 
   const handleRequirementsUpdate = (updatedRequirements: string[]) => {
     setRequirements(updatedRequirements);
-    // Save to localStorage for persistence
     localStorage.setItem(`order-requirements-${id}`, JSON.stringify(updatedRequirements));
     
     toast({
@@ -38,8 +37,13 @@ const OrderDetails = () => {
       country: string;
     };
   }) => {
-    console.log('Updating customer info:', data);
-    // TODO: Implement the update logic
+    // Save to localStorage for persistence
+    localStorage.setItem(`order-customer-${id}`, JSON.stringify(data));
+    
+    toast({
+      title: "Customer information updated",
+      description: "Customer details have been successfully updated",
+    });
   };
 
   const handleCollectorInfoUpdate = (data: {
@@ -139,41 +143,13 @@ const OrderDetails = () => {
         </Card>
 
         {/* Customer Information */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between text-lg">
-              <div className="flex items-center gap-2">
-                <User className="h-5 w-5" />
-                Customer Information
-              </div>
-              <CustomerInfoEditDialog
-                customerName={mockOrder.customerName}
-                email={mockOrder.email}
-                phone={mockOrder.phone}
-                shippingAddress={mockOrder.shippingAddress}
-                onSave={handleCustomerInfoUpdate}
-              />
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div>
-                <p className="font-medium">{mockOrder.customerName}</p>
-                <p className="text-sm text-gray-500">{mockOrder.email}</p>
-                <p className="text-sm text-gray-500">{mockOrder.phone}</p>
-              </div>
-              <div>
-                <p className="font-medium mb-1">Shipping Address</p>
-                <p className="text-sm text-gray-500">{mockOrder.shippingAddress.street}</p>
-                <p className="text-sm text-gray-500">
-                  {mockOrder.shippingAddress.city}, {mockOrder.shippingAddress.state}{" "}
-                  {mockOrder.shippingAddress.zip}
-                </p>
-                <p className="text-sm text-gray-500">{mockOrder.shippingAddress.country}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <CustomerInformation
+          initialCustomerName={mockOrder.customerName}
+          initialEmail={mockOrder.email}
+          initialPhone={mockOrder.phone}
+          initialShippingAddress={mockOrder.shippingAddress}
+          onUpdate={handleCustomerInfoUpdate}
+        />
 
         {/* Collector Information */}
         <Card>
