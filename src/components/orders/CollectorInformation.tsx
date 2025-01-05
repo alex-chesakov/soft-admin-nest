@@ -1,6 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { UserCog } from "lucide-react";
-import { CollectorInfoEditDialog } from "./CollectorInfoEditDialog";
 import ProofOfCollection from "./ProofOfCollection";
 
 interface CollectorInformationProps {
@@ -24,12 +23,9 @@ const CollectorInformation = ({
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center justify-between text-lg">
-            <div className="flex items-center gap-2">
-              <UserCog className="h-5 w-5" />
-              Collector Information
-            </div>
-            <CollectorInfoEditDialog collector={collector} onSave={onSave} />
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <UserCog className="h-5 w-5" />
+            Collector Information
           </CardTitle>
         </CardHeader>
         <CardContent>

@@ -1,8 +1,5 @@
 import { Info } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { OrderDetailsEditDialog } from "./OrderDetailsEditDialog";
-import { LocationsEditDialog } from "./LocationsEditDialog";
 
 interface OrderDetailsSummaryProps {
   deliveryDate: string;
@@ -28,40 +25,14 @@ export const OrderDetailsSummary = ({
   itemsCount,
   pickupLocations,
   deliveryLocation,
-  onDeliveryLocationUpdate,
   shippingAddress,
 }: OrderDetailsSummaryProps) => {
-  const handleOrderDetailsUpdate = (data: {
-    deliveryDate: string;
-    deliveryWindow: string;
-    paymentStatus: 'paid' | 'pending' | 'failed';
-  }) => {
-    console.log('Updating order details:', data);
-    // TODO: Implement the update logic
-  };
-
-  const handleLocationsUpdate = (data: {
-    pickupLocations: { name: string; address: string }[];
-    deliveryLocation: { name: string; address: string };
-  }) => {
-    console.log('Updating locations:', data);
-    if (onDeliveryLocationUpdate) {
-      onDeliveryLocationUpdate(data.deliveryLocation);
-    }
-  };
-
   return (
     <Card>
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-lg font-medium">
           <Info className="h-5 w-5 text-muted-foreground" />
           Order Details
-          <OrderDetailsEditDialog
-            deliveryDate={deliveryDate}
-            deliveryWindow={deliveryWindow}
-            paymentStatus={paymentStatus}
-            onSave={handleOrderDetailsUpdate}
-          />
         </CardTitle>
       </CardHeader>
       <CardContent>
