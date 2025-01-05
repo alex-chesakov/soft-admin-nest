@@ -32,6 +32,14 @@ interface Order {
     phone: string;
     email: string;
   };
+  deliveryDate: string;
+  deliveryWindow: string;
+  paymentStatus: 'paid' | 'pending' | 'failed';
+  fees?: {
+    subtotal: number;
+    serviceFee: number;
+    creditCardFee: number;
+  };
 }
 
 // Mock data for demonstration
@@ -42,7 +50,7 @@ const mockOrder: Order = {
   phone: "+1 234 567 8900",
   date: "2024-02-20",
   status: "processing",
-  total: 299.99,
+  total: 99.99,
   items: [
     { id: 1, productName: "Product 1", quantity: 2, price: 99.99 },
     { id: 2, productName: "Product 2", quantity: 1, price: 100.01 },
@@ -66,11 +74,18 @@ const mockOrder: Order = {
   },
   deliveryDate: "2024-02-22",
   deliveryWindow: "09:00 AM - 12:00 PM",
-  paymentStatus: "paid"
+  paymentStatus: "paid",
+  fees: {
+    subtotal: 81.29,
+    serviceFee: 16.26,
+    creditCardFee: 2.44
+  }
 };
 
 const OrderDetails = () => {
   const { id } = useParams();
+
+  // ... keep existing code (header section with status badge)
 
   return (
     <div className="flex gap-6">
@@ -147,9 +162,21 @@ const OrderDetails = () => {
                   <p className="font-medium">${(item.price * item.quantity).toFixed(2)}</p>
                 </div>
               ))}
-              <div className="pt-4">
-                <div className="flex justify-between font-bold">
-                  <p>Total</p>
+              <div className="pt-4 space-y-2 border-t">
+                <div className="flex justify-between text-sm">
+                  <p className="text-gray-500">Subtotal</p>
+                  <p>${mockOrder.fees?.subtotal.toFixed(2)}</p>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <p className="text-gray-500">Service Fee</p>
+                  <p>${mockOrder.fees?.serviceFee.toFixed(2)}</p>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <p className="text-gray-500">Credit Card Fee (2.5%)</p>
+                  <p>${mockOrder.fees?.creditCardFee.toFixed(2)}</p>
+                </div>
+                <div className="flex justify-between font-bold pt-2 border-t">
+                  <p>Estimated Total</p>
                   <p>${mockOrder.total.toFixed(2)}</p>
                 </div>
               </div>
