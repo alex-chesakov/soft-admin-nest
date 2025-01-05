@@ -124,6 +124,13 @@ export const OrderFees = ({ items, fees, total, onItemsChange }: OrderFeesProps)
     });
   };
 
+  const handleCollectionComplete = () => {
+    toast({
+      title: "Collection Complete",
+      description: "Collection has been marked as complete",
+    });
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -165,7 +172,13 @@ export const OrderFees = ({ items, fees, total, onItemsChange }: OrderFeesProps)
               <p>Estimated Total</p>
               <p>${total.toFixed(2)}</p>
             </div>
-            <div className="flex justify-end pt-2">
+            <div className="flex justify-end gap-2 pt-2">
+              <Button 
+                onClick={handleCollectionComplete}
+                className="bg-green-500 hover:bg-green-600 text-white h-8 text-sm px-3"
+              >
+                Collection Complete
+              </Button>
               <Button 
                 onClick={() => setIsConfirmOpen(true)}
                 className="bg-[#ea384c] hover:bg-[#ea384c]/90 text-white h-8 text-sm px-3"
