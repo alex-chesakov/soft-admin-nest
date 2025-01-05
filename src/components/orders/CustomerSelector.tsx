@@ -14,6 +14,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useState, useEffect } from "react";
+import { mockCustomers } from "@/data/mockCustomers";
 
 interface Customer {
   id: string;
@@ -29,54 +30,42 @@ interface CustomerSelectorProps {
 
 export function CustomerSelector({ value = '', onChange }: CustomerSelectorProps) {
   const [open, setOpen] = useState(false);
-  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [customers, setCustomers] = useState<Customer[]>(mockCustomers);
   const [searchValue, setSearchValue] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const defaultCustomers = [
-      {
-        id: "CUST-001",
-        name: "John Doe",
-        email: "john@example.com",
-        phone: "+1 234 567 8900",
-      },
-      {
-        id: "CUST-002",
-        name: "Jane Smith",
-        email: "jane@example.com",
-        phone: "+1 234 567 8901",
-      },
-    ];
-
+    // Set mounted state to true after initial render
+    setMounted(true);
+    
     try {
       const storedCustomers = localStorage.getItem("customers");
-      const parsedCustomers = storedCustomers ? JSON.parse(storedCustomers) : [];
-      
-      // Ensure we always have an array of customers
-      setCustomers(Array.isArray(parsedCustomers) && parsedCustomers.length > 0 
-        ? parsedCustomers 
-        : defaultCustomers
-      );
+      if (storedCustomers) {
+        const parsedCustomers = JSON.parse(storedCustomers);
+        if (Array.isArray(parsedCustomers) && parsedCustomers.length > 0) {
+          setCustomers(parsedCustomers);
+        }
+      }
     } catch (error) {
       console.error("Error loading customers:", error);
-      setCustomers(defaultCustomers);
-    } finally {
-      setIsLoading(false);
     }
   }, []);
 
-  // Ensure we're working with a valid array and valid customer objects
-  const safeCustomers = (Array.isArray(customers) ? customers : []).filter(customer => 
-    customer && 
-    typeof customer === 'object' && 
-    typeof customer.name === 'string' &&
-    typeof customer.email === 'string' &&
-    typeof customer.phone === 'string'
-  );
+  // Don't render the Command component until after mount
+  if (!mounted) {
+    return (
+      <Button
+        variant="outline"
+        role="combobox"
+        className="w-full justify-between"
+      >
+        {value || "Select customer..."}
+        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+      </Button>
+    );
+  }
 
-  // Safe filtering with null checks
-  const filteredCustomers = safeCustomers.filter(customer => {
+  const filteredCustomers = customers.filter(customer => {
     const searchLower = searchValue.toLowerCase();
     return (
       customer.name.toLowerCase().includes(searchLower) ||
@@ -84,20 +73,6 @@ export function CustomerSelector({ value = '', onChange }: CustomerSelectorProps
       customer.phone.toLowerCase().includes(searchLower)
     );
   });
-
-  if (isLoading) {
-    return (
-      <Button
-        variant="outline"
-        role="combobox"
-        className="w-full justify-between"
-        disabled
-      >
-        Loading customers...
-        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-      </Button>
-    );
-  }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
