@@ -47,34 +47,38 @@ export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => 
   };
 
   return (
-    <Command className="border rounded-md w-72">
-      <CommandInput
-        placeholder="Add product..."
-        value={value}
-        onValueChange={(newValue) => {
-          setValue(newValue);
-          setOpen(newValue.length > 0);
-        }}
-      />
-      {open && filteredProducts.length > 0 && (
-        <CommandList>
-          <CommandEmpty>No products found.</CommandEmpty>
-          <CommandGroup>
-            {filteredProducts.map((product) => (
-              <CommandItem
-                key={product.id}
-                value={product.name}
-                onSelect={handleProductSelect}
-              >
-                <div className="flex justify-between w-full">
-                  <span>{product.name}</span>
-                  <span>${product.price}</span>
-                </div>
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </CommandList>
-      )}
-    </Command>
+    <div className="relative">
+      <Command className="border rounded-md w-72">
+        <CommandInput
+          placeholder="Add product..."
+          value={value}
+          onValueChange={(newValue) => {
+            setValue(newValue);
+            setOpen(newValue.length > 0);
+          }}
+        />
+        {open && filteredProducts.length > 0 && (
+          <div className="absolute w-full bg-popover shadow-md rounded-md mt-2 z-50">
+            <CommandList>
+              <CommandEmpty>No products found.</CommandEmpty>
+              <CommandGroup>
+                {filteredProducts.map((product) => (
+                  <CommandItem
+                    key={product.id}
+                    value={product.name}
+                    onSelect={handleProductSelect}
+                  >
+                    <div className="flex justify-between w-full">
+                      <span>{product.name}</span>
+                      <span>${product.price}</span>
+                    </div>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </div>
+        )}
+      </Command>
+    </div>
   );
 };
