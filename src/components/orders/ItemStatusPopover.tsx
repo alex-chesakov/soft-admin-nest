@@ -3,6 +3,12 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -23,14 +29,14 @@ export const ItemStatusPopover = ({
 }: ItemStatusPopoverProps) => {
   const [adjustedQty, setAdjustedQty] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
-  const [showQtyInput, setShowQtyInput] = useState(false);
+  const [showQtyDialog, setShowQtyDialog] = useState(false);
 
   const handleStatusClick = (newStatus: string) => {
     if (newStatus === "Collected Adjusted") {
-      setShowQtyInput(true);
+      setShowQtyDialog(true);
+      setIsOpen(false);
       return;
     }
-    setShowQtyInput(false);
     onStatusChange(newStatus);
     setIsOpen(false);
   };
@@ -39,29 +45,28 @@ export const ItemStatusPopover = ({
     if (adjustedQty) {
       onStatusChange("Collected Adjusted", Number(adjustedQty));
       setAdjustedQty("");
-      setShowQtyInput(false);
-      setIsOpen(false);
+      setShowQtyDialog(false);
     }
   };
 
   return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild>
-        <button
-          className="text-xs px-2 py-1 rounded inline-flex items-center gap-1 hover:opacity-90 transition-opacity"
-          style={{ 
-            backgroundColor: statusColor,
-            color: 'white'
-          }}
-        >
-          {status}
-          <ChevronDown className="h-3 w-3" />
-        </button>
-      </PopoverTrigger>
-      <PopoverContent className="w-48 p-2">
-        <div className="space-y-1">
-          {!showQtyInput ? (
-            statuses.map((statusItem) => (
+    <>
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
+        <PopoverTrigger asChild>
+          <button
+            className="text-xs px-2 py-1 rounded inline-flex items-center gap-1 hover:opacity-90 transition-opacity"
+            style={{ 
+              backgroundColor: statusColor,
+              color: 'white'
+            }}
+          >
+            {status}
+            <ChevronDown className="h-3 w-3" />
+          </button>
+        </PopoverTrigger>
+        <PopoverContent className="w-48 p-2">
+          <div className="space-y-1">
+            {statuses.map((statusItem) => (
               <button
                 key={statusItem.id}
                 className="w-full text-left px-2 py-1 text-sm rounded hover:bg-gray-100"
@@ -69,27 +74,34 @@ export const ItemStatusPopover = ({
               >
                 {statusItem.name}
               </button>
-            ))
-          ) : (
-            <div className="space-y-2">
-              <Input
-                type="number"
-                placeholder="Adjusted quantity"
-                value={adjustedQty}
-                onChange={(e) => setAdjustedQty(e.target.value)}
-                className="w-full"
-              />
-              <Button 
-                onClick={handleAdjustedQtySave}
-                className="w-full"
-                disabled={!adjustedQty}
-              >
-                Save
-              </Button>
-            </div>
-          )}
-        </div>
-      </PopoverContent>
-    </Popover>
+            ))}
+          </div>
+        </PopoverContent>
+      </Popover>
+
+      <Dialog open={showQtyDialog} onOpenChange={setShowQtyDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Enter Adjusted Quantity</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 p-4">
+            <Input
+              type="number"
+              placeholder="Adjusted quantity"
+              value={adjustedQty}
+              onChange={(e) => setAdjustedQty(e.target.value)}
+              className="w-full"
+            />
+            <Button 
+              onClick={handleAdjustedQtySave}
+              className="w-full"
+              disabled={!adjustedQty}
+            >
+              Save
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
