@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, User } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { LocationsEditDialog } from "@/components/orders/LocationsEditDialog";
 
 interface Customer {
   id: string;
   name: string;
   email: string;
   phone: string;
-  locations?: string[];
+  locations?: Array<{ name: string; address: string }>;
 }
 
 const CustomerDetails = () => {
@@ -24,13 +24,44 @@ const CustomerDetails = () => {
         const customers = JSON.parse(storedCustomers);
         const foundCustomer = customers.find((c: Customer) => c.id === id);
         if (foundCustomer) {
-          setCustomer(foundCustomer);
+          // Initialize locations array if it doesn't exist
+          setCustomer({
+            ...foundCustomer,
+            locations: foundCustomer.locations || []
+          });
         }
       } catch (error) {
         console.error("Error parsing customers from localStorage:", error);
       }
     }
   }, [id]);
+
+  const handleLocationsSave = (data: {
+    pickupLocations: { name: string; address: string }[];
+    deliveryLocation: { name: string; address: string };
+  }) => {
+    if (customer) {
+      const updatedCustomer = {
+        ...customer,
+        locations: [...data.pickupLocations, data.deliveryLocation]
+      };
+      
+      // Update customer in localStorage
+      const storedCustomers = localStorage.getItem("customers");
+      if (storedCustomers) {
+        try {
+          const customers = JSON.parse(storedCustomers);
+          const updatedCustomers = customers.map((c: Customer) =>
+            c.id === customer.id ? updatedCustomer : c
+          );
+          localStorage.setItem("customers", JSON.stringify(updatedCustomers));
+          setCustomer(updatedCustomer);
+        } catch (error) {
+          console.error("Error updating customer locations:", error);
+        }
+      }
+    }
+  };
 
   if (!customer) {
     return (
@@ -72,18 +103,32 @@ const CustomerDetails = () => {
 
       {/* Locations Section */}
       <Card>
-        <CardHeader className="flex flex-row items-center space-y-0 gap-2">
-          <MapPin className="h-5 w-5" />
-          <CardTitle>Locations</CardTitle>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0">
+          <div className="flex items-center gap-2">
+            <MapPin className="h-5 w-5" />
+            <CardTitle>Locations</CardTitle>
+          </div>
+          <LocationsEditDialog
+            pickupLocations={customer.locations?.slice(0, -1) || []}
+            deliveryLocation={customer.locations?.[customer.locations.length - 1] || { name: '', address: '' }}
+            onSave={handleLocationsSave}
+          />
         </CardHeader>
         <CardContent>
-          <ScrollArea className="h-[200px] rounded-md">
-            <div className="space-y-2">
+          <ScrollArea className="h-[300px] rounded-md border p-4">
+            <div className="space-y-4">
               {customer.locations && customer.locations.length > 0 ? (
                 customer.locations.map((location, index) => (
-                  <Badge key={index} variant="secondary" className="mr-2">
-                    {location}
-                  </Badge>
+                  <div key={index} className="space-y-2 p-3 rounded-lg border">
+                    <div>
+                      <label className="text-sm font-medium text-muted-foreground">Location Name</label>
+                      <p className="text-base">{location.name}</p>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium text-muted-foreground">Address</label>
+                      <p className="text-base">{location.address}</p>
+                    </div>
+                  </div>
                 ))
               ) : (
                 <p className="text-muted-foreground">No locations assigned</p>
