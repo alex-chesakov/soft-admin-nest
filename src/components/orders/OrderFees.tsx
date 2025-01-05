@@ -54,7 +54,7 @@ export const OrderFees = ({ items, fees, total, onItemsChange }: OrderFeesProps)
           ? { 
               ...item, 
               status: newStatus,
-              adjustedQuantity: adjustedQty
+              adjustedQuantity: adjustedQty !== undefined ? adjustedQty : item.adjustedQuantity
             }
           : item
       );
