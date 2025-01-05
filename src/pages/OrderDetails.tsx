@@ -10,12 +10,16 @@ import CollectorInformation from "@/components/orders/CollectorInformation";
 import { RequirementsSummary } from "@/components/orders/RequirementsSummary";
 import { saveOrderProducts, getOrderProducts } from "@/utils/productStorage";
 import { OrderItem, Order } from "@/types/order";
+import { ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const OrderDetails = () => {
   const { id } = useParams();
   const { toast } = useToast();
   const [orderDetails, setOrderDetails] = useState<Order>(mockOrder);
   const role = localStorage.getItem('userRole') || 'admin';
+  const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {
     if (id) {
@@ -101,71 +105,85 @@ const OrderDetails = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex gap-6">
-        <div className="flex-1 space-y-6">
-          <OrderStatusSection 
-            id={id || ''} 
-            date={orderDetails.date} 
-            initialStatus={orderDetails.status}
-            role={role as 'admin' | 'collector'}
+    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+      <div className="flex justify-end mb-4">
+        <CollapsibleTrigger>
+          <ChevronDown 
+            className={cn(
+              "h-6 w-6 transition-transform duration-200",
+              isOpen ? "transform rotate-180" : ""
+            )} 
           />
-
-          <OrderDetailsSummary
-            deliveryDate={orderDetails.deliveryDate}
-            deliveryWindow={orderDetails.deliveryWindow}
-            paymentStatus={orderDetails.paymentStatus}
-            itemsCount={orderDetails.items.length}
-            pickupLocations={orderDetails.pickupLocations}
-            deliveryLocation={orderDetails.deliveryLocation}
-            onDeliveryLocationUpdate={handleDeliveryLocationUpdate}
-            shippingAddress={orderDetails.shippingAddress}
-            role={role as 'admin' | 'collector'}
-            collectionWindow={orderDetails.collector?.collectionWindow}
-          />
-
-          <OrderFees
-            items={orderDetails.items as OrderItem[]}
-            fees={orderDetails.fees}
-            total={orderDetails.total}
-            onItemsChange={(items) => {
-              setOrderDetails(prev => ({
-                ...prev,
-                items
-              }));
-              if (id) {
-                saveOrderProducts(id, items);
-              }
-            }}
-            role={role as 'admin' | 'collector'}
-          />
-        </div>
-
-        <div className="w-80 space-y-6">
-          <RequirementsSummary
-            requirements={orderDetails.requirements || []}
-            onUpdate={handleRequirementsUpdate}
-            role={role as 'admin' | 'collector'}
-          />
-
-          <CustomerInformation
-            customerName={orderDetails.customerName}
-            email={orderDetails.email}
-            phone={orderDetails.phone}
-            shippingAddress={orderDetails.shippingAddress}
-            onSave={handleCustomerInfoUpdate}
-            onLocationUpdate={handleDeliveryLocationUpdate}
-            role={role as 'admin' | 'collector'}
-          />
-
-          <CollectorInformation
-            collector={orderDetails.collector}
-            onSave={handleCollectorInfoUpdate}
-            role={role as 'admin' | 'collector'}
-          />
-        </div>
+        </CollapsibleTrigger>
       </div>
-    </div>
+      <CollapsibleContent>
+        <div className="space-y-6">
+          <div className="flex gap-6">
+            <div className="flex-1 space-y-6">
+              <OrderStatusSection 
+                id={id || ''} 
+                date={orderDetails.date} 
+                initialStatus={orderDetails.status}
+                role={role as 'admin' | 'collector'}
+              />
+
+              <OrderDetailsSummary
+                deliveryDate={orderDetails.deliveryDate}
+                deliveryWindow={orderDetails.deliveryWindow}
+                paymentStatus={orderDetails.paymentStatus}
+                itemsCount={orderDetails.items.length}
+                pickupLocations={orderDetails.pickupLocations}
+                deliveryLocation={orderDetails.deliveryLocation}
+                onDeliveryLocationUpdate={handleDeliveryLocationUpdate}
+                shippingAddress={orderDetails.shippingAddress}
+                role={role as 'admin' | 'collector'}
+                collectionWindow={orderDetails.collector?.collectionWindow}
+              />
+
+              <OrderFees
+                items={orderDetails.items as OrderItem[]}
+                fees={orderDetails.fees}
+                total={orderDetails.total}
+                onItemsChange={(items) => {
+                  setOrderDetails(prev => ({
+                    ...prev,
+                    items
+                  }));
+                  if (id) {
+                    saveOrderProducts(id, items);
+                  }
+                }}
+                role={role as 'admin' | 'collector'}
+              />
+            </div>
+
+            <div className="w-80 space-y-6">
+              <RequirementsSummary
+                requirements={orderDetails.requirements || []}
+                onUpdate={handleRequirementsUpdate}
+                role={role as 'admin' | 'collector'}
+              />
+
+              <CustomerInformation
+                customerName={orderDetails.customerName}
+                email={orderDetails.email}
+                phone={orderDetails.phone}
+                shippingAddress={orderDetails.shippingAddress}
+                onSave={handleCustomerInfoUpdate}
+                onLocationUpdate={handleDeliveryLocationUpdate}
+                role={role as 'admin' | 'collector'}
+              />
+
+              <CollectorInformation
+                collector={orderDetails.collector}
+                onSave={handleCollectorInfoUpdate}
+                role={role as 'admin' | 'collector'}
+              />
+            </div>
+          </div>
+        </div>
+      </CollapsibleContent>
+    </Collapsible>
   );
 };
 
