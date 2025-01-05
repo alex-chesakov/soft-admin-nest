@@ -74,21 +74,19 @@ export const OrderDetailsSummary = ({
           <div className="grid grid-cols-2 gap-x-6 gap-y-3">
             <div className="col-span-2 border-b pb-2">
               <div className="grid grid-cols-2 gap-x-6">
-                <div className="space-y-3">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Collection Window</p>
-                    <p className="font-medium">{collectionWindow || 'Not set'}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Delivery Window</p>
-                    <p className="font-medium">{deliveryWindow}</p>
-                  </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Collection Window</p>
+                  <p className="font-medium">{collectionWindow || 'Not set'}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Delivery Date</p>
-                  <p className="font-medium">{deliveryDate}</p>
+                  <p className="text-sm text-muted-foreground">Delivery Window</p>
+                  <p className="font-medium">{deliveryWindow}</p>
                 </div>
               </div>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Delivery Date</p>
+              <p className="font-medium">{deliveryDate}</p>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Payment Status</p>
