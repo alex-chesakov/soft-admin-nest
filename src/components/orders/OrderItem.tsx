@@ -62,7 +62,7 @@ export const OrderItemComponent = ({
         <p className="text-sm text-gray-500 mt-2">Price: ${displayPrice.toFixed(2)}/{item.unit || 'Unit'}</p>
         <div className="flex items-center gap-4 mt-2">
           <div className="flex items-center gap-2">
-            <label className="text-sm text-gray-500">Quantity:</label>
+            <label className="text-sm text-gray-500">Booked Qty:</label>
             {role === 'admin' ? (
               <div className="flex items-center">
                 <Button
