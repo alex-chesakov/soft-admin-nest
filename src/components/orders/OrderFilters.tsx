@@ -8,27 +8,53 @@ import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { loadDictionaryItems } from "@/utils/dictionaryStorage";
+import { CollectorOrderFilters } from "./CollectorOrderFilters";
 
 interface OrderFiltersProps {
   locations: string[];
   collectors: string[];
   statuses: string[];
   onStatusChange: (status: string) => void;
+  role?: 'admin' | 'collector';
 }
 
 export const OrderFilters = ({ 
   locations, 
   collectors, 
   statuses, 
-  onStatusChange 
+  onStatusChange,
+  role = 'admin'
 }: OrderFiltersProps) => {
   const [orderStatuses, setOrderStatuses] = useState<{ id: string; name: string }[]>([]);
   const paymentStatuses = ["All Payment Statuses", "paid", "pending", "failed"];
+  const [collectorFilter, setCollectorFilter] = useState('all');
 
   useEffect(() => {
     const loadedStatuses = loadDictionaryItems('order-statuses');
     setOrderStatuses([{ id: '0', name: 'All Statuses' }, ...loadedStatuses]);
   }, []);
+
+  if (role === 'collector') {
+    return (
+      <CollectorOrderFilters
+        onFilterChange={(filter) => {
+          setCollectorFilter(filter);
+          // Map collector filters to corresponding status changes
+          switch (filter) {
+            case 'today':
+              onStatusChange('today');
+              break;
+            case 'tomorrow':
+              onStatusChange('tomorrow');
+              break;
+            default:
+              onStatusChange('all');
+          }
+        }}
+        activeFilter={collectorFilter}
+      />
+    );
+  }
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
