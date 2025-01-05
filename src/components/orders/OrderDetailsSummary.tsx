@@ -92,16 +92,8 @@ export const OrderDetailsSummary = ({
           </div>
 
           <div className="grid grid-cols-2 gap-6 pt-2 border-t">
-            <div className="relative">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium mb-2">Delivery from:</p>
-                <LocationsEditDialog
-                  pickupLocations={pickupLocations}
-                  deliveryLocation={deliveryLocation}
-                  onSave={handleLocationsUpdate}
-                  mode="create"
-                />
-              </div>
+            <div>
+              <p className="text-sm font-medium mb-2">Delivery from:</p>
               <div className="space-y-2">
                 {pickupLocations.map((location, index) => (
                   <div key={index} className="text-sm">
