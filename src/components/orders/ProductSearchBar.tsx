@@ -10,6 +10,7 @@ import {
 import { OrderItem } from "@/types/order";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
   DialogContent,
@@ -19,19 +20,32 @@ import {
 } from "@/components/ui/dialog";
 
 const products = [
-  { id: "8", name: "Wireless Headphones", price: 199.99 },
-  { id: "9", name: "Mechanical Keyboard", price: 149.99 },
-  { id: "10", name: "Gaming Mouse", price: 79.99 },
-  { id: "11", name: "Monitor Stand", price: 49.99 },
-  { id: "12", name: "USB Microphone", price: 129.99 },
-  { id: "13", name: "Webcam HD", price: 89.99 },
-  { id: "14", name: "Desk Mat", price: 29.99 },
-  { id: "15", name: "Cable Management Kit", price: 19.99 },
+  { id: "8", name: "Wireless Headphones", price: 199.99, status: "In Stock", stock: 45 },
+  { id: "9", name: "Mechanical Keyboard", price: 149.99, status: "Low Stock", stock: 5 },
+  { id: "10", name: "Gaming Mouse", price: 79.99, status: "Out of Stock", stock: 0 },
+  { id: "11", name: "Monitor Stand", price: 49.99, status: "In Stock", stock: 20 },
+  { id: "12", name: "USB Microphone", price: 129.99, status: "In Stock", stock: 15 },
+  { id: "13", name: "Webcam HD", price: 89.99, status: "Low Stock", stock: 3 },
+  { id: "14", name: "Desk Mat", price: 29.99, status: "In Stock", stock: 30 },
+  { id: "15", name: "Cable Management Kit", price: 19.99, status: "Out of Stock", stock: 0 },
 ];
 
 interface ProductSearchBarProps {
   onProductSelect: (product: OrderItem) => void;
 }
+
+const getStatusBadgeVariant = (status: string) => {
+  switch (status) {
+    case "In Stock":
+      return "success";
+    case "Low Stock":
+      return "warning";
+    case "Out of Stock":
+      return "destructive";
+    default:
+      return "default";
+  }
+};
 
 export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => {
   const [value, setValue] = useState("");
@@ -93,11 +107,16 @@ export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => 
                     className="flex justify-between items-center"
                   >
                     <div className="flex items-center gap-2 flex-1 mr-4">
-                      <span>{product.name}</span>
+                      <div className="flex flex-col">
+                        <span>{product.name}</span>
+                        <Badge variant={getStatusBadgeVariant(product.status)} className="w-fit mt-1">
+                          {product.status}
+                        </Badge>
+                      </div>
                       <Button
                         size="sm"
                         variant="outline"
-                        className="h-6 px-2 text-xs"
+                        className="h-6 px-2 text-xs ml-auto"
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
@@ -106,7 +125,7 @@ export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => 
                       >
                         {selectedUnits[product.id] === "case" ? "Case" : "Unit"}
                       </Button>
-                      <span className="ml-auto">
+                      <span>
                         ${selectedUnits[product.id] === "case" ? (product.price * 6).toFixed(2) : product.price.toFixed(2)}
                       </span>
                     </div>
