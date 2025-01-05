@@ -31,7 +31,9 @@ const CollectorInformation = ({
               <UserCog className="h-5 w-5" />
               Collector Information
             </div>
-            <CollectorInfoEditDialog collector={collector} onSave={onSave} />
+            {role === 'admin' && (
+              <CollectorInfoEditDialog collector={collector} onSave={onSave} />
+            )}
           </CardTitle>
         </CardHeader>
         <CardContent>

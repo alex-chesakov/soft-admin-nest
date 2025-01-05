@@ -15,6 +15,7 @@ const OrderDetails = () => {
   const { id } = useParams();
   const { toast } = useToast();
   const [orderDetails, setOrderDetails] = useState(mockOrder);
+  const role = localStorage.getItem('userRole') || 'admin';
 
   useEffect(() => {
     if (id) {
@@ -159,6 +160,7 @@ const OrderDetails = () => {
           <CollectorInformation
             collector={orderDetails.collector}
             onSave={handleCollectorInfoUpdate}
+            role={role as 'admin' | 'collector'}
           />
         </div>
       </div>
