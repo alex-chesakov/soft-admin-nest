@@ -14,8 +14,8 @@ interface LocationSelectorProps {
 }
 
 export const LocationSelector = ({
-  locations = [], // Add default value
-  availableCities = [], // Add default value
+  locations = [],
+  availableCities = [],
   onLocationSelect,
   onLocationRemove,
 }: LocationSelectorProps) => {
@@ -28,9 +28,16 @@ export const LocationSelector = ({
     setSearchValue("");
   };
 
-  // Ensure we're working with arrays
-  const safeLocations = Array.isArray(locations) ? locations : [];
-  const safeAvailableCities = Array.isArray(availableCities) ? availableCities : [];
+  // Ensure we're working with arrays and remove duplicates
+  const safeLocations = Array.from(new Set(Array.isArray(locations) ? locations : []));
+  const safeAvailableCities = Array.from(new Set(Array.isArray(availableCities) ? availableCities : []));
+
+  // Filter out already selected locations and match search value
+  const filteredCities = safeAvailableCities
+    .filter(city => 
+      !safeLocations.includes(city) && 
+      city.toLowerCase().includes(searchValue.toLowerCase())
+    );
 
   return (
     <div className="grid gap-2">
@@ -45,7 +52,7 @@ export const LocationSelector = ({
             {safeLocations.length > 0 ? `${safeLocations.length} location(s) selected` : "Select locations..."}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[400px] p-0">
+        <PopoverContent className="w-[400px] p-0" align="start">
           <Command>
             <CommandInput 
               placeholder="Search locations..." 
@@ -55,41 +62,40 @@ export const LocationSelector = ({
             <CommandList>
               <CommandEmpty>No locations found.</CommandEmpty>
               <CommandGroup>
-                {safeAvailableCities
-                  .filter(city => 
-                    !safeLocations.includes(city) && 
-                    city.toLowerCase().includes(searchValue.toLowerCase())
-                  )
-                  .map((city) => (
-                    <CommandItem
-                      key={city}
-                      value={city}
-                      onSelect={() => handleLocationSelect(city)}
-                      className="cursor-pointer hover:bg-accent"
-                    >
-                      <Check
-                        className={cn(
-                          "mr-2 h-4 w-4",
-                          safeLocations.includes(city) ? "opacity-100" : "opacity-0"
-                        )}
-                      />
-                      {city}
-                    </CommandItem>
-                  ))}
+                {filteredCities.map((city) => (
+                  <CommandItem
+                    key={`location-${city}`}
+                    value={city}
+                    onSelect={() => handleLocationSelect(city)}
+                    className="cursor-pointer hover:bg-accent"
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        safeLocations.includes(city) ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    {city}
+                  </CommandItem>
+                ))}
               </CommandGroup>
             </CommandList>
           </Command>
         </PopoverContent>
       </Popover>
 
-      {/* Display selected locations below */}
+      {/* Display selected locations */}
       <div className="mt-4">
         {safeLocations.length > 0 && (
           <div className="space-y-2">
             <p className="text-sm text-muted-foreground">Selected locations:</p>
             <div className="flex flex-wrap gap-2">
               {safeLocations.map((location) => (
-                <Badge key={location} variant="secondary" className="flex items-center gap-1">
+                <Badge 
+                  key={`selected-${location}`} 
+                  variant="secondary" 
+                  className="flex items-center gap-1"
+                >
                   {location}
                   <Button
                     variant="ghost"
