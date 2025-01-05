@@ -1,5 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { OrderStatusEditDialog } from "./OrderStatusEditDialog";
+import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 interface OrderHeaderProps {
   id: string;
@@ -8,7 +10,10 @@ interface OrderHeaderProps {
   onStatusUpdate: (status: string) => void;
 }
 
-export const OrderHeader = ({ id, date, status, onStatusUpdate }: OrderHeaderProps) => {
+export const OrderHeader = ({ id, date, status: initialStatus, onStatusUpdate }: OrderHeaderProps) => {
+  const [status, setStatus] = useState(initialStatus);
+  const { toast } = useToast();
+
   const getStatusVariant = (status: string) => {
     switch (status.toLowerCase()) {
       case "delivered":
@@ -26,6 +31,15 @@ export const OrderHeader = ({ id, date, status, onStatusUpdate }: OrderHeaderPro
     }
   };
 
+  const handleStatusUpdate = (newStatus: string) => {
+    setStatus(newStatus);
+    onStatusUpdate(newStatus);
+    toast({
+      title: "Order status updated",
+      description: `Status changed to ${newStatus}`,
+    });
+  };
+
   return (
     <div className="flex justify-between items-center">
       <div>
@@ -36,7 +50,7 @@ export const OrderHeader = ({ id, date, status, onStatusUpdate }: OrderHeaderPro
         <Badge variant={getStatusVariant(status)}>
           {status}
         </Badge>
-        <OrderStatusEditDialog status={status} onSave={onStatusUpdate} />
+        <OrderStatusEditDialog status={status} onSave={handleStatusUpdate} />
       </div>
     </div>
   );

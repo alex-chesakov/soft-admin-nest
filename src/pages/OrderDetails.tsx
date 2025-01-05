@@ -1,12 +1,11 @@
-import { useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Package2, User, UserCog } from "lucide-react";
-import { OrderHeader } from "@/components/orders/OrderHeader";
+import { OrderStatusSection } from "@/components/orders/OrderStatusSection";
 import { OrderDetailsSummary } from "@/components/orders/OrderDetailsSummary";
 import { RequirementsEditDialog } from "@/components/orders/RequirementsEditDialog";
 import { CustomerInfoEditDialog } from "@/components/orders/CustomerInfoEditDialog";
 import { CollectorInfoEditDialog } from "@/components/orders/CollectorInfoEditDialog";
-import { useToast } from "@/hooks/use-toast";
+import { useParams } from "react-router-dom";
 
 interface OrderItem {
   id: number;
@@ -105,16 +104,6 @@ const mockOrder: Order = {
 
 const OrderDetails = () => {
   const { id } = useParams();
-  const { toast } = useToast();
-
-  const handleStatusUpdate = (newStatus: string) => {
-    console.log('Updating order status:', newStatus);
-    toast({
-      title: "Order status updated",
-      description: `Status changed to ${newStatus}`,
-    });
-    // TODO: Implement the update logic
-  };
 
   const handleRequirementsUpdate = (requirements: string[]) => {
     console.log('Updating requirements:', requirements);
@@ -150,11 +139,10 @@ const OrderDetails = () => {
     <div className="flex gap-6">
       {/* Main Content */}
       <div className="flex-1 space-y-6">
-        <OrderHeader 
+        <OrderStatusSection 
           id={id || ''} 
           date={mockOrder.date} 
-          status={mockOrder.status}
-          onStatusUpdate={handleStatusUpdate}
+          initialStatus={mockOrder.status}
         />
 
         <OrderDetailsSummary
