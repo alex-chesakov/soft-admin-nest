@@ -11,18 +11,16 @@ import { Plus } from "lucide-react";
 import { useState } from "react";
 
 interface AddItemDialogProps {
-  onAdd: (name: string, description: string) => void;
+  onAdd: (name: string) => void;
 }
 
 export const AddItemDialog = ({ onAdd }: AddItemDialogProps) => {
   const [newItemName, setNewItemName] = useState("");
-  const [newItemDescription, setNewItemDescription] = useState("");
 
   const handleAddItem = () => {
-    if (newItemName && newItemDescription) {
-      onAdd(newItemName, newItemDescription);
+    if (newItemName) {
+      onAdd(newItemName);
       setNewItemName("");
-      setNewItemDescription("");
     }
   };
 
@@ -46,15 +44,6 @@ export const AddItemDialog = ({ onAdd }: AddItemDialogProps) => {
               value={newItemName}
               onChange={(e) => setNewItemName(e.target.value)}
               placeholder="Enter item name"
-            />
-          </div>
-          <div className="space-y-2">
-            <label htmlFor="description">Description</label>
-            <Input
-              id="description"
-              value={newItemDescription}
-              onChange={(e) => setNewItemDescription(e.target.value)}
-              placeholder="Enter item description"
             />
           </div>
           <Button onClick={handleAddItem} className="w-full">

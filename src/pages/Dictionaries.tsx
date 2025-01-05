@@ -17,7 +17,6 @@ import { loadDictionaryItems, saveDictionaryItems } from "@/utils/dictionaryStor
 interface DictionaryItem {
   id: string;
   name: string;
-  description: string;
 }
 
 const Dictionaries = () => {
@@ -42,11 +41,10 @@ const Dictionaries = () => {
     setSelectedDictionary(value);
   };
 
-  const handleAddItem = (name: string, description: string) => {
+  const handleAddItem = (name: string) => {
     const newItem: DictionaryItem = {
-      id: Date.now().toString(),
+      id: `${selectedDictionary}-${Date.now()}`,
       name,
-      description,
     };
     setItems([...items, newItem]);
     setHasUnsavedChanges(true);

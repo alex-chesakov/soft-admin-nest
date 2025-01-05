@@ -12,7 +12,6 @@ import {
 interface DictionaryItem {
   id: string;
   name: string;
-  description: string;
 }
 
 interface DictionaryTableProps {
@@ -25,16 +24,16 @@ export const DictionaryTable = ({ items, onDelete }: DictionaryTableProps) => {
     <Table>
       <TableHeader>
         <TableRow>
+          <TableHead>ID</TableHead>
           <TableHead>Name</TableHead>
-          <TableHead>Description</TableHead>
           <TableHead className="w-[100px]">Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {items.map((item) => (
           <TableRow key={item.id}>
+            <TableCell>{item.id}</TableCell>
             <TableCell>{item.name}</TableCell>
-            <TableCell>{item.description}</TableCell>
             <TableCell>
               <Button
                 variant="ghost"
