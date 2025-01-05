@@ -9,6 +9,7 @@ import CustomerInformation from "@/components/orders/CustomerInformation";
 import CollectorInformation from "@/components/orders/CollectorInformation";
 import { RequirementsSummary } from "@/components/orders/RequirementsSummary";
 import { saveOrderProducts, getOrderProducts } from "@/utils/productStorage";
+import { OrderItem } from "@/types/order";
 
 const OrderDetails = () => {
   const { id } = useParams();
@@ -22,7 +23,7 @@ const OrderDetails = () => {
       if (savedProducts.length > 0) {
         setOrderDetails(prev => ({
           ...prev,
-          items: savedProducts
+          items: savedProducts as OrderItem[]
         }));
       } else {
         // If no saved products exist, save the current ones
@@ -120,6 +121,15 @@ const OrderDetails = () => {
           items={orderDetails.items}
           fees={orderDetails.fees || { subtotal: 0, serviceFee: 0, creditCardFee: 0 }}
           total={orderDetails.total}
+          onItemsChange={(items) => {
+            setOrderDetails(prev => ({
+              ...prev,
+              items
+            }));
+            if (id) {
+              saveOrderProducts(id, items);
+            }
+          }}
         />
       </div>
 
