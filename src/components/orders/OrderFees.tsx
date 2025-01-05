@@ -68,9 +68,17 @@ export const OrderFees = ({ items, fees, total, onItemsChange }: OrderFeesProps)
 
   const handleUnitChange = (itemId: string, unit: "Unit" | "Case") => {
     if (onItemsChange) {
-      const updatedItems = items.map((item) =>
-        item.id === itemId ? { ...item, unit } : item
-      );
+      const updatedItems = items.map((item) => {
+        if (item.id === itemId) {
+          const basePrice = unit === "Case" ? item.price / 6 : item.price * 6;
+          return {
+            ...item,
+            unit,
+            price: unit === "Case" ? basePrice * 6 : basePrice
+          };
+        }
+        return item;
+      });
       onItemsChange(updatedItems);
     }
   };
