@@ -49,7 +49,7 @@ const mockOrders: Order[] = [
     email: "jane@example.com",
     phone: "+1234567891",
     date: "2024-02-19",
-    status: "completed",
+    status: "delivered",
     total: 2199.92,
     items: [
       { id: "8", productName: "4K Gaming Monitor", quantity: 1, price: 699.99 },
