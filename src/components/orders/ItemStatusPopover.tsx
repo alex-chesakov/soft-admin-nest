@@ -33,32 +33,24 @@ export const ItemStatusPopover = ({
 }: ItemStatusPopoverProps) => {
   const [adjustedQty, setAdjustedQty] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
-  const [showQtyInput, setShowQtyInput] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const handleStatusClick = (newStatus: string) => {
     if (newStatus === "Collected Adjusted") {
-      setShowQtyInput(true);
+      setIsConfirmOpen(true);
+      setIsOpen(false);
       return;
     }
-    setShowQtyInput(false);
     onStatusChange(newStatus);
     setIsOpen(false);
   };
 
-  const handleAdjustedQtySave = () => {
-    if (adjustedQty) {
-      setIsConfirmOpen(true);
-      setIsOpen(false); // Close the popover when showing confirmation
-    }
-  };
-
   const handleConfirmAdjustedQty = () => {
-    onStatusChange("Collected Adjusted", Number(adjustedQty));
-    setAdjustedQty("");
-    setShowQtyInput(false);
-    setIsOpen(false);
-    setIsConfirmOpen(false);
+    if (adjustedQty) {
+      onStatusChange("Collected Adjusted", Number(adjustedQty));
+      setAdjustedQty("");
+      setIsConfirmOpen(false);
+    }
   };
 
   return (
@@ -78,34 +70,15 @@ export const ItemStatusPopover = ({
         </PopoverTrigger>
         <PopoverContent className="w-48 p-2">
           <div className="space-y-1">
-            {!showQtyInput ? (
-              statuses.map((statusItem) => (
-                <button
-                  key={statusItem.id}
-                  className="w-full text-left px-2 py-1 text-sm rounded hover:bg-gray-100"
-                  onClick={() => handleStatusClick(statusItem.name)}
-                >
-                  {statusItem.name}
-                </button>
-              ))
-            ) : (
-              <div className="space-y-2">
-                <Input
-                  type="number"
-                  placeholder="Adjusted quantity"
-                  value={adjustedQty}
-                  onChange={(e) => setAdjustedQty(e.target.value)}
-                  className="w-full"
-                />
-                <Button 
-                  onClick={handleAdjustedQtySave}
-                  className="w-full"
-                  disabled={!adjustedQty}
-                >
-                  Save
-                </Button>
-              </div>
-            )}
+            {statuses.map((statusItem) => (
+              <button
+                key={statusItem.id}
+                className="w-full text-left px-2 py-1 text-sm rounded hover:bg-gray-100"
+                onClick={() => handleStatusClick(statusItem.name)}
+              >
+                {statusItem.name}
+              </button>
+            ))}
           </div>
         </PopoverContent>
       </Popover>
@@ -113,19 +86,29 @@ export const ItemStatusPopover = ({
       <AlertDialog open={isConfirmOpen} onOpenChange={setIsConfirmOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Confirm Adjusted Quantity</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to set the adjusted quantity to {adjustedQty}?
+            <AlertDialogTitle>Enter Adjusted Quantity</AlertDialogTitle>
+            <AlertDialogDescription className="space-y-4">
+              <p>Please enter the adjusted quantity for this item:</p>
+              <Input
+                type="number"
+                placeholder="Adjusted quantity"
+                value={adjustedQty}
+                onChange={(e) => setAdjustedQty(e.target.value)}
+                className="w-full"
+              />
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={() => {
               setIsConfirmOpen(false);
-              setIsOpen(true); // Reopen the popover when canceling
-              }}>
+              setAdjustedQty("");
+            }}>
               Cancel
             </AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirmAdjustedQty}>
+            <AlertDialogAction 
+              onClick={handleConfirmAdjustedQty}
+              disabled={!adjustedQty}
+            >
               Confirm
             </AlertDialogAction>
           </AlertDialogFooter>
