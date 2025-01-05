@@ -1,9 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { MainLayout } from "@/components/layouts/MainLayout";
-import { CollectorLayout } from "@/components/layouts/CollectorLayout";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
-import { ViewProvider, useView } from "@/contexts/ViewContext";
 import Index from "@/pages/Index";
 import Products from "@/pages/Products";
 import ProductDetails from "@/pages/ProductDetails";
@@ -21,52 +19,30 @@ import Dictionaries from "@/pages/Dictionaries";
 
 const queryClient = new QueryClient();
 
-function AppRoutes() {
-  const { viewType } = useView();
-  
-  if (viewType === "collector") {
-    return (
-      <CollectorLayout>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/orders" element={<Orders />} />
-          <Route path="/orders/:id" element={<OrderDetails />} />
-        </Routes>
-      </CollectorLayout>
-    );
-  }
-
-  return (
-    <MainLayout>
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/products/:id" element={<ProductDetails />} />
-        <Route path="/orders" element={<Orders />} />
-        <Route path="/orders/:id" element={<OrderDetails />} />
-        <Route path="/customers" element={<Customers />} />
-        <Route path="/customers/:id" element={<CustomerDetails />} />
-        <Route path="/users" element={<Users />} />
-        <Route path="/users/admins" element={<Admins />} />
-        <Route path="/users/collectors" element={<Collectors />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/analytics" element={<Analytics />} />
-        <Route path="/locations" element={<Locations />} />
-        <Route path="/dictionaries" element={<Dictionaries />} />
-      </Routes>
-    </MainLayout>
-  );
-}
-
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ViewProvider>
-        <Router>
-          <AppRoutes />
-          <Toaster />
-        </Router>
-      </ViewProvider>
+      <Router>
+        <MainLayout>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/products/:id" element={<ProductDetails />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/orders/:id" element={<OrderDetails />} />
+            <Route path="/customers" element={<Customers />} />
+            <Route path="/customers/:id" element={<CustomerDetails />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/users/admins" element={<Admins />} />
+            <Route path="/users/collectors" element={<Collectors />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/locations" element={<Locations />} />
+            <Route path="/dictionaries" element={<Dictionaries />} />
+          </Routes>
+        </MainLayout>
+        <Toaster />
+      </Router>
     </QueryClientProvider>
   );
 }
