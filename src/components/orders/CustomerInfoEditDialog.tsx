@@ -9,6 +9,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Edit2 } from "lucide-react";
+import { CustomerSelector } from "./CustomerSelector";
+import { useState } from "react";
 
 interface CustomerInfoEditDialogProps {
   customerName: string;
@@ -42,13 +44,18 @@ export const CustomerInfoEditDialog = ({
   shippingAddress,
   onSave,
 }: CustomerInfoEditDialogProps) => {
+  const [selectedCustomer, setSelectedCustomer] = useState(customerName);
+  const [selectedEmail, setSelectedEmail] = useState(email);
+  const [selectedPhone, setSelectedPhone] = useState(phone);
+  const [open, setOpen] = useState(false);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     onSave({
-      customerName: formData.get('customerName') as string,
-      email: formData.get('email') as string,
-      phone: formData.get('phone') as string,
+      customerName: selectedCustomer,
+      email: selectedEmail,
+      phone: selectedPhone,
       shippingAddress: {
         street: formData.get('street') as string,
         city: formData.get('city') as string,
@@ -57,10 +64,17 @@ export const CustomerInfoEditDialog = ({
         country: formData.get('country') as string,
       },
     });
+    setOpen(false);
+  };
+
+  const handleCustomerSelect = (name: string, email: string, phone: string) => {
+    setSelectedCustomer(name);
+    setSelectedEmail(email);
+    setSelectedPhone(phone);
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="ghost" size="icon">
           <Edit2 className="h-4 w-4" />
@@ -73,11 +87,10 @@ export const CustomerInfoEditDialog = ({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-4">
             <div className="grid gap-2">
-              <Label htmlFor="customerName">Customer Name</Label>
-              <Input
-                id="customerName"
-                name="customerName"
-                defaultValue={customerName}
+              <Label>Customer</Label>
+              <CustomerSelector 
+                value={selectedCustomer} 
+                onChange={handleCustomerSelect}
               />
             </div>
             <div className="grid gap-2">
@@ -86,7 +99,8 @@ export const CustomerInfoEditDialog = ({
                 id="email"
                 name="email"
                 type="email"
-                defaultValue={email}
+                value={selectedEmail}
+                onChange={(e) => setSelectedEmail(e.target.value)}
               />
             </div>
             <div className="grid gap-2">
@@ -94,7 +108,8 @@ export const CustomerInfoEditDialog = ({
               <Input
                 id="phone"
                 name="phone"
-                defaultValue={phone}
+                value={selectedPhone}
+                onChange={(e) => setSelectedPhone(e.target.value)}
               />
             </div>
           </div>
