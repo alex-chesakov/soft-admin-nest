@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 interface Customer {
   id: string;
@@ -72,7 +73,14 @@ const Customers = () => {
             <TableBody>
               {mockCustomers.map((customer) => (
                 <TableRow key={customer.id}>
-                  <TableCell className="font-medium">{customer.name}</TableCell>
+                  <TableCell className="font-medium">
+                    <Link 
+                      to={`/customers/${customer.id}`} 
+                      className="text-primary hover:underline"
+                    >
+                      {customer.name}
+                    </Link>
+                  </TableCell>
                   <TableCell>{customer.email}</TableCell>
                   <TableCell>{customer.phone}</TableCell>
                   <TableCell>{customer.orders}</TableCell>
