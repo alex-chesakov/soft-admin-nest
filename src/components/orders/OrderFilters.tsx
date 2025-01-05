@@ -6,6 +6,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Button } from "@/components/ui/button";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
+import { loadDictionaryItems } from "@/utils/dictionaryStorage";
 
 interface OrderFiltersProps {
   locations: string[];
@@ -20,7 +22,13 @@ export const OrderFilters = ({
   statuses, 
   onStatusChange 
 }: OrderFiltersProps) => {
+  const [orderStatuses, setOrderStatuses] = useState<{ id: string; name: string }[]>([]);
   const paymentStatuses = ["All Payment Statuses", "paid", "pending", "failed"];
+
+  useEffect(() => {
+    const loadedStatuses = loadDictionaryItems('order-statuses');
+    setOrderStatuses([{ id: '0', name: 'All Statuses' }, ...loadedStatuses]);
+  }, []);
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -60,9 +68,9 @@ export const OrderFilters = ({
           <SelectValue placeholder="Status" />
         </SelectTrigger>
         <SelectContent>
-          {statuses.map((status) => (
-            <SelectItem key={status} value={status.toLowerCase()}>
-              {status.charAt(0).toUpperCase() + status.slice(1)}
+          {orderStatuses.map((status) => (
+            <SelectItem key={status.id} value={status.name.toLowerCase()}>
+              {status.name}
             </SelectItem>
           ))}
         </SelectContent>
