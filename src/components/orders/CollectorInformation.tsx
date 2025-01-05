@@ -51,10 +51,9 @@ const CollectorInformation = ({
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center py-4">
-              <p className="text-gray-500 mb-4">No collector assigned</p>
               {role === 'admin' && (
                 <CollectorInfoEditDialog onSave={onSave}>
-                  <Button variant="outline">
+                  <Button variant="destructive">
                     <UserPlus className="h-4 w-4 mr-2" />
                     Assign Collector
                   </Button>
