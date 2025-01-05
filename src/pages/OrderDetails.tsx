@@ -10,6 +10,7 @@ import CollectorInformation from "@/components/orders/CollectorInformation";
 import { RequirementsSummary } from "@/components/orders/RequirementsSummary";
 import { saveOrderProducts, getOrderProducts } from "@/utils/productStorage";
 import { OrderItem } from "@/types/order";
+import { Button } from "@/components/ui/button";
 
 const OrderDetails = () => {
   const { id } = useParams();
@@ -98,60 +99,78 @@ const OrderDetails = () => {
     });
   };
 
+  const handleChargeClient = () => {
+    toast({
+      title: "Processing charge",
+      description: "Client charge initiated",
+    });
+  };
+
   return (
-    <div className="flex gap-6">
-      <div className="flex-1 space-y-6">
-        <OrderStatusSection 
-          id={id || ''} 
-          date={orderDetails.date} 
-          initialStatus={orderDetails.status}
-        />
+    <div className="space-y-6">
+      <div className="flex gap-6">
+        <div className="flex-1 space-y-6">
+          <OrderStatusSection 
+            id={id || ''} 
+            date={orderDetails.date} 
+            initialStatus={orderDetails.status}
+          />
 
-        <OrderDetailsSummary
-          deliveryDate={orderDetails.deliveryDate}
-          deliveryWindow={orderDetails.deliveryWindow}
-          paymentStatus={orderDetails.paymentStatus}
-          itemsCount={orderDetails.items.length}
-          pickupLocations={orderDetails.pickupLocations}
-          deliveryLocation={orderDetails.deliveryLocation}
-          onDeliveryLocationUpdate={handleDeliveryLocationUpdate}
-        />
+          <OrderDetailsSummary
+            deliveryDate={orderDetails.deliveryDate}
+            deliveryWindow={orderDetails.deliveryWindow}
+            paymentStatus={orderDetails.paymentStatus}
+            itemsCount={orderDetails.items.length}
+            pickupLocations={orderDetails.pickupLocations}
+            deliveryLocation={orderDetails.deliveryLocation}
+            onDeliveryLocationUpdate={handleDeliveryLocationUpdate}
+          />
 
-        <OrderFees
-          items={orderDetails.items as OrderItem[]}
-          fees={orderDetails.fees}
-          total={orderDetails.total}
-          onItemsChange={(items) => {
-            setOrderDetails(prev => ({
-              ...prev,
-              items
-            }));
-            if (id) {
-              saveOrderProducts(id, items);
-            }
-          }}
-        />
+          <OrderFees
+            items={orderDetails.items as OrderItem[]}
+            fees={orderDetails.fees}
+            total={orderDetails.total}
+            onItemsChange={(items) => {
+              setOrderDetails(prev => ({
+                ...prev,
+                items
+              }));
+              if (id) {
+                saveOrderProducts(id, items);
+              }
+            }}
+          />
+        </div>
+
+        <div className="w-80 space-y-6">
+          <RequirementsSummary
+            requirements={orderDetails.requirements || []}
+            onUpdate={handleRequirementsUpdate}
+          />
+
+          <CustomerInformation
+            customerName={orderDetails.customerName}
+            email={orderDetails.email}
+            phone={orderDetails.phone}
+            shippingAddress={orderDetails.shippingAddress}
+            onSave={handleCustomerInfoUpdate}
+            onLocationUpdate={handleDeliveryLocationUpdate}
+          />
+
+          <CollectorInformation
+            collector={orderDetails.collector}
+            onSave={handleCollectorInfoUpdate}
+          />
+        </div>
       </div>
-
-      <div className="w-80 space-y-6">
-        <RequirementsSummary
-          requirements={orderDetails.requirements || []}
-          onUpdate={handleRequirementsUpdate}
-        />
-
-        <CustomerInformation
-          customerName={orderDetails.customerName}
-          email={orderDetails.email}
-          phone={orderDetails.phone}
-          shippingAddress={orderDetails.shippingAddress}
-          onSave={handleCustomerInfoUpdate}
-          onLocationUpdate={handleDeliveryLocationUpdate}
-        />
-
-        <CollectorInformation
-          collector={orderDetails.collector}
-          onSave={handleCollectorInfoUpdate}
-        />
+      
+      <div className="flex justify-end pt-6">
+        <Button 
+          onClick={handleChargeClient}
+          className="bg-[#ea384c] hover:bg-[#ea384c]/90 text-white"
+        >
+          Charge Client
+        </Button>
       </div>
     </div>
   );
