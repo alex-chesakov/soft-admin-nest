@@ -11,6 +11,7 @@ import {
 import { ItemStatusPopover } from "./ItemStatusPopover";
 import { getItemStatusColor } from "@/utils/dictionaryStorage";
 import { OrderItem as OrderItemType } from "@/types/order";
+import { Badge } from "@/components/ui/badge";
 
 interface OrderItemProps {
   item: OrderItemType & { adjustedQuantity?: number };
@@ -29,10 +30,30 @@ export const OrderItemComponent = ({
   onDelete,
   itemStatuses,
 }: OrderItemProps) => {
+  const getStatusBadgeVariant = (status: string) => {
+    switch (status?.toLowerCase()) {
+      case 'in stock':
+        return 'success';
+      case 'low stock':
+        return 'warning';
+      case 'out of stock':
+        return 'destructive';
+      default:
+        return 'secondary';
+    }
+  };
+
   return (
     <div className="flex justify-between items-start border-b pb-4 last:border-0">
       <div className="space-y-1 flex-1">
-        <p className="font-medium">{item.productName}</p>
+        <div className="flex items-center gap-2">
+          <p className="font-medium">{item.productName}</p>
+          {item.productStatus && (
+            <Badge variant={getStatusBadgeVariant(item.productStatus)}>
+              {item.productStatus}
+            </Badge>
+          )}
+        </div>
         <p className="text-sm text-gray-500">ID: {item.id}</p>
         <p className="text-sm text-gray-500 mt-2">Price: ${item.price.toFixed(2)}/{item.unit || 'Unit'}</p>
         <div className="flex items-center gap-4 mt-2">
