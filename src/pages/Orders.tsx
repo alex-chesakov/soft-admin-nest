@@ -2,22 +2,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { OrderFilters } from "@/components/orders/OrderFilters";
 import { OrdersTable } from "@/components/orders/OrdersTable";
+import { Order } from "@/types/order";
 
-interface Order {
-  id: string;
-  customerName: string;
-  date: string;
-  status: 'pending' | 'processing' | 'completed' | 'cancelled';
-  total: number;
-  items: number;
-  location?: string;
-  collector?: string;
-  paymentStatus: 'paid' | 'pending' | 'failed';
-  deliveryDate: string;
-  deliveryWindow: string;
-}
-
-// Mock data with additional fields
+// Mock data with correct status types
 const mockOrders: Order[] = [
   {
     id: "ORD-001",
@@ -58,7 +45,7 @@ const Orders = () => {
       // Simulate API call
       const ordersWithSavedStatus = mockOrders.map(order => {
         const savedStatus = localStorage.getItem(`order-status-${order.id}`);
-        return savedStatus ? { ...order, status: savedStatus } : order;
+        return savedStatus ? { ...order, status: savedStatus as Order['status'] } : order;
       });
       return new Promise<Order[]>((resolve) => {
         setTimeout(() => resolve(ordersWithSavedStatus), 1000);
