@@ -1,7 +1,8 @@
 import { useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Package2, User, UserCog, Info } from "lucide-react";
+import { OrderHeader } from "@/components/orders/OrderHeader";
+import { OrderDetailsSummary } from "@/components/orders/OrderDetailsSummary";
 
 interface OrderItem {
   id: number;
@@ -40,6 +41,8 @@ interface Order {
     serviceFee: number;
     creditCardFee: number;
   };
+  pickupLocations: { name: string; address: string }[];
+  deliveryLocation: { name: string; address: string };
 }
 
 // Mock data for demonstration
@@ -79,69 +82,44 @@ const mockOrder: Order = {
     subtotal: 81.29,
     serviceFee: 16.26,
     creditCardFee: 2.44
+  },
+  pickupLocations: [
+    {
+      name: "Restaurant Depo",
+      address: "1300 Mariposa ave, San Jose"
+    },
+    {
+      name: "Costco",
+      address: "150 Lawrence station drive, Sunnyvale"
+    }
+  ],
+  deliveryLocation: {
+    name: "Main Kitchen",
+    address: "2500 El Camino Real, Palo Alto, CA 94306"
   }
 };
 
 const OrderDetails = () => {
   const { id } = useParams();
 
-  // ... keep existing code (header section with status badge)
-
   return (
     <div className="flex gap-6">
       {/* Main Content */}
       <div className="flex-1 space-y-6">
-        <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-2xl font-bold">Order {id}</h1>
-            <p className="text-gray-500">Placed on {mockOrder.date}</p>
-          </div>
-          <Badge
-            variant={
-              mockOrder.status === "completed"
-                ? "default"
-                : mockOrder.status === "pending"
-                ? "secondary"
-                : mockOrder.status === "processing"
-                ? "outline"
-                : "destructive"
-            }
-          >
-            {mockOrder.status}
-          </Badge>
-        </div>
+        <OrderHeader 
+          id={id || ''} 
+          date={mockOrder.date} 
+          status={mockOrder.status} 
+        />
 
-        {/* Order Details Summary */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Info className="h-5 w-5" />
-              Order Details
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm text-gray-500">Delivery Date</p>
-                <p className="font-medium">{mockOrder.deliveryDate}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Delivery Window</p>
-                <p className="font-medium">{mockOrder.deliveryWindow}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Payment Status</p>
-                <Badge variant={mockOrder.paymentStatus === 'paid' ? 'default' : 'secondary'}>
-                  {mockOrder.paymentStatus}
-                </Badge>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Total Items</p>
-                <p className="font-medium">{mockOrder.items.length}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <OrderDetailsSummary
+          deliveryDate={mockOrder.deliveryDate}
+          deliveryWindow={mockOrder.deliveryWindow}
+          paymentStatus={mockOrder.paymentStatus}
+          itemsCount={mockOrder.items.length}
+          pickupLocations={mockOrder.pickupLocations}
+          deliveryLocation={mockOrder.deliveryLocation}
+        />
 
         {/* Order Items */}
         <Card>
