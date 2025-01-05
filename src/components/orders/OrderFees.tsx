@@ -153,7 +153,7 @@ export const OrderFees = ({ items, fees, total, onItemsChange, role = 'admin' }:
             <Package2 className="h-5 w-5" />
             Order Items
           </CardTitle>
-          {role === 'admin' && <ProductSearchBar onProductSelect={handleProductSelect} />}
+          <ProductSearchBar onProductSelect={handleProductSelect} />
         </div>
       </CardHeader>
       <CardContent>
