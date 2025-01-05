@@ -52,27 +52,23 @@ export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => 
           value={value}
           onValueChange={setValue}
         />
-        {value && (
-          <div className="absolute w-full bg-popover border rounded-md mt-1 shadow-md z-50">
-            <CommandList>
-              <CommandEmpty>No products found.</CommandEmpty>
-              <CommandGroup>
-                {filteredProducts.map((product) => (
-                  <CommandItem
-                    key={product.id}
-                    value={product.name}
-                    onSelect={handleProductSelect}
-                  >
-                    <div className="flex justify-between w-full">
-                      <span>{product.name}</span>
-                      <span>${product.price}</span>
-                    </div>
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </CommandList>
-          </div>
-        )}
+        <CommandList className={value ? "visible" : "hidden"}>
+          <CommandEmpty>No products found.</CommandEmpty>
+          <CommandGroup>
+            {filteredProducts.map((product) => (
+              <CommandItem
+                key={product.id}
+                value={product.name}
+                onSelect={handleProductSelect}
+              >
+                <div className="flex justify-between w-full">
+                  <span>{product.name}</span>
+                  <span>${product.price}</span>
+                </div>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </CommandList>
       </Command>
     </div>
   );
