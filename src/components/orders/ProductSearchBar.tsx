@@ -47,17 +47,17 @@ export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => 
   };
 
   return (
-    <div className="relative">
-      <Command className="border rounded-md w-72">
-        <CommandInput
-          placeholder="Add product..."
-          value={value}
-          onValueChange={(newValue) => {
-            setValue(newValue);
-            setOpen(newValue.length > 0);
-          }}
-        />
-        <CommandList className={open && filteredProducts.length > 0 ? "absolute w-full bg-popover shadow-md rounded-md mt-2 z-50" : ""}>
+    <Command className="border rounded-md w-72">
+      <CommandInput
+        placeholder="Add product..."
+        value={value}
+        onValueChange={(newValue) => {
+          setValue(newValue);
+          setOpen(newValue.length > 0);
+        }}
+      />
+      {open && filteredProducts.length > 0 && (
+        <CommandList>
           <CommandEmpty>No products found.</CommandEmpty>
           <CommandGroup>
             {filteredProducts.map((product) => (
@@ -74,7 +74,7 @@ export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => 
             ))}
           </CommandGroup>
         </CommandList>
-      </Command>
-    </div>
+      )}
+    </Command>
   );
 };
