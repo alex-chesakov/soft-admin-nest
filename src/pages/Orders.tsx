@@ -45,6 +45,136 @@ const mockOrders: Order[] = [
     deliveryDate: "2024-02-21",
     deliveryWindow: "02:00 PM - 05:00 PM"
   },
+  {
+    id: "ORD-003",
+    customerName: "Michael Brown",
+    date: "2024-02-21",
+    status: "processing",
+    total: 450.50,
+    items: 5,
+    location: "Chicago",
+    collector: "Carol Williams",
+    paymentStatus: "paid",
+    deliveryDate: "2024-02-23",
+    deliveryWindow: "10:00 AM - 01:00 PM"
+  },
+  {
+    id: "ORD-004",
+    customerName: "Emily Davis",
+    date: "2024-02-21",
+    status: "pending",
+    total: 275.25,
+    items: 3,
+    location: "Miami",
+    collector: "David Miller",
+    paymentStatus: "pending",
+    deliveryDate: "2024-02-23",
+    deliveryWindow: "01:00 PM - 04:00 PM"
+  },
+  {
+    id: "ORD-005",
+    customerName: "William Wilson",
+    date: "2024-02-20",
+    status: "cancelled",
+    total: 189.99,
+    items: 2,
+    location: "Boston",
+    collector: "Emma Davis",
+    paymentStatus: "failed",
+    deliveryDate: "2024-02-22",
+    deliveryWindow: "03:00 PM - 06:00 PM"
+  },
+  {
+    id: "ORD-006",
+    customerName: "Sarah Johnson",
+    date: "2024-02-22",
+    status: "processing",
+    total: 567.80,
+    items: 6,
+    location: "Seattle",
+    collector: "Frank White",
+    paymentStatus: "paid",
+    deliveryDate: "2024-02-24",
+    deliveryWindow: "11:00 AM - 02:00 PM"
+  },
+  {
+    id: "ORD-007",
+    customerName: "Robert Martin",
+    date: "2024-02-22",
+    status: "completed",
+    total: 345.60,
+    items: 4,
+    location: "Denver",
+    collector: "Grace Lee",
+    paymentStatus: "paid",
+    deliveryDate: "2024-02-24",
+    deliveryWindow: "09:00 AM - 12:00 PM"
+  },
+  {
+    id: "ORD-008",
+    customerName: "Lisa Anderson",
+    date: "2024-02-21",
+    status: "pending",
+    total: 234.75,
+    items: 3,
+    location: "Phoenix",
+    collector: "Henry Chen",
+    paymentStatus: "pending",
+    deliveryDate: "2024-02-23",
+    deliveryWindow: "02:00 PM - 05:00 PM"
+  },
+  {
+    id: "ORD-009",
+    customerName: "James Taylor",
+    date: "2024-02-20",
+    status: "processing",
+    total: 678.90,
+    items: 7,
+    location: "Houston",
+    collector: "Isabel Rodriguez",
+    paymentStatus: "paid",
+    deliveryDate: "2024-02-22",
+    deliveryWindow: "10:00 AM - 01:00 PM"
+  },
+  {
+    id: "ORD-010",
+    customerName: "Patricia Moore",
+    date: "2024-02-22",
+    status: "completed",
+    total: 423.45,
+    items: 4,
+    location: "Atlanta",
+    collector: "Jack Thompson",
+    paymentStatus: "paid",
+    deliveryDate: "2024-02-24",
+    deliveryWindow: "01:00 PM - 04:00 PM"
+  },
+  {
+    id: "ORD-011",
+    customerName: "Thomas Clark",
+    date: "2024-02-21",
+    status: "pending",
+    total: 289.99,
+    items: 3,
+    location: "San Diego",
+    collector: "Kelly Brown",
+    paymentStatus: "pending",
+    deliveryDate: "2024-02-23",
+    deliveryWindow: "03:00 PM - 06:00 PM"
+  },
+  {
+    id: "ORD-012",
+    customerName: "Nancy Lee",
+    date: "2024-02-20",
+    status: "cancelled",
+    total: 156.78,
+    items: 2,
+    location: "Portland",
+    collector: "Liam Wilson",
+    paymentStatus: "failed",
+    deliveryDate: "2024-02-22",
+    deliveryWindow: "11:00 AM - 02:00 PM"
+  }
 ];
 
 const locations = ["All Locations", "New York", "Los Angeles", "Chicago", "Miami"];
@@ -58,7 +188,13 @@ const Orders = () => {
       // Simulate API call
       const ordersWithSavedStatus = mockOrders.map(order => {
         const savedStatus = localStorage.getItem(`order-status-${order.id}`);
-        return savedStatus ? { ...order, status: savedStatus } : order;
+        if (savedStatus) {
+          return { 
+            ...order, 
+            status: savedStatus as 'pending' | 'processing' | 'completed' | 'cancelled' 
+          };
+        }
+        return order;
       });
       return new Promise<Order[]>((resolve) => {
         setTimeout(() => resolve(ordersWithSavedStatus), 1000);
