@@ -1,4 +1,4 @@
-import { Home, ClipboardList } from "lucide-react";
+import { ClipboardList } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -15,7 +15,6 @@ export function CollectorSidebar() {
   const { setViewType } = useView();
 
   const menuItems = [
-    { title: "Dashboard", icon: Home, url: "/" },
     { title: "Orders", icon: ClipboardList, url: "/orders" },
   ];
 
