@@ -2,6 +2,8 @@ import { Badge } from "@/components/ui/badge";
 import { OrderStatusEditDialog } from "./OrderStatusEditDialog";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Play } from "lucide-react";
 
 interface OrderHeaderProps {
   id: string;
@@ -47,13 +49,28 @@ export const OrderHeader = ({
     });
   };
 
+  const handleStartCollection = () => {
+    toast({
+      title: "Collection Started",
+      description: "You have started the collection process",
+    });
+  };
+
   return (
     <div className="flex justify-between items-center">
       <div>
         <h1 className="text-2xl font-bold">Order {id}</h1>
         <p className="text-gray-500">Placed on {date}</p>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-4">
+        <Button 
+          onClick={handleStartCollection}
+          className="bg-green-500 hover:bg-green-600"
+          size="sm"
+        >
+          <Play className="mr-2 h-4 w-4" />
+          Start Collection
+        </Button>
         <Badge variant={getStatusVariant(status)}>
           {status}
         </Badge>
