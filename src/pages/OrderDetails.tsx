@@ -3,6 +3,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Package2, User, UserCog, Info } from "lucide-react";
 import { OrderHeader } from "@/components/orders/OrderHeader";
 import { OrderDetailsSummary } from "@/components/orders/OrderDetailsSummary";
+import { RequirementsEditDialog } from "@/components/orders/RequirementsEditDialog";
+import { CustomerInfoEditDialog } from "@/components/orders/CustomerInfoEditDialog";
+import { CollectorInfoEditDialog } from "@/components/orders/CollectorInfoEditDialog";
 
 interface OrderItem {
   id: number;
@@ -102,6 +105,36 @@ const mockOrder: Order = {
 const OrderDetails = () => {
   const { id } = useParams();
 
+  const handleRequirementsUpdate = (requirements: string[]) => {
+    console.log('Updating requirements:', requirements);
+    // TODO: Implement the update logic
+  };
+
+  const handleCustomerInfoUpdate = (data: {
+    customerName: string;
+    email: string;
+    phone: string;
+    shippingAddress: {
+      street: string;
+      city: string;
+      state: string;
+      zip: string;
+      country: string;
+    };
+  }) => {
+    console.log('Updating customer info:', data);
+    // TODO: Implement the update logic
+  };
+
+  const handleCollectorInfoUpdate = (data: {
+    name: string;
+    phone: string;
+    email: string;
+  }) => {
+    console.log('Updating collector info:', data);
+    // TODO: Implement the update logic
+  };
+
   return (
     <div className="flex gap-6">
       {/* Main Content */}
@@ -168,7 +201,13 @@ const OrderDetails = () => {
         {/* Order Requirements */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Order Requirements</CardTitle>
+            <CardTitle className="flex items-center justify-between text-lg">
+              <span>Order Requirements</span>
+              <RequirementsEditDialog
+                requirements={mockOrder.requirements || []}
+                onSave={handleRequirementsUpdate}
+              />
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <ul className="list-disc list-inside space-y-2">
@@ -182,9 +221,18 @@ const OrderDetails = () => {
         {/* Customer Information */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <User className="h-5 w-5" />
-              Customer Information
+            <CardTitle className="flex items-center justify-between text-lg">
+              <div className="flex items-center gap-2">
+                <User className="h-5 w-5" />
+                Customer Information
+              </div>
+              <CustomerInfoEditDialog
+                customerName={mockOrder.customerName}
+                email={mockOrder.email}
+                phone={mockOrder.phone}
+                shippingAddress={mockOrder.shippingAddress}
+                onSave={handleCustomerInfoUpdate}
+              />
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -210,9 +258,15 @@ const OrderDetails = () => {
         {/* Collector Information */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <UserCog className="h-5 w-5" />
-              Collector Information
+            <CardTitle className="flex items-center justify-between text-lg">
+              <div className="flex items-center gap-2">
+                <UserCog className="h-5 w-5" />
+                Collector Information
+              </div>
+              <CollectorInfoEditDialog
+                collector={mockOrder.collector}
+                onSave={handleCollectorInfoUpdate}
+              />
             </CardTitle>
           </CardHeader>
           <CardContent>
