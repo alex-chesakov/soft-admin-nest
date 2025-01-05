@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import CustomerInformation from "@/components/orders/CustomerInformation";
 import CollectorInformation from "@/components/orders/CollectorInformation";
+import { RequirementsSummary } from "@/components/orders/RequirementsSummary";
 
 const OrderDetails = () => {
   const { id } = useParams();
@@ -65,6 +66,19 @@ const OrderDetails = () => {
     setOrderDetails(updatedOrder);
   };
 
+  const handleRequirementsUpdate = (requirements: string[]) => {
+    const updatedOrder = {
+      ...orderDetails,
+      requirements,
+    };
+    setOrderDetails(updatedOrder);
+    
+    toast({
+      title: "Success",
+      description: "Order requirements have been updated",
+    });
+  };
+
   return (
     <div className="flex gap-6">
       {/* Main Content */}
@@ -83,6 +97,11 @@ const OrderDetails = () => {
           pickupLocations={orderDetails.pickupLocations}
           deliveryLocation={orderDetails.deliveryLocation}
           onDeliveryLocationUpdate={handleDeliveryLocationUpdate}
+        />
+
+        <RequirementsSummary
+          requirements={orderDetails.requirements || []}
+          onUpdate={handleRequirementsUpdate}
         />
 
         <OrderFees

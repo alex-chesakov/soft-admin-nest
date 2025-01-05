@@ -8,7 +8,7 @@ export const mockOrder: Order = {
   date: "2024-02-20",
   status: "processing",
   total: 599.99,
-  location: "New York", // Added the required location field
+  location: "New York",
   items: [
     {
       id: 1,
@@ -20,6 +20,8 @@ export const mockOrder: Order = {
   requirements: [
     "Handle with care",
     "Fragile items inside",
+    "Temperature controlled",
+    "Insurance required"
   ],
   fees: {
     subtotal: 599.98,
