@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -7,7 +6,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Settings2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Edit2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { loadDictionaryItems } from "@/utils/dictionaryStorage";
 import {
   Select,
   SelectContent,
@@ -15,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 
 interface OrderDetailsEditDialogProps {
   deliveryDate: string;
@@ -27,30 +31,47 @@ interface OrderDetailsEditDialogProps {
   }) => void;
 }
 
+const getPaymentStatusColor = (status: string) => {
+  switch (status) {
+    case 'paid':
+      return 'bg-green-50 text-green-700 border-green-200';
+    case 'pending':
+      return 'bg-orange-50 text-orange-700 border-orange-200';
+    case 'failed':
+      return 'bg-red-50 text-red-700 border-red-200';
+    default:
+      return '';
+  }
+};
+
 export const OrderDetailsEditDialog = ({
   deliveryDate,
   deliveryWindow,
   paymentStatus,
   onSave,
 }: OrderDetailsEditDialogProps) => {
-  const [open, setOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    deliveryDate,
-    deliveryWindow,
-    paymentStatus,
-  });
+  const [deliveryWindows, setDeliveryWindows] = useState<{ id: string; name: string }[]>([]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    const windows = loadDictionaryItems('delivery-windows');
+    setDeliveryWindows(windows);
+  }, []);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSave(formData);
-    setOpen(false);
+    const formData = new FormData(e.currentTarget);
+    onSave({
+      deliveryDate: formData.get('deliveryDate') as string,
+      deliveryWindow: formData.get('deliveryWindow') as string,
+      paymentStatus: formData.get('paymentStatus') as 'paid' | 'pending' | 'failed',
+    });
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="hover:bg-transparent">
-          <Settings2 className="h-4 w-4" />
+        <Button variant="ghost" size="icon">
+          <Edit2 className="h-4 w-4" />
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -58,55 +79,43 @@ export const OrderDetailsEditDialog = ({
           <DialogTitle>Edit Order Details</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <label htmlFor="deliveryDate" className="text-sm font-medium">
-              Delivery Date
-            </label>
-            <input
-              type="date"
+          <div className="grid gap-2">
+            <Label htmlFor="deliveryDate">Delivery Date</Label>
+            <Input
               id="deliveryDate"
               name="deliveryDate"
-              value={formData.deliveryDate}
-              onChange={(e) =>
-                setFormData({ ...formData, deliveryDate: e.target.value })
-              }
-              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1"
+              defaultValue={deliveryDate}
             />
           </div>
-          <div className="space-y-2">
-            <label htmlFor="deliveryWindow" className="text-sm font-medium">
-              Delivery Window
-            </label>
-            <input
-              type="text"
-              id="deliveryWindow"
-              name="deliveryWindow"
-              value={formData.deliveryWindow}
-              onChange={(e) =>
-                setFormData({ ...formData, deliveryWindow: e.target.value })
-              }
-              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1"
-            />
+          <div className="grid gap-2">
+            <Label htmlFor="deliveryWindow">Delivery Window</Label>
+            <Select name="deliveryWindow" defaultValue={deliveryWindow}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select delivery window" />
+              </SelectTrigger>
+              <SelectContent>
+                {deliveryWindows.map((window) => (
+                  <SelectItem key={window.id} value={window.name}>
+                    {window.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
-          <div className="space-y-2">
-            <label htmlFor="paymentStatus" className="text-sm font-medium">
-              Payment Status
-            </label>
+          <div className="grid gap-2">
+            <Label htmlFor="paymentStatus">Payment Status</Label>
             <select
               id="paymentStatus"
               name="paymentStatus"
               defaultValue={paymentStatus}
-              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1"
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  paymentStatus: e.target.value as 'paid' | 'pending' | 'failed',
-                })
-              }
+              className={cn(
+                "flex h-9 w-full rounded-md border px-3 py-1",
+                getPaymentStatusColor(paymentStatus)
+              )}
             >
-              <option value="paid">Paid</option>
-              <option value="pending">Pending</option>
-              <option value="failed">Failed</option>
+              <option value="paid" className="bg-green-50 text-green-700">Paid</option>
+              <option value="pending" className="bg-orange-50 text-orange-700">Pending</option>
+              <option value="failed" className="bg-red-50 text-red-700">Failed</option>
             </select>
           </div>
           <Button type="submit" className="w-full">Save Changes</Button>

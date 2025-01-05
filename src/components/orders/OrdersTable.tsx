@@ -8,7 +8,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
 
 interface Order {
   id: string;
@@ -27,19 +26,6 @@ interface Order {
 interface OrdersTableProps {
   orders: Order[];
 }
-
-const getPaymentStatusColor = (status: string) => {
-  switch (status) {
-    case 'paid':
-      return 'bg-green-50 text-green-700 border-green-200';
-    case 'pending':
-      return 'bg-orange-50 text-orange-700 border-orange-200';
-    case 'failed':
-      return 'bg-red-50 text-red-700 border-red-200';
-    default:
-      return '';
-  }
-};
 
 export const OrdersTable = ({ orders }: OrdersTableProps) => {
   const navigate = useNavigate();
@@ -88,8 +74,13 @@ export const OrdersTable = ({ orders }: OrdersTableProps) => {
             </TableCell>
             <TableCell>
               <Badge
-                className={cn(getPaymentStatusColor(order.paymentStatus))}
-                variant="outline"
+                variant={
+                  order.paymentStatus === "paid"
+                    ? "default"
+                    : order.paymentStatus === "pending"
+                    ? "secondary"
+                    : "destructive"
+                }
               >
                 {order.paymentStatus}
               </Badge>
