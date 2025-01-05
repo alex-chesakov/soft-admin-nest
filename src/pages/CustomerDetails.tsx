@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, User } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { LocationsEditDialog } from "@/components/orders/LocationsEditDialog";
+import { CustomerEditDialog } from "@/components/customers/CustomerEditDialog";
+import { useToast } from "@/components/ui/use-toast";
 
 interface Customer {
   id: string;
@@ -16,6 +18,7 @@ interface Customer {
 const CustomerDetails = () => {
   const { id } = useParams();
   const [customer, setCustomer] = useState<Customer | null>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     const storedCustomers = localStorage.getItem("customers");
@@ -24,7 +27,6 @@ const CustomerDetails = () => {
         const customers = JSON.parse(storedCustomers);
         const foundCustomer = customers.find((c: Customer) => c.id === id);
         if (foundCustomer) {
-          // Initialize locations array if it doesn't exist
           setCustomer({
             ...foundCustomer,
             locations: foundCustomer.locations || []
@@ -35,6 +37,39 @@ const CustomerDetails = () => {
       }
     }
   }, [id]);
+
+  const handleCustomerUpdate = (data: { name: string; email: string; phone: string }) => {
+    if (customer) {
+      const updatedCustomer = {
+        ...customer,
+        ...data
+      };
+      
+      // Update customer in localStorage
+      const storedCustomers = localStorage.getItem("customers");
+      if (storedCustomers) {
+        try {
+          const customers = JSON.parse(storedCustomers);
+          const updatedCustomers = customers.map((c: Customer) =>
+            c.id === customer.id ? updatedCustomer : c
+          );
+          localStorage.setItem("customers", JSON.stringify(updatedCustomers));
+          setCustomer(updatedCustomer);
+          toast({
+            title: "Success",
+            description: "Customer information updated successfully",
+          });
+        } catch (error) {
+          console.error("Error updating customer:", error);
+          toast({
+            title: "Error",
+            description: "Failed to update customer information",
+            variant: "destructive",
+          });
+        }
+      }
+    }
+  };
 
   const handleLocationsSave = (data: {
     pickupLocations: { name: string; address: string }[];
@@ -56,8 +91,17 @@ const CustomerDetails = () => {
           );
           localStorage.setItem("customers", JSON.stringify(updatedCustomers));
           setCustomer(updatedCustomer);
+          toast({
+            title: "Success",
+            description: "Customer locations updated successfully",
+          });
         } catch (error) {
           console.error("Error updating customer locations:", error);
+          toast({
+            title: "Error",
+            description: "Failed to update customer locations",
+            variant: "destructive",
+          });
         }
       }
     }
@@ -79,9 +123,12 @@ const CustomerDetails = () => {
     <div className="p-6 space-y-6">
       {/* Customer Details Section */}
       <Card>
-        <CardHeader className="flex flex-row items-center space-y-0 gap-2">
-          <User className="h-5 w-5" />
-          <CardTitle>Customer Details</CardTitle>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0">
+          <div className="flex items-center gap-2">
+            <User className="h-5 w-5" />
+            <CardTitle>Customer Details</CardTitle>
+          </div>
+          <CustomerEditDialog customer={customer} onSave={handleCustomerUpdate} />
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
