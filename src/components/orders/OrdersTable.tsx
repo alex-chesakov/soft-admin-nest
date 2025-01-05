@@ -17,19 +17,6 @@ interface OrdersTableProps {
 export const OrdersTable = ({ orders }: OrdersTableProps) => {
   const navigate = useNavigate();
 
-  const getPaymentStatusVariant = (status: string) => {
-    switch (status) {
-      case 'paid':
-        return 'success';
-      case 'pending':
-        return 'warning';
-      case 'failed':
-        return 'destructive';
-      default:
-        return 'default';
-    }
-  };
-
   const getStatusVariant = (status: string) => {
     switch (status.toLowerCase()) {
       case "delivered":
@@ -79,11 +66,7 @@ export const OrdersTable = ({ orders }: OrdersTableProps) => {
                 {order.status}
               </Badge>
             </TableCell>
-            <TableCell>
-              <Badge variant={getPaymentStatusVariant(order.paymentStatus)}>
-                {order.paymentStatus}
-              </Badge>
-            </TableCell>
+            <TableCell>{order.paymentStatus}</TableCell>
             <TableCell>${order.total.toFixed(2)}</TableCell>
             <TableCell>{order.items.length}</TableCell>
             <TableCell>{order.location}</TableCell>

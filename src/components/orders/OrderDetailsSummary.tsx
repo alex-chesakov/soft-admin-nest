@@ -14,19 +14,6 @@ interface OrderDetailsSummaryProps {
   onDeliveryLocationUpdate?: (location: { name: string; address: string }) => void;
 }
 
-const getPaymentStatusVariant = (status: string) => {
-  switch (status) {
-    case 'paid':
-      return 'success';
-    case 'pending':
-      return 'warning';
-    case 'failed':
-      return 'destructive';
-    default:
-      return 'default';
-  }
-};
-
 export const OrderDetailsSummary = ({
   deliveryDate,
   deliveryWindow,
@@ -82,12 +69,7 @@ export const OrderDetailsSummary = ({
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Payment Status</p>
-              <Badge 
-                variant={getPaymentStatusVariant(paymentStatus)}
-                className="mt-0.5"
-              >
-                {paymentStatus}
-              </Badge>
+              <p className="font-medium">{paymentStatus}</p>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Total Items</p>
