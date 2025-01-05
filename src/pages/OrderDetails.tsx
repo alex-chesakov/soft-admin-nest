@@ -9,12 +9,12 @@ import CustomerInformation from "@/components/orders/CustomerInformation";
 import CollectorInformation from "@/components/orders/CollectorInformation";
 import { RequirementsSummary } from "@/components/orders/RequirementsSummary";
 import { saveOrderProducts, getOrderProducts } from "@/utils/productStorage";
-import { OrderItem } from "@/types/order";
+import { OrderItem, Order } from "@/types/order";
 
 const OrderDetails = () => {
   const { id } = useParams();
   const { toast } = useToast();
-  const [orderDetails, setOrderDetails] = useState(mockOrder);
+  const [orderDetails, setOrderDetails] = useState<Order>(mockOrder);
   const role = localStorage.getItem('userRole') || 'admin';
 
   useEffect(() => {
@@ -65,6 +65,7 @@ const OrderDetails = () => {
     name: string;
     phone: string;
     email: string;
+    collectionWindow?: string;
   }) => {
     const updatedOrder = {
       ...orderDetails,
@@ -96,13 +97,6 @@ const OrderDetails = () => {
     toast({
       title: "Success",
       description: "Order requirements have been updated",
-    });
-  };
-
-  const handleChargeClient = () => {
-    toast({
-      title: "Processing charge",
-      description: "Client charge initiated",
     });
   };
 
