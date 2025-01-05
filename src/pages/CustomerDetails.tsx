@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, User } from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { LocationsEditDialog } from "@/components/orders/LocationsEditDialog";
 import { CustomerEditDialog } from "@/components/customers/CustomerEditDialog";
 import { useToast } from "@/components/ui/use-toast";
@@ -162,26 +161,24 @@ const CustomerDetails = () => {
           />
         </CardHeader>
         <CardContent>
-          <ScrollArea className="h-[300px] rounded-md border p-4">
+          {customer.locations && customer.locations.length > 0 ? (
             <div className="space-y-4">
-              {customer.locations && customer.locations.length > 0 ? (
-                customer.locations.map((location, index) => (
-                  <div key={index} className="space-y-2 p-3 rounded-lg border">
-                    <div>
-                      <label className="text-sm font-medium text-muted-foreground">Location Name</label>
-                      <p className="text-base">{location.name}</p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-muted-foreground">Address</label>
-                      <p className="text-base">{location.address}</p>
-                    </div>
+              {customer.locations.map((location, index) => (
+                <div key={index} className="space-y-2 p-3 rounded-lg border">
+                  <div>
+                    <label className="text-sm font-medium text-muted-foreground">Location Name</label>
+                    <p className="text-base">{location.name}</p>
                   </div>
-                ))
-              ) : (
-                <p className="text-muted-foreground">No locations assigned</p>
-              )}
+                  <div>
+                    <label className="text-sm font-medium text-muted-foreground">Address</label>
+                    <p className="text-base">{location.address}</p>
+                  </div>
+                </div>
+              ))}
             </div>
-          </ScrollArea>
+          ) : (
+            <p className="text-muted-foreground">No locations assigned</p>
+          )}
         </CardContent>
       </Card>
     </div>
