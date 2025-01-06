@@ -23,6 +23,28 @@ export const OrderFees = ({ items, fees, total, onItemsChange, role = 'admin' }:
   const itemStatuses = loadDictionaryItems('item-statuses');
   const { toast } = useToast();
 
+  // Calculate adjusted values based on adjusted quantities
+  const calculateAdjustedValues = () => {
+    const adjustedSubtotal = items.reduce((sum, item) => {
+      const quantity = item.adjustedQuantity !== undefined ? item.adjustedQuantity : item.quantity;
+      return sum + (item.price * quantity);
+    }, 0);
+
+    const adjustedServiceFee = adjustedSubtotal * (fees.serviceFee / fees.subtotal);
+    const adjustedCreditCardFee = adjustedSubtotal * 0.025; // 2.5% of adjusted subtotal
+    const adjustedTotal = adjustedSubtotal + adjustedServiceFee + adjustedCreditCardFee;
+
+    return {
+      adjustedSubtotal,
+      adjustedServiceFee,
+      adjustedCreditCardFee,
+      adjustedTotal
+    };
+  };
+
+  const adjustedValues = calculateAdjustedValues();
+  const hasAdjustments = items.some(item => item.adjustedQuantity !== undefined);
+
   const handleProductSelect = (newProduct: OrderItemType) => {
     if (onItemsChange) {
       const existingProduct = items.find(
@@ -130,7 +152,19 @@ export const OrderFees = ({ items, fees, total, onItemsChange, role = 'admin' }:
               role={role}
             />
           ))}
-          <OrderSummary fees={fees} total={total} role={role} />
+          <OrderSummary 
+            fees={{
+              ...fees,
+              ...(hasAdjustments ? {
+                adjustedSubtotal: adjustedValues.adjustedSubtotal,
+                adjustedServiceFee: adjustedValues.adjustedServiceFee,
+                adjustedCreditCardFee: adjustedValues.adjustedCreditCardFee,
+              } : {})
+            }}
+            total={total}
+            adjustedTotal={hasAdjustments ? adjustedValues.adjustedTotal : undefined}
+            role={role}
+          />
         </div>
       </CardContent>
     </Card>
