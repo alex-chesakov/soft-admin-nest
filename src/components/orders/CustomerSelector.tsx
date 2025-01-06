@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -24,12 +24,22 @@ interface CustomerSelectorProps {
 export function CustomerSelector({ initialValue = "", onSelect }: CustomerSelectorProps) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(initialValue);
+  const [customers, setCustomers] = useState<Array<{ name: string; email: string; phone: string }>>([]);
 
-  // Get customers from the shared data source and ensure we always have a valid array
-  const customers = getCustomers() || [];
+  useEffect(() => {
+    // Initialize customers and ensure it's never undefined
+    const loadedCustomers = getCustomers();
+    if (Array.isArray(loadedCustomers)) {
+      setCustomers(loadedCustomers);
+      console.log('Loaded customers:', loadedCustomers);
+    } else {
+      console.log('No customers found, using empty array');
+      setCustomers([]);
+    }
+  }, []);
 
-  // Add console.log to help debug if the issue persists
-  console.log('CustomerSelector customers:', customers);
+  // Add console.log to help debug
+  console.log('CustomerSelector render - value:', value, 'customers:', customers);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

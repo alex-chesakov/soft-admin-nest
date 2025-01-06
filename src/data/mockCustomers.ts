@@ -156,20 +156,21 @@ export const mockCustomers: Customer[] = [
   }
 ];
 
-// Helper function to ensure we always return an array
 export const getCustomers = (): Customer[] => {
   try {
-    const storedCustomers = localStorage.getItem("customers");
-    if (!storedCustomers) {
-      localStorage.setItem("customers", JSON.stringify(mockCustomers));
+    const savedCustomers = localStorage.getItem("customers");
+    if (!savedCustomers) {
+      console.log('No customers in localStorage, using mockCustomers');
       return mockCustomers;
     }
-    const parsedCustomers = JSON.parse(storedCustomers);
-    return Array.isArray(parsedCustomers) && parsedCustomers.length > 0
-      ? parsedCustomers
-      : mockCustomers;
+    const parsedCustomers = JSON.parse(savedCustomers);
+    if (!Array.isArray(parsedCustomers)) {
+      console.log('Invalid customers data in localStorage, using mockCustomers');
+      return mockCustomers;
+    }
+    return parsedCustomers;
   } catch (error) {
-    console.error("Error loading customers:", error);
+    console.error('Error getting customers:', error);
     return mockCustomers;
   }
 };
