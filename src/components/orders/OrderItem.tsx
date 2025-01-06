@@ -46,6 +46,8 @@ export const OrderItemComponent = ({
   };
 
   const displayPrice = item.unit === "Case" ? item.price * 10 : item.price;
+  const originalTotal = displayPrice * item.quantity;
+  const adjustedTotal = item.adjustedQuantity ? displayPrice * item.adjustedQuantity : null;
 
   return (
     <div className="flex justify-between items-start border-b pb-4 last:border-0">
@@ -55,6 +57,11 @@ export const OrderItemComponent = ({
           {item.productStatus && (
             <Badge variant={getStatusBadgeVariant(item.productStatus)}>
               {item.productStatus}
+            </Badge>
+          )}
+          {item.status && (
+            <Badge variant="secondary">
+              {item.status}
             </Badge>
           )}
         </div>
@@ -121,7 +128,14 @@ export const OrderItemComponent = ({
           onStatusChange={(newStatus, adjustedQty) => onStatusChange(item.id, newStatus, adjustedQty)}
           statuses={itemStatuses}
         />
-        <p className="font-medium">${(displayPrice * item.quantity).toFixed(2)}</p>
+        <p className={`font-medium ${adjustedTotal ? 'line-through text-gray-400' : ''}`}>
+          ${originalTotal.toFixed(2)}
+        </p>
+        {adjustedTotal && (
+          <p className="font-medium text-green-600">
+            ${adjustedTotal.toFixed(2)}
+          </p>
+        )}
         <Button
           variant="ghost"
           size="icon"
