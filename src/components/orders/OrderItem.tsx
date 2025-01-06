@@ -59,11 +59,6 @@ export const OrderItemComponent = ({
               {item.productStatus}
             </Badge>
           )}
-          {item.status && (
-            <Badge variant="secondary">
-              {item.status}
-            </Badge>
-          )}
         </div>
         <p className="font-medium">BIN: {item.id}</p>
         <p className="text-sm text-gray-500 mt-2">Price: ${displayPrice.toFixed(2)}/{item.unit || 'Unit'}</p>
