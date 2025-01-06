@@ -19,6 +19,7 @@ const adminMenuItems = [
   { title: "Dashboard", icon: Home, url: "/" },
   { title: "Products", icon: Package, url: "/products" },
   { title: "Orders", icon: ClipboardList, url: "/orders" },
+  { title: "Customers", icon: Users, url: "/customers" },
   { title: "Users", icon: Users, url: "/users" },
   { title: "Locations", icon: MapPin, url: "/locations" },
   { title: "Dictionaries", icon: BookOpen, url: "/dictionaries" },
