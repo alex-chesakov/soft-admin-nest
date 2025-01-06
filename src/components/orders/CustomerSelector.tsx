@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -13,28 +14,18 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState } from "react";
 import { mockCustomers } from "@/data/mockCustomers";
 
 interface CustomerSelectorProps {
-  value: string;
-  onChange: (value: string, email: string, phone: string) => void;
+  onSelect: (customer: { name: string; email: string; phone: string }) => void;
 }
 
-export function CustomerSelector({ value = '', onChange }: CustomerSelectorProps) {
+export function CustomerSelector({ onSelect }: CustomerSelectorProps) {
   const [open, setOpen] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
+  const [value, setValue] = useState("");
 
-  // Filter customers based on search value
-  const filteredCustomers = mockCustomers.filter(customer => {
-    if (!searchValue) return true;
-    const searchLower = searchValue.toLowerCase();
-    return (
-      customer.name.toLowerCase().includes(searchLower) ||
-      customer.email.toLowerCase().includes(searchLower) ||
-      customer.phone.toLowerCase().includes(searchLower)
-    );
-  });
+  // Ensure we always have a valid array of customers
+  const customers = mockCustomers || [];
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -43,44 +34,41 @@ export function CustomerSelector({ value = '', onChange }: CustomerSelectorProps
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between"
+          className="w-[200px] justify-between"
         >
-          {value || "Select customer..."}
+          {value
+            ? customers.find((customer) => customer.name === value)?.name
+            : "Select customer..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      {open && (
-        <PopoverContent className="w-full p-0" align="start">
-          <Command className="w-full">
-            <CommandInput 
-              placeholder="Search customers..." 
-              value={searchValue}
-              onValueChange={setSearchValue}
-            />
-            <CommandEmpty>No customer found.</CommandEmpty>
-            <CommandGroup>
-              {filteredCustomers.map((customer) => (
-                <CommandItem
-                  key={customer.id}
-                  value={customer.name}
-                  onSelect={() => {
-                    onChange(customer.name, customer.email, customer.phone);
-                    setOpen(false);
-                  }}
-                >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      value === customer.name ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                  {customer.name}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </Command>
-        </PopoverContent>
-      )}
+      <PopoverContent className="w-[200px] p-0">
+        <Command>
+          <CommandInput placeholder="Search customer..." />
+          <CommandEmpty>No customer found.</CommandEmpty>
+          <CommandGroup>
+            {customers.map((customer) => (
+              <CommandItem
+                key={customer.email}
+                value={customer.name}
+                onSelect={(currentValue) => {
+                  setValue(currentValue === value ? "" : currentValue);
+                  setOpen(false);
+                  onSelect(customer);
+                }}
+              >
+                <Check
+                  className={cn(
+                    "mr-2 h-4 w-4",
+                    value === customer.name ? "opacity-100" : "opacity-0"
+                  )}
+                />
+                {customer.name}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </Command>
+      </PopoverContent>
     </Popover>
   );
 }
