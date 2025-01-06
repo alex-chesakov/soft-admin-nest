@@ -123,14 +123,16 @@ export const OrderItemComponent = ({
           onStatusChange={(newStatus, adjustedQty) => onStatusChange(item.id, newStatus, adjustedQty)}
           statuses={itemStatuses}
         />
-        <p className={`font-medium ${adjustedTotal ? 'line-through text-gray-400' : ''}`}>
-          ${originalTotal.toFixed(2)}
-        </p>
-        {adjustedTotal && (
-          <p className="font-medium text-green-600">
-            ${adjustedTotal.toFixed(2)}
-          </p>
-        )}
+        <div className="flex items-center justify-end gap-2">
+          <span className={`font-medium ${adjustedTotal ? 'line-through text-gray-400' : ''}`}>
+            ${originalTotal.toFixed(2)}
+          </span>
+          {adjustedTotal && (
+            <span className="font-medium text-green-600">
+              ${adjustedTotal.toFixed(2)}
+            </span>
+          )}
+        </div>
         <Button
           variant="ghost"
           size="icon"
