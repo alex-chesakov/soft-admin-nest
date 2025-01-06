@@ -10,18 +10,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Edit2 } from "lucide-react";
 import { useState } from "react";
+import { Customer } from "@/types/customer";
 
 interface CustomerEditDialogProps {
-  customer: {
-    name: string;
-    email: string;
-    phone: string;
-  };
-  onSave: (data: {
-    name: string;
-    email: string;
-    phone: string;
-  }) => void;
+  customer: Customer;
+  onSave: (customer: Customer) => void;
 }
 
 export const CustomerEditDialog = ({
@@ -36,6 +29,7 @@ export const CustomerEditDialog = ({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSave({
+      ...customer,
       name,
       email,
       phone,

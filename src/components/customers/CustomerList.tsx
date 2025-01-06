@@ -8,12 +8,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Customer } from "@/types/customer";
+import { CustomerInfo } from "./CustomerInfo";
 
 interface CustomerListProps {
   customers: Customer[];
+  onCustomerUpdate: (customer: Customer) => void;
 }
 
-export const CustomerList = ({ customers }: CustomerListProps) => {
+export const CustomerList = ({ customers, onCustomerUpdate }: CustomerListProps) => {
   return (
     <Table>
       <TableHeader>
@@ -31,7 +33,7 @@ export const CustomerList = ({ customers }: CustomerListProps) => {
           <TableRow key={customer.id}>
             <TableCell className="font-medium">
               <Link 
-                to={`/customers/${customer.id}`} 
+                to={`/users/${customer.id}`} 
                 className="text-primary hover:underline"
               >
                 {customer.name}

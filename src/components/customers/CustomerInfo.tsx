@@ -2,14 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CustomerEditDialog } from "@/components/customers/CustomerEditDialog";
 import { User } from "lucide-react";
+import { Customer } from "@/types/customer";
 
 interface CustomerInfoProps {
-  customer: {
-    name: string;
-    email: string;
-    phone: string;
-  };
-  onCustomerUpdate: (data: { name: string; email: string; phone: string; }) => void;
+  customer: Customer;
+  onCustomerUpdate: (customer: Customer) => void;
 }
 
 export const CustomerInfo = ({ customer, onCustomerUpdate }: CustomerInfoProps) => {
@@ -35,6 +32,18 @@ export const CustomerInfo = ({ customer, onCustomerUpdate }: CustomerInfoProps) 
           <div>
             <label className="text-sm font-medium text-muted-foreground">Phone</label>
             <p className="text-base">{customer.phone}</p>
+          </div>
+          <div>
+            <label className="text-sm font-medium text-muted-foreground">Total Orders</label>
+            <p className="text-base">{customer.orders}</p>
+          </div>
+          <div>
+            <label className="text-sm font-medium text-muted-foreground">Total Spent</label>
+            <p className="text-base">${customer.totalSpent.toFixed(2)}</p>
+          </div>
+          <div>
+            <label className="text-sm font-medium text-muted-foreground">Last Order</label>
+            <p className="text-base">{new Date(customer.lastOrder).toLocaleDateString()}</p>
           </div>
         </div>
       </CardContent>
