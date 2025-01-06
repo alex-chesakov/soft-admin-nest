@@ -17,12 +17,13 @@ import {
 import { mockCustomers } from "@/data/mockCustomers";
 
 interface CustomerSelectorProps {
+  initialValue?: string;
   onSelect: (customer: { name: string; email: string; phone: string }) => void;
 }
 
-export function CustomerSelector({ onSelect }: CustomerSelectorProps) {
+export function CustomerSelector({ initialValue = "", onSelect }: CustomerSelectorProps) {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(initialValue);
 
   // Ensure we always have a valid array of customers
   const customers = mockCustomers || [];

@@ -114,10 +114,10 @@ export const CustomerInfoEditDialog = ({
     setOpen(false);
   };
 
-  const handleCustomerSelect = (name: string, email: string, phone: string) => {
-    setSelectedCustomer(name);
-    setSelectedEmail(email);
-    setSelectedPhone(phone);
+  const handleCustomerSelect = (customer: { name: string; email: string; phone: string }) => {
+    setSelectedCustomer(customer.name);
+    setSelectedEmail(customer.email);
+    setSelectedPhone(customer.phone);
   };
 
   return (
@@ -136,8 +136,8 @@ export const CustomerInfoEditDialog = ({
             <div className="grid gap-2">
               <Label>Customer</Label>
               <CustomerSelector 
-                value={selectedCustomer} 
-                onChange={handleCustomerSelect}
+                initialValue={selectedCustomer}
+                onSelect={handleCustomerSelect}
               />
             </div>
             <div className="grid gap-2">
