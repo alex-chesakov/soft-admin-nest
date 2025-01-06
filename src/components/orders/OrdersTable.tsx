@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Order } from "@/types/order";
-import { useMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { Card } from "@/components/ui/card";
 
 interface OrdersTableProps {
@@ -18,7 +18,7 @@ interface OrdersTableProps {
 
 export const OrdersTable = ({ orders }: OrdersTableProps) => {
   const navigate = useNavigate();
-  const isMobile = useMobile();
+  const isMobile = useIsMobile();
 
   const getStatusVariant = (status: string) => {
     switch (status.toLowerCase()) {
