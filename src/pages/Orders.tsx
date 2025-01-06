@@ -5,7 +5,6 @@ import { OrdersTable } from "@/components/orders/OrdersTable";
 import { Order } from "@/types/order";
 import { useState } from "react";
 import { filterOrdersByStatus } from "@/features/orders/ordersData";
-import CollectorDashboard from "@/components/collectors/CollectorDashboard";
 
 const mockOrders: Order[] = [
   {
@@ -397,7 +396,7 @@ const statuses = ["All Statuses", "new order", "collector assigned", "in progres
 
 const Orders = () => {
   const [selectedStatus, setSelectedStatus] = useState<string>("All Statuses");
-  const role = localStorage.getItem('userRole') || 'admin';
+  const role = localStorage.getItem('userRole') || 'admin'; // Get user role
 
   const { data: orders, isLoading } = useQuery({
     queryKey: ["orders"],
@@ -428,8 +427,6 @@ const Orders = () => {
         <h1 className="text-2xl font-bold">Orders</h1>
       </div>
 
-      {role === 'collector' && <CollectorDashboard />}
-
       <Card className="mb-6">
         <CardContent className="pt-6">
           <OrderFilters
@@ -437,7 +434,7 @@ const Orders = () => {
             collectors={collectors}
             statuses={statuses}
             onStatusChange={setSelectedStatus}
-            role={role as 'admin' | 'collector'}
+            role={role as 'admin' | 'collector'} // Pass the role to OrderFilters
           />
         </CardContent>
       </Card>
