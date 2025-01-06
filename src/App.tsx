@@ -13,7 +13,6 @@ import Settings from "@/pages/Settings";
 import Analytics from "@/pages/Analytics";
 import Admins from "@/pages/users/Admins";
 import Collectors from "@/pages/users/Collectors";
-import Customers from "@/pages/users/Customers";
 import Locations from "@/pages/Locations";
 import Dictionaries from "@/pages/Dictionaries";
 import CollectorDashboard from "@/pages/CollectorDashboard";
@@ -51,7 +50,6 @@ function App() {
             <Route path="/users" element={<Users />} />
             <Route path="/users/admins" element={<Admins />} />
             <Route path="/users/collectors" element={<Collectors />} />
-            <Route path="/users/customers" element={<Customers />} />
             <Route path="/users/:id" element={<CustomerDetails />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/analytics" element={<Analytics />} />
