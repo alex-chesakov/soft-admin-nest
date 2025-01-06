@@ -1,5 +1,7 @@
 import { OrderItem } from "@/types/order";
 import { OrderSummary } from "./OrderSummary";
+import { OrderItemComponent } from "./OrderItem";
+import { loadDictionaryItems } from "@/utils/dictionaryStorage";
 
 interface OrderFeesProps {
   items: OrderItem[];
@@ -37,6 +39,9 @@ export const OrderFees = ({
   if (adjustedFees) {
     adjustedFees.total = adjustedFees.subtotal + adjustedFees.serviceFee + adjustedFees.creditCardFee;
   }
+
+  // Load item statuses from dictionary storage
+  const itemStatuses = loadDictionaryItems('item-statuses');
 
   return (
     <div className="space-y-6">
