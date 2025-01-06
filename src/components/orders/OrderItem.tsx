@@ -62,7 +62,7 @@ export const OrderItemComponent = ({
         <p className="text-sm text-gray-500 mt-2">Price: ${displayPrice.toFixed(2)}/{item.unit || 'Unit'}</p>
         <div className="flex items-center gap-4 mt-2">
           <div className="flex items-center gap-2">
-            <label className="text-sm text-gray-500">Booked Qty:</label>
+            <label className={`text-sm text-gray-500 ${item.adjustedQuantity ? 'line-through text-gray-400' : ''}`}>Booked Qty:</label>
             {role === 'admin' && !item.adjustedQuantity ? (
               <div className="flex items-center">
                 <Button
@@ -94,7 +94,7 @@ export const OrderItemComponent = ({
           </div>
           {item.adjustedQuantity !== undefined && (
             <div className="flex items-center gap-2">
-              <label className="text-sm text-gray-500">Adjusted Qty:</label>
+              <label className="text-sm text-green-600">Adjusted Qty:</label>
               <span className="text-sm font-medium text-green-600">{item.adjustedQuantity}</span>
             </div>
           )}
