@@ -3,10 +3,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Admin, Collector } from "@/types/user";
+import { Customer } from "@/types/customer";
+import { getCustomers } from "@/data/mockCustomers";
+import { CustomerList } from "@/components/customers/CustomerList";
 
 const Users = () => {
   const [adminCount, setAdminCount] = useState(0);
   const [collectorCount, setCollectorCount] = useState(0);
+  const [customers, setCustomers] = useState<Customer[]>([]);
 
   useEffect(() => {
     // Load admins from localStorage
@@ -22,6 +26,10 @@ const Users = () => {
       const collectors: Collector[] = JSON.parse(savedCollectors);
       setCollectorCount(collectors.length);
     }
+
+    // Load customers
+    const loadedCustomers = getCustomers();
+    setCustomers(loadedCustomers);
   }, []);
 
   return (
@@ -51,6 +59,15 @@ const Users = () => {
           </CardContent>
         </Card>
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Customers ({customers.length})</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <CustomerList customers={customers} />
+        </CardContent>
+      </Card>
     </div>
   );
 };
