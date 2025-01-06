@@ -42,8 +42,29 @@ export const OrderFees = ({ items, fees, total, onItemsChange, role = 'admin' }:
     };
   };
 
+  const calculateStatusSummary = () => {
+    const summary = {
+      notCollected: 0,
+      collectedAdjusted: 0,
+      collected: 0
+    };
+
+    items.forEach(item => {
+      if (item.status === 'Not collected') {
+        summary.notCollected++;
+      } else if (item.status === 'Collected adjusted') {
+        summary.collectedAdjusted++;
+      } else if (item.status === 'Collected') {
+        summary.collected++;
+      }
+    });
+
+    return summary;
+  };
+
   const adjustedValues = calculateAdjustedValues();
   const hasAdjustments = items.some(item => item.adjustedQuantity !== undefined);
+  const statusSummary = calculateStatusSummary();
 
   const handleProductSelect = (newProduct: OrderItemType) => {
     if (onItemsChange) {
@@ -164,6 +185,7 @@ export const OrderFees = ({ items, fees, total, onItemsChange, role = 'admin' }:
             total={total}
             adjustedTotal={hasAdjustments ? adjustedValues.adjustedTotal : undefined}
             role={role}
+            statusSummary={statusSummary}
           />
         </div>
       </CardContent>

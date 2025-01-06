@@ -31,9 +31,14 @@ interface OrderSummaryProps {
   total: number;
   adjustedTotal?: number;
   role?: 'admin' | 'collector';
+  statusSummary?: {
+    notCollected: number;
+    collectedAdjusted: number;
+    collected: number;
+  };
 }
 
-export const OrderSummary = ({ fees, total, adjustedTotal, role = 'admin' }: OrderSummaryProps) => {
+export const OrderSummary = ({ fees, total, adjustedTotal, role = 'admin', statusSummary }: OrderSummaryProps) => {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isProofDialogOpen, setIsProofDialogOpen] = useState(false);
   const { toast } = useToast();
@@ -61,6 +66,26 @@ export const OrderSummary = ({ fees, total, adjustedTotal, role = 'admin' }: Ord
   return (
     <>
       <div className="pt-4 space-y-2 border-t">
+        {statusSummary && (
+          <div className="pb-4 border-b space-y-1">
+            <p className="text-sm text-gray-500">Collection Status Summary:</p>
+            <div className="grid grid-cols-3 gap-4">
+              <div>
+                <p className="text-sm font-medium">{statusSummary.notCollected}</p>
+                <p className="text-xs text-gray-500">Not Collected</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium">{statusSummary.collectedAdjusted}</p>
+                <p className="text-xs text-gray-500">Collected Adjusted</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium">{statusSummary.collected}</p>
+                <p className="text-xs text-gray-500">Collected</p>
+              </div>
+            </div>
+          </div>
+        )}
+        
         <div className="flex justify-between text-sm">
           <p className="text-gray-500">Subtotal</p>
           <div className="flex items-center gap-2">
@@ -72,6 +97,7 @@ export const OrderSummary = ({ fees, total, adjustedTotal, role = 'admin' }: Ord
             )}
           </div>
         </div>
+
         <div className="flex justify-between text-sm">
           <p className="text-gray-500">Service Fee</p>
           <div className="flex items-center gap-2">
