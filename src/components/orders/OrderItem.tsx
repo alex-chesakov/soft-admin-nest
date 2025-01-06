@@ -89,13 +89,13 @@ export const OrderItemComponent = ({
                 </Button>
               </div>
             ) : (
-              <span className="text-sm font-medium">{item.quantity}</span>
+              <span className={`text-sm font-medium ${item.adjustedQuantity ? 'line-through text-gray-400' : ''}`}>{item.quantity}</span>
             )}
           </div>
           {item.adjustedQuantity !== undefined && (
             <div className="flex items-center gap-2">
               <label className="text-sm text-gray-500">Adjusted Qty:</label>
-              <span className="text-sm font-medium">{item.adjustedQuantity}</span>
+              <span className="text-sm font-medium text-green-600">{item.adjustedQuantity}</span>
             </div>
           )}
           {role === 'admin' && !item.adjustedQuantity && (
