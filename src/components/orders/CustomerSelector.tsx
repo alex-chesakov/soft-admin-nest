@@ -14,7 +14,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { mockCustomers } from "@/data/mockCustomers";
+import { getCustomers } from "@/data/mockCustomers";
 
 interface CustomerSelectorProps {
   initialValue?: string;
@@ -25,8 +25,8 @@ export function CustomerSelector({ initialValue = "", onSelect }: CustomerSelect
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(initialValue);
 
-  // Ensure we always have a valid array of customers
-  const customers = mockCustomers || [];
+  // Get customers from the shared data source
+  const customers = getCustomers();
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

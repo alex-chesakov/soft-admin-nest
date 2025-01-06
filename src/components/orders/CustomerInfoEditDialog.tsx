@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { getCustomers } from "@/data/mockCustomers";
 
 interface CustomerInfoEditDialogProps {
   customerName: string;
@@ -63,25 +64,17 @@ export const CustomerInfoEditDialog = ({
   const { toast } = useToast();
 
   useEffect(() => {
-    // Get customer locations from localStorage
-    const storedCustomers = localStorage.getItem("customers");
-    if (storedCustomers) {
-      try {
-        const customers = JSON.parse(storedCustomers);
-        const currentCustomer = customers.find((c: any) => c.name === selectedCustomer);
-        if (currentCustomer && Array.isArray(currentCustomer.locations)) {
-          setLocations(currentCustomer.locations);
-          // Set first location as default if none selected
-          if (!selectedLocation && currentCustomer.locations.length > 0) {
-            setSelectedLocation(currentCustomer.locations[0].name);
-          }
-        } else {
-          setLocations([]);
-        }
-      } catch (error) {
-        console.error("Error parsing customers:", error);
-        setLocations([]);
+    // Get customer locations from the customers list
+    const customers = getCustomers();
+    const currentCustomer = customers.find((c) => c.name === selectedCustomer);
+    if (currentCustomer && Array.isArray(currentCustomer.locations)) {
+      setLocations(currentCustomer.locations);
+      // Set first location as default if none selected
+      if (!selectedLocation && currentCustomer.locations.length > 0) {
+        setSelectedLocation(currentCustomer.locations[0].name);
       }
+    } else {
+      setLocations([]);
     }
   }, [selectedCustomer]);
 
@@ -105,6 +98,19 @@ export const CustomerInfoEditDialog = ({
         country: shippingAddress.country,
       },
     });
+
+    // Update customers in localStorage to keep data in sync
+    const customers = getCustomers();
+    const updatedCustomers = customers.map((c) =>
+      c.name === selectedCustomer
+        ? {
+            ...c,
+            email: selectedEmail,
+            phone: selectedPhone,
+          }
+        : c
+    );
+    localStorage.setItem("customers", JSON.stringify(updatedCustomers));
 
     toast({
       title: "Success",
