@@ -52,9 +52,6 @@ export const OrderItemComponent = ({
       <div className="space-y-1 flex-1">
         <div className="flex items-center gap-2">
           <p className="font-medium">{item.productName}</p>
-          <Badge variant={getStatusBadgeVariant(item.status)}>
-            {item.status}
-          </Badge>
           {item.productStatus && (
             <Badge variant={getStatusBadgeVariant(item.productStatus)}>
               {item.productStatus}
