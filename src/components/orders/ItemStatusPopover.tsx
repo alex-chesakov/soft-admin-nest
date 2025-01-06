@@ -38,18 +38,20 @@ export const ItemStatusPopover = ({
   const [selectedStatus, setSelectedStatus] = useState<string>("");
 
   const handleStatusClick = (newStatus: string) => {
-    if (newStatus === "Collected Adjusted") {
+    const isCollectedAdjusted = statuses.find(s => s.name === newStatus && s.id === "2");
+    
+    if (isCollectedAdjusted) {
       setShowQtyInput(true);
+      setSelectedStatus(newStatus);
       return;
     }
-    setSelectedStatus(newStatus);
+    
     onStatusChange(newStatus);
     setIsOpen(false);
   };
 
   const handleAdjustedQtySave = () => {
     if (adjustedQty) {
-      setSelectedStatus("Collected Adjusted");
       setIsConfirmOpen(true);
       setIsOpen(false);
     }
