@@ -11,6 +11,8 @@ const CollectorDashboard = () => {
       const savedOrders = localStorage.getItem("orders");
       return savedOrders ? JSON.parse(savedOrders) : [];
     },
+    // Add refetchInterval to periodically check for updates
+    refetchInterval: 1000,
   });
 
   const calculateAverageProcessingTime = () => {
@@ -40,7 +42,7 @@ const CollectorDashboard = () => {
   };
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2 mb-6">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">
