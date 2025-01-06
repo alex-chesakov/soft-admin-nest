@@ -120,14 +120,14 @@ export const ItemStatusPopover = ({
           <AlertDialogHeader>
             <AlertDialogTitle>Confirm Status Change</AlertDialogTitle>
             <AlertDialogDescription>
-              Update Quantity
+              Adjusted Quantity: {adjustedQty}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={() => {
               setIsConfirmOpen(false);
               setIsOpen(true);
-              }}>
+            }}>
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction onClick={handleConfirmStatusChange}>
