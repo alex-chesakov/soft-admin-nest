@@ -55,21 +55,19 @@ export const CustomerInfoEditDialog = ({
   onSave,
   onLocationUpdate,
 }: CustomerInfoEditDialogProps) => {
-  const [selectedCustomer, setSelectedCustomer] = useState(customerName);
-  const [selectedEmail, setSelectedEmail] = useState(email);
-  const [selectedPhone, setSelectedPhone] = useState(phone);
   const [open, setOpen] = useState(false);
+  const [selectedCustomer] = useState(customerName);
+  const [selectedEmail] = useState(email);
+  const [selectedPhone] = useState(phone);
   const [locations, setLocations] = useState<{ name: string; address: string }[]>([]);
   const [selectedLocation, setSelectedLocation] = useState("");
   const { toast } = useToast();
 
   useEffect(() => {
-    // Get customer locations from the customers list
     const customers = getCustomers();
     const currentCustomer = customers.find((c) => c.name === selectedCustomer);
     if (currentCustomer && Array.isArray(currentCustomer.locations)) {
       setLocations(currentCustomer.locations);
-      // Set first location as default if none selected
       if (!selectedLocation && currentCustomer.locations.length > 0) {
         setSelectedLocation(currentCustomer.locations[0].name);
       }
@@ -99,31 +97,12 @@ export const CustomerInfoEditDialog = ({
       },
     });
 
-    // Update customers in localStorage to keep data in sync
-    const customers = getCustomers();
-    const updatedCustomers = customers.map((c) =>
-      c.name === selectedCustomer
-        ? {
-            ...c,
-            email: selectedEmail,
-            phone: selectedPhone,
-          }
-        : c
-    );
-    localStorage.setItem("customers", JSON.stringify(updatedCustomers));
-
     toast({
       title: "Success",
       description: "Customer information updated successfully",
     });
     
     setOpen(false);
-  };
-
-  const handleCustomerSelect = (customer: { name: string; email: string; phone: string }) => {
-    setSelectedCustomer(customer.name);
-    setSelectedEmail(customer.email);
-    setSelectedPhone(customer.phone);
   };
 
   return (
@@ -141,9 +120,10 @@ export const CustomerInfoEditDialog = ({
           <div className="space-y-4">
             <div className="grid gap-2">
               <Label>Customer</Label>
-              <CustomerSelector 
-                initialValue={selectedCustomer}
-                onSelect={handleCustomerSelect}
+              <Input
+                value={selectedCustomer}
+                readOnly
+                className="bg-gray-100"
               />
             </div>
             <div className="grid gap-2">
@@ -153,7 +133,8 @@ export const CustomerInfoEditDialog = ({
                 name="email"
                 type="email"
                 value={selectedEmail}
-                onChange={(e) => setSelectedEmail(e.target.value)}
+                readOnly
+                className="bg-gray-100"
               />
             </div>
             <div className="grid gap-2">
@@ -162,7 +143,8 @@ export const CustomerInfoEditDialog = ({
                 id="phone"
                 name="phone"
                 value={selectedPhone}
-                onChange={(e) => setSelectedPhone(e.target.value)}
+                readOnly
+                className="bg-gray-100"
               />
             </div>
           </div>
