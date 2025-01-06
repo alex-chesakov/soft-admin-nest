@@ -11,7 +11,7 @@ import {
   SidebarFooter,
 } from "@/components/ui/sidebar";
 import { UserRole } from "@/types/user";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 
@@ -19,7 +19,6 @@ const adminMenuItems = [
   { title: "Dashboard", icon: Home, url: "/" },
   { title: "Products", icon: Package, url: "/products" },
   { title: "Orders", icon: ClipboardList, url: "/orders" },
-  { title: "Customers", icon: Users, url: "/customers" },
   { title: "Users", icon: Users, url: "/users" },
   { title: "Locations", icon: MapPin, url: "/locations" },
   { title: "Dictionaries", icon: BookOpen, url: "/dictionaries" },
@@ -54,12 +53,10 @@ export function AdminSidebar() {
       description: `Switched to ${newRole} view`,
     });
     
-    // Navigate to Orders page when switching roles
     if (newRole === 'admin') {
       navigate('/orders');
     }
     
-    // Force a page refresh to update all components
     window.location.reload();
   };
 
