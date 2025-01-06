@@ -1,9 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, DollarSign, ShoppingCart, TrendingUp } from "lucide-react";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useMobile } from "@/hooks/use-mobile";
 
 export function AdminDashboard() {
-  const isMobile = useIsMobile();
+  const isMobile = useMobile();
 
   return (
     <div className="space-y-6">
