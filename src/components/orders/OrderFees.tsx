@@ -27,11 +27,18 @@ export const OrderFees = ({ items, fees, total, onItemsChange, role = 'admin' }:
   const calculateAdjustedValues = () => {
     const adjustedSubtotal = items.reduce((sum, item) => {
       const quantity = item.adjustedQuantity !== undefined ? item.adjustedQuantity : item.quantity;
-      return sum + (item.price * quantity);
+      const price = item.unit === "Case" ? item.price : item.price;
+      return sum + (price * quantity);
     }, 0);
 
-    const adjustedServiceFee = adjustedSubtotal * (fees.serviceFee / fees.subtotal);
-    const adjustedCreditCardFee = adjustedSubtotal * 0.025; // 2.5% of adjusted subtotal
+    // Calculate service fee as the same percentage of adjusted subtotal
+    const serviceFeePercentage = (fees.serviceFee / fees.subtotal) * 100;
+    const adjustedServiceFee = (adjustedSubtotal * serviceFeePercentage) / 100;
+
+    // Credit card fee is always 2.5% of the subtotal
+    const adjustedCreditCardFee = adjustedSubtotal * 0.025;
+
+    // Calculate total
     const adjustedTotal = adjustedSubtotal + adjustedServiceFee + adjustedCreditCardFee;
 
     return {
