@@ -1,93 +1,138 @@
-import { OrderItem } from "@/types/order";
-import { OrderSummary } from "./OrderSummary";
-import { OrderItemComponent } from "./OrderItem";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Package2 } from "lucide-react";
+import { OrderItem as OrderItemType } from "@/types/order";
+import { ProductSearchBar } from "./ProductSearchBar";
 import { loadDictionaryItems } from "@/utils/dictionaryStorage";
+import { useToast } from "@/hooks/use-toast";
+import { OrderItemComponent } from "./OrderItem";
+import { OrderSummary } from "./OrderSummary";
 
 interface OrderFeesProps {
-  items: OrderItem[];
+  items: OrderItemType[];
   fees: {
     subtotal: number;
     serviceFee: number;
     creditCardFee: number;
   };
   total: number;
-  onItemsChange: (items: OrderItem[]) => void;
+  onItemsChange?: (items: OrderItemType[]) => void;
   role?: 'admin' | 'collector';
 }
 
-export const OrderFees = ({
-  items,
-  fees,
-  total,
-  onItemsChange,
-  role = 'admin'
-}: OrderFeesProps) => {
-  // Calculate adjusted fees if there are any adjusted quantities
-  const hasAdjustments = items.some(item => item.adjustedQuantity !== undefined);
-  
-  const adjustedFees = hasAdjustments ? {
-    subtotal: items.reduce((acc, item) => {
-      const price = item.unit === "Case" ? item.price * 10 : item.price;
-      const quantity = item.adjustedQuantity !== undefined ? item.adjustedQuantity : item.quantity;
-      return acc + (price * quantity);
-    }, 0),
-    serviceFee: fees.serviceFee,
-    creditCardFee: fees.creditCardFee,
-    total: 0
-  } : undefined;
-
-  // Calculate the adjusted total if there are adjustments
-  if (adjustedFees) {
-    adjustedFees.total = adjustedFees.subtotal + adjustedFees.serviceFee + adjustedFees.creditCardFee;
-  }
-
-  // Load item statuses from dictionary storage
+export const OrderFees = ({ items, fees, total, onItemsChange, role = 'admin' }: OrderFeesProps) => {
   const itemStatuses = loadDictionaryItems('item-statuses');
+  const { toast } = useToast();
+
+  const handleProductSelect = (newProduct: OrderItemType) => {
+    if (onItemsChange) {
+      const existingProduct = items.find(
+        (item) => item.productName === newProduct.productName
+      );
+
+      if (existingProduct) {
+        const updatedItems = items.map((item) =>
+          item.productName === newProduct.productName
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+        onItemsChange(updatedItems);
+      } else {
+        const randomStatus = itemStatuses[Math.floor(Math.random() * itemStatuses.length)];
+        const productWithStatus: OrderItemType = {
+          ...newProduct,
+          id: "CRT006",
+          status: randomStatus.name,
+          unit: "Unit" as const
+        };
+        onItemsChange([...items, productWithStatus]);
+      }
+    }
+  };
+
+  const handleStatusChange = (itemId: string, newStatus: string, adjustedQty?: number) => {
+    if (onItemsChange) {
+      const updatedItems = items.map((item) =>
+        item.id === itemId 
+          ? { 
+              ...item, 
+              status: newStatus,
+              adjustedQuantity: adjustedQty !== undefined ? adjustedQty : item.adjustedQuantity
+            }
+          : item
+      );
+      onItemsChange(updatedItems);
+      toast({
+        title: "Status updated",
+        description: `Item status changed to ${newStatus}${adjustedQty ? ` with adjusted quantity: ${adjustedQty}` : ''}`,
+      });
+    }
+  };
+
+  const handleQuantityChange = (itemId: string, change: number) => {
+    if (onItemsChange) {
+      const updatedItems = items.map((item) => {
+        if (item.id === itemId) {
+          const newQuantity = Math.max(0, item.quantity + change);
+          return { ...item, quantity: newQuantity };
+        }
+        return item;
+      });
+      onItemsChange(updatedItems);
+    }
+  };
+
+  const handleUnitChange = (itemId: string, unit: "Unit" | "Case") => {
+    if (onItemsChange) {
+      const updatedItems = items.map((item) => {
+        if (item.id === itemId) {
+          const basePrice = unit === "Case" ? item.price / 10 : item.price * 10;
+          return {
+            ...item,
+            unit,
+            price: unit === "Case" ? basePrice * 10 : basePrice / 10
+          };
+        }
+        return item;
+      });
+      onItemsChange(updatedItems);
+    }
+  };
+
+  const handleDeleteItem = (itemId: string) => {
+    if (onItemsChange) {
+      const updatedItems = items.filter((item) => item.id !== itemId);
+      onItemsChange(updatedItems);
+    }
+  };
 
   return (
-    <div className="space-y-6">
-      {items.map(item => (
-        <OrderItemComponent
-          key={item.id}
-          item={item}
-          onQuantityChange={(itemId, change) => {
-            const updatedItems = items.map(i => {
-              if (i.id === itemId) {
-                const currentQuantity = i.adjustedQuantity !== undefined ? i.adjustedQuantity : i.quantity;
-                const newQuantity = currentQuantity + change;
-                return { ...i, adjustedQuantity: newQuantity >= 0 ? newQuantity : 0 };
-              }
-              return i;
-            });
-            onItemsChange(updatedItems);
-          }}
-          onUnitChange={(itemId, unit) => {
-            const updatedItems = items.map(i => 
-              i.id === itemId ? { ...i, unit } : i
-            );
-            onItemsChange(updatedItems);
-          }}
-          onStatusChange={(itemId, newStatus, adjustedQty) => {
-            const updatedItems = items.map(i => 
-              i.id === itemId ? { ...i, status: newStatus, adjustedQuantity: adjustedQty } : i
-            );
-            onItemsChange(updatedItems);
-          }}
-          onDelete={(itemId) => {
-            const updatedItems = items.filter(i => i.id !== itemId);
-            onItemsChange(updatedItems);
-          }}
-          itemStatuses={itemStatuses}
-          role={role}
-        />
-      ))}
-      
-      <OrderSummary
-        fees={fees}
-        total={total}
-        role={role}
-        adjustedFees={adjustedFees}
-      />
-    </div>
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center gap-2">
+            <Package2 className="h-5 w-5" />
+            Order Items
+          </CardTitle>
+          <ProductSearchBar onProductSelect={handleProductSelect} />
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          {items.map((item) => (
+            <OrderItemComponent
+              key={item.id}
+              item={item}
+              onQuantityChange={handleQuantityChange}
+              onUnitChange={handleUnitChange}
+              onStatusChange={handleStatusChange}
+              onDelete={handleDeleteItem}
+              itemStatuses={itemStatuses}
+              role={role}
+            />
+          ))}
+          <OrderSummary fees={fees} total={total} role={role} />
+        </div>
+      </CardContent>
+    </Card>
   );
 };

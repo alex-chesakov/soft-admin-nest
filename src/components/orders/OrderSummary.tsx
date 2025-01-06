@@ -27,15 +27,9 @@ interface OrderSummaryProps {
   };
   total: number;
   role?: 'admin' | 'collector';
-  adjustedFees?: {
-    subtotal: number;
-    serviceFee: number;
-    creditCardFee: number;
-    total: number;
-  };
 }
 
-export const OrderSummary = ({ fees, total, role = 'admin', adjustedFees }: OrderSummaryProps) => {
+export const OrderSummary = ({ fees, total, role = 'admin' }: OrderSummaryProps) => {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isProofDialogOpen, setIsProofDialogOpen] = useState(false);
   const { toast } = useToast();
@@ -65,47 +59,19 @@ export const OrderSummary = ({ fees, total, role = 'admin', adjustedFees }: Orde
       <div className="pt-4 space-y-2 border-t">
         <div className="flex justify-between text-sm">
           <p className="text-gray-500">Subtotal</p>
-          <div className="flex items-center gap-2">
-            <span className={`${adjustedFees ? 'line-through text-gray-400' : ''}`}>
-              ${fees.subtotal.toFixed(2)}
-            </span>
-            {adjustedFees && (
-              <span className="text-green-600">${adjustedFees.subtotal.toFixed(2)}</span>
-            )}
-          </div>
+          <p>${fees.subtotal.toFixed(2)}</p>
         </div>
         <div className="flex justify-between text-sm">
           <p className="text-gray-500">Service Fee</p>
-          <div className="flex items-center gap-2">
-            <span className={`${adjustedFees ? 'line-through text-gray-400' : ''}`}>
-              ${fees.serviceFee.toFixed(2)}
-            </span>
-            {adjustedFees && (
-              <span className="text-green-600">${adjustedFees.serviceFee.toFixed(2)}</span>
-            )}
-          </div>
+          <p>${fees.serviceFee.toFixed(2)}</p>
         </div>
         <div className="flex justify-between text-sm">
           <p className="text-gray-500">Credit Card Fee (2.5%)</p>
-          <div className="flex items-center gap-2">
-            <span className={`${adjustedFees ? 'line-through text-gray-400' : ''}`}>
-              ${fees.creditCardFee.toFixed(2)}
-            </span>
-            {adjustedFees && (
-              <span className="text-green-600">${adjustedFees.creditCardFee.toFixed(2)}</span>
-            )}
-          </div>
+          <p>${fees.creditCardFee.toFixed(2)}</p>
         </div>
         <div className="flex justify-between font-bold pt-2 border-t">
           <p>Estimated Total</p>
-          <div className="flex items-center gap-2">
-            <span className={`${adjustedFees ? 'line-through text-gray-400' : ''}`}>
-              ${total.toFixed(2)}
-            </span>
-            {adjustedFees && (
-              <span className="text-green-600">${adjustedFees.total.toFixed(2)}</span>
-            )}
-          </div>
+          <p>${total.toFixed(2)}</p>
         </div>
         <div className="flex justify-end gap-2 pt-2">
           <Button 
@@ -130,7 +96,7 @@ export const OrderSummary = ({ fees, total, role = 'admin', adjustedFees }: Orde
           <AlertDialogHeader>
             <AlertDialogTitle>Confirm Charge</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to charge the client ${adjustedFees ? adjustedFees.total.toFixed(2) : total.toFixed(2)}?
+              Are you sure you want to charge the client ${total.toFixed(2)}?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
