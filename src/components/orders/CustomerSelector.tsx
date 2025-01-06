@@ -25,8 +25,11 @@ export function CustomerSelector({ initialValue = "", onSelect }: CustomerSelect
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(initialValue);
 
-  // Get customers from the shared data source
-  const customers = getCustomers();
+  // Get customers from the shared data source and ensure we always have a valid array
+  const customers = getCustomers() || [];
+
+  // Add console.log to help debug if the issue persists
+  console.log('CustomerSelector customers:', customers);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
