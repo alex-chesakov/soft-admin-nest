@@ -28,11 +28,12 @@ export const OrderFees = ({
   const adjustedFees = hasAdjustments ? {
     subtotal: items.reduce((acc, item) => {
       const price = item.unit === "Case" ? item.price * 10 : item.price;
-      return acc + price * (item.adjustedQuantity || item.quantity);
+      const quantity = item.adjustedQuantity !== undefined ? item.adjustedQuantity : item.quantity;
+      return acc + (price * quantity);
     }, 0),
-    serviceFee: fees.serviceFee, // Keep the same service fee
-    creditCardFee: fees.creditCardFee, // Keep the same credit card fee
-    total: 0 // Will be calculated below
+    serviceFee: fees.serviceFee,
+    creditCardFee: fees.creditCardFee,
+    total: 0
   } : undefined;
 
   // Calculate the adjusted total if there are adjustments
@@ -50,9 +51,14 @@ export const OrderFees = ({
           key={item.id}
           item={item}
           onQuantityChange={(itemId, change) => {
-            const updatedItems = items.map(i => 
-              i.id === itemId ? { ...i, adjustedQuantity: (i.adjustedQuantity || 0) + change } : i
-            );
+            const updatedItems = items.map(i => {
+              if (i.id === itemId) {
+                const currentQuantity = i.adjustedQuantity !== undefined ? i.adjustedQuantity : i.quantity;
+                const newQuantity = currentQuantity + change;
+                return { ...i, adjustedQuantity: newQuantity >= 0 ? newQuantity : 0 };
+              }
+              return i;
+            });
             onItemsChange(updatedItems);
           }}
           onUnitChange={(itemId, unit) => {
