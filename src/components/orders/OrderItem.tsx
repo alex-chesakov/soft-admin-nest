@@ -63,7 +63,7 @@ export const OrderItemComponent = ({
         <div className="flex items-center gap-4 mt-2">
           <div className="flex items-center gap-2">
             <label className="text-sm text-gray-500">Booked Qty:</label>
-            {role === 'admin' ? (
+            {role === 'admin' && !item.adjustedQuantity ? (
               <div className="flex items-center">
                 <Button
                   variant="outline"
@@ -98,7 +98,7 @@ export const OrderItemComponent = ({
               <span className="text-sm font-medium">{item.adjustedQuantity}</span>
             </div>
           )}
-          {role === 'admin' && (
+          {role === 'admin' && !item.adjustedQuantity && (
             <Select
               value={item.unit || "Unit"}
               onValueChange={(value) => onUnitChange(item.id, value as "Unit" | "Case")}
