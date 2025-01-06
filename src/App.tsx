@@ -17,16 +17,33 @@ import Collectors from "@/pages/users/Collectors";
 import Locations from "@/pages/Locations";
 import Dictionaries from "@/pages/Dictionaries";
 import CollectorDashboard from "@/pages/CollectorDashboard";
+import { useEffect, useState } from "react";
+import { UserRole } from "@/types/user";
 
 const queryClient = new QueryClient();
 
 function App() {
+  const [currentRole, setCurrentRole] = useState<UserRole>(() => {
+    const savedRole = localStorage.getItem('userRole');
+    return (savedRole as UserRole) || 'admin';
+  });
+
+  useEffect(() => {
+    const handleRoleChange = () => {
+      const savedRole = localStorage.getItem('userRole');
+      setCurrentRole((savedRole as UserRole) || 'admin');
+    };
+
+    window.addEventListener('storage', handleRoleChange);
+    return () => window.removeEventListener('storage', handleRoleChange);
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
         <MainLayout>
           <Routes>
-            <Route path="/" element={<CollectorDashboard />} />
+            <Route path="/" element={currentRole === 'admin' ? <Index /> : <CollectorDashboard />} />
             <Route path="/products" element={<Products />} />
             <Route path="/products/:id" element={<ProductDetails />} />
             <Route path="/orders" element={<Orders />} />
