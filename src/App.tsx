@@ -16,6 +16,7 @@ import Admins from "@/pages/users/Admins";
 import Collectors from "@/pages/users/Collectors";
 import Locations from "@/pages/Locations";
 import Dictionaries from "@/pages/Dictionaries";
+import CollectorDashboard from "@/pages/CollectorDashboard";
 
 const queryClient = new QueryClient();
 
@@ -25,7 +26,7 @@ function App() {
       <Router>
         <MainLayout>
           <Routes>
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={<CollectorDashboard />} />
             <Route path="/products" element={<Products />} />
             <Route path="/products/:id" element={<ProductDetails />} />
             <Route path="/orders" element={<Orders />} />
