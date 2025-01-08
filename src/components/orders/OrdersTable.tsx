@@ -10,7 +10,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Order } from "@/types/order";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 
 interface OrdersTableProps {
   orders: Order[];
@@ -43,40 +43,26 @@ export const OrdersTable = ({ orders }: OrdersTableProps) => {
         {orders?.map((order) => (
           <Card
             key={order.id}
-            className="cursor-pointer hover:shadow-md transition-shadow"
+            className="p-4 cursor-pointer hover:bg-gray-50"
             onClick={() => navigate(`/orders/${order.id}`)}
           >
-            <CardContent className="pt-6">
-              <div className="space-y-2">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <p className="font-medium">Order #{order.id}</p>
-                    <p className="text-sm text-muted-foreground">{order.customerName}</p>
-                  </div>
-                  <Badge variant={getStatusVariant(order.status)}>
-                    {order.status}
-                  </Badge>
+            <div className="space-y-2">
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="font-medium">Order #{order.id}</p>
+                  <p className="text-sm text-gray-500">{order.customerName}</p>
                 </div>
-                <div className="grid grid-cols-2 gap-2 text-sm">
-                  <div>
-                    <p className="text-muted-foreground">Date</p>
-                    <p>{new Date(order.date).toLocaleDateString()}</p>
-                  </div>
-                  <div>
-                    <p className="text-muted-foreground">Items</p>
-                    <p>{order.items.length}</p>
-                  </div>
-                  <div>
-                    <p className="text-muted-foreground">Total</p>
-                    <p>${order.total.toFixed(2)}</p>
-                  </div>
-                  <div>
-                    <p className="text-muted-foreground">Payment</p>
-                    <p>{order.paymentStatus}</p>
-                  </div>
-                </div>
+                <Badge variant={getStatusVariant(order.status)}>
+                  {order.status}
+                </Badge>
               </div>
-            </CardContent>
+              <div className="text-sm">
+                <p>Items: {order.items.length}</p>
+                <p>Total: ${order.total.toFixed(2)}</p>
+                <p>Location: {order.location}</p>
+                <p>Delivery: {new Date(order.deliveryDate).toLocaleDateString()}</p>
+              </div>
+            </div>
           </Card>
         ))}
       </div>
