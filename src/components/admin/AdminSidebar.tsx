@@ -70,7 +70,7 @@ export function AdminSidebar() {
         <Button
           variant="ghost"
           size="icon"
-          className="fixed top-4 left-4 z-50"
+          className="fixed bottom-4 left-4 z-[9999] bg-primary hover:bg-primary/90 text-primary-foreground rounded-full shadow-lg"
           onClick={() => setIsOpen(!isOpen)}
         >
           <Menu className="h-6 w-6" />
