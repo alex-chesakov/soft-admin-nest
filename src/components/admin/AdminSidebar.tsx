@@ -80,7 +80,10 @@ export function AdminSidebar() {
           <Menu className="h-6 w-6" />
         </Button>
       )}
-      <Sidebar className={`fixed inset-y-0 left-0 transition-transform duration-300 ease-in-out ${
+      <div className={`fixed inset-0 bg-black/50 transition-opacity duration-300 ease-in-out z-[9998] ${
+        isMobile && isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+      }`} onClick={toggleMenu} />
+      <Sidebar className={`fixed inset-y-0 left-0 transition-transform duration-300 ease-in-out z-[9999] ${
         isMobile && !isOpen ? '-translate-x-full' : 'translate-x-0'
       }`}>
         <SidebarContent>
