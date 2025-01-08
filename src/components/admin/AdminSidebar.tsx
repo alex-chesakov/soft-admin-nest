@@ -1,4 +1,4 @@
-import { Home, Users, Package, Settings, BarChart2, ClipboardList, MapPin, BookOpen, User } from "lucide-react";
+import { Home, Users, Package, Settings, BarChart2, ClipboardList, MapPin, BookOpen, User, Menu } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -14,6 +14,8 @@ import { UserRole } from "@/types/user";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Button } from "@/components/ui/button";
 
 const adminMenuItems = [
   { title: "Dashboard", icon: Home, url: "/" },
@@ -41,6 +43,8 @@ export function AdminSidebar() {
     return (savedRole as UserRole) || 'admin';
   });
   
+  const [isOpen, setIsOpen] = useState(false);
+  const isMobile = useIsMobile();
   const { toast } = useToast();
   const navigate = useNavigate();
   const menuItems = getMenuItems(currentRole);
@@ -60,56 +64,77 @@ export function AdminSidebar() {
     window.location.reload();
   };
 
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
-    <Sidebar>
-      <SidebarContent>
-        <div className="p-6">
-          <h1 className="text-2xl font-bold text-primary">Store Admin</h1>
-        </div>
-        <SidebarGroup>
-          <SidebarGroupLabel>Menu</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {menuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url} className="flex items-center gap-2">
-                      <item.icon className="h-5 w-5" />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-      <SidebarFooter className="border-t p-4">
-        <div className="flex gap-2">
-          <button
-            onClick={() => handleRoleChange('admin')}
-            className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-md transition-colors ${
-              currentRole === 'admin'
-                ? 'bg-primary text-primary-foreground'
-                : 'hover:bg-muted'
-            }`}
-          >
-            <User className="h-4 w-4" />
-            Admin
-          </button>
-          <button
-            onClick={() => handleRoleChange('collector')}
-            className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-md transition-colors ${
-              currentRole === 'collector'
-                ? 'bg-primary text-primary-foreground'
-                : 'hover:bg-muted'
-            }`}
-          >
-            <Users className="h-4 w-4" />
-            Collector
-          </button>
-        </div>
-      </SidebarFooter>
-    </Sidebar>
+    <>
+      {isMobile && (
+        <Button
+          variant="ghost"
+          size="icon"
+          className="fixed top-4 left-4 z-50"
+          onClick={toggleSidebar}
+        >
+          <Menu className="h-6 w-6" />
+        </Button>
+      )}
+      
+      <Sidebar className={`${isMobile ? (isOpen ? 'translate-x-0' : '-translate-x-full') : ''} transition-transform duration-200 ease-in-out fixed md:relative z-40`}>
+        <SidebarContent>
+          <div className="p-6">
+            <h1 className="text-2xl font-bold text-primary">Store Admin</h1>
+          </div>
+          <SidebarGroup>
+            <SidebarGroupLabel>Menu</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {menuItems.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <a 
+                        href={item.url} 
+                        className="flex items-center gap-2"
+                        onClick={() => isMobile && setIsOpen(false)}
+                      >
+                        <item.icon className="h-5 w-5" />
+                        <span>{item.title}</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+        <SidebarFooter className="border-t p-4">
+          <div className="flex gap-2">
+            <button
+              onClick={() => handleRoleChange('admin')}
+              className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-md transition-colors ${
+                currentRole === 'admin'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'hover:bg-muted'
+              }`}
+            >
+              <User className="h-4 w-4" />
+              Admin
+            </button>
+            <button
+              onClick={() => handleRoleChange('collector')}
+              className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-md transition-colors ${
+                currentRole === 'collector'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'hover:bg-muted'
+              }`}
+            >
+              <Users className="h-4 w-4" />
+              Collector
+            </button>
+          </div>
+        </SidebarFooter>
+      </Sidebar>
+    </>
   );
 }
