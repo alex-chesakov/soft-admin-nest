@@ -43,7 +43,7 @@ export function AdminSidebar() {
     return (savedRole as UserRole) || 'admin';
   });
   
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const isMobile = useIsMobile();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -64,6 +64,10 @@ export function AdminSidebar() {
     window.location.reload();
   };
 
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <>
       {isMobile && (
@@ -71,12 +75,14 @@ export function AdminSidebar() {
           variant="ghost"
           size="icon"
           className="fixed bottom-4 left-4 z-[9999] bg-primary hover:bg-primary/90 text-primary-foreground rounded-full shadow-lg"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={toggleMenu}
         >
           <Menu className="h-6 w-6" />
         </Button>
       )}
-      <Sidebar className={`transition-transform duration-300 ${isMobile && !isOpen ? '-translate-x-full' : 'translate-x-0'}`}>
+      <Sidebar className={`fixed inset-y-0 left-0 transition-transform duration-300 ease-in-out ${
+        isMobile && !isOpen ? '-translate-x-full' : 'translate-x-0'
+      }`}>
         <SidebarContent>
           <div className="p-6">
             <h1 className="text-2xl font-bold text-primary">Store Admin</h1>
