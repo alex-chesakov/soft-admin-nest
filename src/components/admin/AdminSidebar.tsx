@@ -14,7 +14,7 @@ import { UserRole } from "@/types/user";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
 
 const adminMenuItems = [
@@ -43,10 +43,10 @@ export function AdminSidebar() {
     return (savedRole as UserRole) || 'admin';
   });
   
-  const [isOpen, setIsOpen] = useState(false);
-  const isMobile = useIsMobile();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const isMobile = useMobile();
+  const [isOpen, setIsOpen] = useState(!isMobile);
   const menuItems = getMenuItems(currentRole);
 
   const handleRoleChange = (newRole: UserRole) => {
@@ -80,8 +80,7 @@ export function AdminSidebar() {
           <Menu className="h-6 w-6" />
         </Button>
       )}
-      
-      <Sidebar className={`${isMobile ? (isOpen ? 'translate-x-0' : '-translate-x-full') : ''} transition-transform duration-200 ease-in-out fixed md:relative z-40`}>
+      <Sidebar className={`${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-200 ease-in-out ${isMobile ? 'absolute' : 'relative'} z-40`}>
         <SidebarContent>
           <div className="p-6">
             <h1 className="text-2xl font-bold text-primary">Store Admin</h1>
@@ -135,6 +134,12 @@ export function AdminSidebar() {
           </div>
         </SidebarFooter>
       </Sidebar>
+      {isMobile && isOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-30"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
     </>
   );
 }
