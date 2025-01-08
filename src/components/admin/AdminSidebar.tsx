@@ -74,18 +74,23 @@ export function AdminSidebar() {
         <Button
           variant="ghost"
           size="icon"
-          className="fixed bottom-4 left-4 z-[9999] bg-primary hover:bg-primary/90 text-primary-foreground rounded-full shadow-lg"
+          className="fixed bottom-4 left-4 z-[99999] bg-primary hover:bg-primary/90 text-primary-foreground rounded-full shadow-lg w-12 h-12 flex items-center justify-center"
           onClick={toggleMenu}
         >
           <Menu className="h-6 w-6" />
         </Button>
       )}
-      <div className={`fixed inset-0 bg-black/50 transition-opacity duration-300 ease-in-out z-[9998] ${
-        isMobile && isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-      }`} onClick={toggleMenu} />
-      <Sidebar className={`fixed inset-y-0 left-0 transition-transform duration-300 ease-in-out z-[9999] ${
-        isMobile && !isOpen ? '-translate-x-full' : 'translate-x-0'
-      }`}>
+      <div 
+        className={`fixed inset-0 bg-black/50 transition-opacity duration-300 ease-in-out z-[99998] ${
+          isMobile && isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`} 
+        onClick={toggleMenu} 
+      />
+      <Sidebar 
+        className={`fixed inset-y-0 left-0 transition-transform duration-300 ease-in-out z-[99999] ${
+          isMobile && !isOpen ? '-translate-x-full' : 'translate-x-0'
+        }`}
+      >
         <SidebarContent>
           <div className="p-6">
             <h1 className="text-2xl font-bold text-primary">Store Admin</h1>
