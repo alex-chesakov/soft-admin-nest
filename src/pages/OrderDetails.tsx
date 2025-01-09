@@ -108,68 +108,64 @@ const OrderDetails = () => {
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleContent>
           <div className="space-y-6">
-            <div className="flex gap-6">
-              <div className="flex-1 space-y-6">
-                <OrderStatusSection 
-                  id={id || ''} 
-                  date={orderDetails.date} 
-                  initialStatus={orderDetails.status}
-                  role={role as 'admin' | 'collector'}
-                />
+            <div className="grid grid-cols-1 gap-6">
+              <OrderStatusSection 
+                id={id || ''} 
+                date={orderDetails.date} 
+                initialStatus={orderDetails.status}
+                role={role as 'admin' | 'collector'}
+              />
 
-                <OrderDetailsSummary
-                  deliveryDate={orderDetails.deliveryDate}
-                  deliveryWindow={orderDetails.deliveryWindow}
-                  paymentStatus={orderDetails.paymentStatus}
-                  itemsCount={orderDetails.items.length}
-                  pickupLocations={orderDetails.pickupLocations}
-                  deliveryLocation={orderDetails.deliveryLocation}
-                  onDeliveryLocationUpdate={handleDeliveryLocationUpdate}
-                  shippingAddress={orderDetails.shippingAddress}
-                  role={role as 'admin' | 'collector'}
-                  collectionWindow={orderDetails.collector?.collectionWindow}
-                />
+              <OrderDetailsSummary
+                deliveryDate={orderDetails.deliveryDate}
+                deliveryWindow={orderDetails.deliveryWindow}
+                paymentStatus={orderDetails.paymentStatus}
+                itemsCount={orderDetails.items.length}
+                pickupLocations={orderDetails.pickupLocations}
+                deliveryLocation={orderDetails.deliveryLocation}
+                onDeliveryLocationUpdate={handleDeliveryLocationUpdate}
+                shippingAddress={orderDetails.shippingAddress}
+                role={role as 'admin' | 'collector'}
+                collectionWindow={orderDetails.collector?.collectionWindow}
+              />
 
-                <OrderFees
-                  items={orderDetails.items as OrderItem[]}
-                  fees={orderDetails.fees}
-                  total={orderDetails.total}
-                  onItemsChange={(items) => {
-                    setOrderDetails(prev => ({
-                      ...prev,
-                      items
-                    }));
-                    if (id) {
-                      saveOrderProducts(id, items);
-                    }
-                  }}
-                  role={role as 'admin' | 'collector'}
-                />
-              </div>
+              <OrderFees
+                items={orderDetails.items as OrderItem[]}
+                fees={orderDetails.fees}
+                total={orderDetails.total}
+                onItemsChange={(items) => {
+                  setOrderDetails(prev => ({
+                    ...prev,
+                    items
+                  }));
+                  if (id) {
+                    saveOrderProducts(id, items);
+                  }
+                }}
+                role={role as 'admin' | 'collector'}
+              />
 
-              <div className="w-80 space-y-6">
-                <RequirementsSummary
-                  requirements={orderDetails.requirements || []}
-                  onUpdate={handleRequirementsUpdate}
-                  role={role as 'admin' | 'collector'}
-                />
+              <RequirementsSummary
+                requirements={orderDetails.requirements || []}
+                onUpdate={handleRequirementsUpdate}
+                role={role as 'admin' | 'collector'}
+              />
 
-                <CustomerInformation
-                  customerName={orderDetails.customerName}
-                  email={orderDetails.email}
-                  phone={orderDetails.phone}
-                  shippingAddress={orderDetails.shippingAddress}
-                  onSave={handleCustomerInfoUpdate}
-                  onLocationUpdate={handleDeliveryLocationUpdate}
-                  role={role as 'admin' | 'collector'}
-                />
+              <CustomerInformation
+                customerName={orderDetails.customerName}
+                email={orderDetails.email}
+                phone={orderDetails.phone}
+                shippingAddress={orderDetails.shippingAddress}
+                onSave={handleCustomerInfoUpdate}
+                onLocationUpdate={handleDeliveryLocationUpdate}
+                role={role as 'admin' | 'collector'}
+              />
 
-                <CollectorInformation
-                  collector={orderDetails.collector}
-                  onSave={handleCollectorInfoUpdate}
-                  role={role as 'admin' | 'collector'}
-                />
-              </div>
+              <CollectorInformation
+                collector={orderDetails.collector}
+                onSave={handleCollectorInfoUpdate}
+                role={role as 'admin' | 'collector'}
+              />
             </div>
           </div>
         </CollapsibleContent>
