@@ -2,7 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { MainLayout } from "@/components/layouts/MainLayout";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
-import Index from "@/pages/Index";
+import AdminDashboard from "@/pages/dashboards/AdminDashboard";
+import CollectorDashboard from "@/pages/dashboards/CollectorDashboard";
 import Products from "@/pages/Products";
 import ProductDetails from "@/pages/ProductDetails";
 import Orders from "@/pages/Orders";
@@ -16,7 +17,6 @@ import Collectors from "@/pages/users/Collectors";
 import Customers from "@/pages/users/Customers";
 import Locations from "@/pages/Locations";
 import Dictionaries from "@/pages/Dictionaries";
-import CollectorDashboard from "@/pages/CollectorDashboard";
 import { useEffect, useState } from "react";
 import { UserRole } from "@/types/user";
 
@@ -43,7 +43,9 @@ function App() {
       <Router>
         <MainLayout>
           <Routes>
-            <Route path="/" element={currentRole === 'admin' ? <Index /> : <CollectorDashboard />} />
+            <Route path="/" element={currentRole === 'admin' ? <AdminDashboard /> : <CollectorDashboard />} />
+            <Route path="/dashboard/admin" element={<AdminDashboard />} />
+            <Route path="/dashboard/collector" element={<CollectorDashboard />} />
             <Route path="/products" element={<Products />} />
             <Route path="/products/:id" element={<ProductDetails />} />
             <Route path="/orders" element={<Orders />} />
