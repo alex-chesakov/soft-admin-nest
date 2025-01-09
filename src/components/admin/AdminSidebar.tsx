@@ -141,8 +141,14 @@ export function AdminSidebar() {
         </SheetTrigger>
         <SheetContent 
           side="left" 
-          className="w-[300px] p-0"
-          style={{ zIndex: 9999 }}
+          className="w-[300px] p-0 fixed inset-y-0 left-0"
+          style={{ 
+            zIndex: 9999,
+            position: 'fixed',
+            top: 0,
+            bottom: 0,
+            left: 0,
+          }}
         >
           <MenuContent 
             currentRole={currentRole} 
