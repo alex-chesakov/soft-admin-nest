@@ -123,8 +123,8 @@ export const OrderItemComponent = ({
           onStatusChange={(newStatus, adjustedQty) => onStatusChange(item.id, newStatus, adjustedQty)}
           statuses={itemStatuses}
         />
-        <div className="flex items-center justify-end gap-2">
-          <span className={`font-medium ${adjustedTotal ? 'line-through text-gray-400' : ''}`}>
+        <div className="flex flex-col items-end gap-1">
+          <span className={`text-xs font-medium ${adjustedTotal ? 'line-through text-gray-400' : ''}`}>
             ${originalTotal.toFixed(2)}
           </span>
           {adjustedTotal && (
