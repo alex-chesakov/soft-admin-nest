@@ -3,11 +3,9 @@ import { Users, DollarSign, ShoppingCart, TrendingUp } from "lucide-react";
 
 export function AdminDashboard() {
   return (
-    <div className="p-4">
-      <div className="mb-6">
-        <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-        <p className="text-muted-foreground">Welcome to your admin dashboard</p>
-      </div>
+    <>
+      <h2 className="text-3xl font-bold tracking-tight mb-2">Dashboard</h2>
+      <p className="text-muted-foreground mb-6">Welcome to your admin dashboard</p>
       
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
@@ -54,6 +52,6 @@ export function AdminDashboard() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </>
   );
 }
