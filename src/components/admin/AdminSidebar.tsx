@@ -60,7 +60,11 @@ const MenuContent = ({ currentRole, handleRoleChange, onItemClick }: {
                   <a 
                     href={item.url} 
                     className="flex items-center gap-2"
-                    onClick={onItemClick}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (onItemClick) onItemClick();
+                      window.location.href = item.url;
+                    }}
                   >
                     <item.icon className="h-5 w-5" />
                     <span>{item.title}</span>
@@ -134,7 +138,7 @@ export function AdminSidebar() {
           <Button
             variant="ghost"
             size="icon"
-            className="fixed bottom-4 left-4 z-50 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full shadow-lg w-12 h-12 flex items-center justify-center"
+            className="fixed bottom-4 left-4 z-[9999] bg-primary hover:bg-primary/90 text-primary-foreground rounded-full shadow-lg w-12 h-12 flex items-center justify-center"
           >
             <Menu className="h-6 w-6" />
           </Button>
@@ -143,7 +147,7 @@ export function AdminSidebar() {
           side="left" 
           className="w-[300px] p-0 fixed inset-y-0 left-0"
           style={{ 
-            zIndex: 9999,
+            zIndex: 99999,
             position: 'fixed',
             top: 0,
             bottom: 0,
