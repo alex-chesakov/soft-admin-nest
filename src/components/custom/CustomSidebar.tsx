@@ -1,8 +1,9 @@
-import { Home, Users, Package, Settings, BarChart2, ClipboardList, MapPin, BookOpen, User, Menu } from "lucide-react";
+import { Home, Users, Package, Settings, BarChart2, ClipboardList, MapPin, BookOpen, User } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
+  SidebarGroupLabel,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
@@ -35,13 +36,17 @@ const getMenuItems = (role: UserRole) => {
   return role === 'admin' ? adminMenuItems : collectorMenuItems;
 };
 
-export function CustomSidebar() {
+interface CustomSidebarProps {
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+export function CustomSidebar({ isOpen, onOpenChange }: CustomSidebarProps) {
   const [currentRole, setCurrentRole] = useState<UserRole>(() => {
     const savedRole = localStorage.getItem('userRole');
     return (savedRole as UserRole) || 'admin';
   });
   
-  const [isOpen, setIsOpen] = useState(false);
   const isMobile = useIsMobile();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -68,7 +73,7 @@ export function CustomSidebar() {
         className={`fixed inset-0 bg-black/50 transition-opacity duration-300 ease-in-out z-[99998] ${
           isMobile && isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`} 
-        onClick={() => setIsOpen(false)} 
+        onClick={() => onOpenChange?.(false)} 
       />
       <Sidebar 
         className={`fixed inset-y-0 left-0 transition-transform duration-300 ease-in-out z-[99999] ${
@@ -76,13 +81,19 @@ export function CustomSidebar() {
         }`}
       >
         <SidebarContent>
-          <h1 className="text-2xl font-bold text-primary p-4">Store Admin</h1>
+          <div className="p-6">
+            <h1 className="text-2xl font-bold text-primary">Store Admin</h1>
+          </div>
           <SidebarGroup>
+            <SidebarGroupLabel>Menu</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {menuItems.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
+                    <SidebarMenuButton 
+                      asChild
+                      onClick={() => isMobile && onOpenChange?.(false)}
+                    >
                       <a href={item.url} className="flex items-center gap-2">
                         <item.icon className="h-5 w-5" />
                         <span>{item.title}</span>
