@@ -3,7 +3,6 @@ import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
@@ -92,9 +91,7 @@ export function CustomSidebar() {
         }`}
       >
         <SidebarContent>
-          <div className="p-4">
-            <h1 className="text-xl font-semibold text-primary">Store Admin</h1>
-          </div>
+          <h1 className="text-2xl font-bold text-primary p-4">Store Admin</h1>
           <SidebarGroup>
             <SidebarGroupContent>
               <SidebarMenu>
