@@ -103,7 +103,7 @@ const OrderDetails = () => {
   };
 
   return (
-    <>
+    <div className="container mx-auto px-4 py-6">
       <h1 className="text-2xl font-bold mb-6">Order Details</h1>
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleContent>
@@ -170,7 +170,7 @@ const OrderDetails = () => {
           </div>
         </CollapsibleContent>
       </Collapsible>
-    </>
+    </div>
   );
 };
 
