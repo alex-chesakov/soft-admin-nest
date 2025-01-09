@@ -107,7 +107,7 @@ export function AdminSidebar() {
     return (savedRole as UserRole) || 'admin';
   });
   
-  const [isOpen, setIsOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const isMobile = useIsMobile();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -129,7 +129,7 @@ export function AdminSidebar() {
 
   if (isMobile) {
     return (
-      <Sheet>
+      <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <Button
             variant="ghost"
@@ -139,8 +139,12 @@ export function AdminSidebar() {
             <Menu className="h-6 w-6" />
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="p-0 w-[300px]">
-          <MenuContent currentRole={currentRole} handleRoleChange={handleRoleChange} />
+        <SheetContent side="left" className="w-[300px] p-0">
+          <MenuContent 
+            currentRole={currentRole} 
+            handleRoleChange={handleRoleChange} 
+            onItemClick={() => setOpen(false)}
+          />
         </SheetContent>
       </Sheet>
     );
