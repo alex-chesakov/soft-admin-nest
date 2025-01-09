@@ -11,9 +11,9 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-gray-100">
+      <div className="flex min-h-screen w-full">
         <CustomSidebar />
-        <main className={`flex-1 ${isMobile ? 'p-2' : 'p-4'} overflow-x-hidden`}>
+        <main className={`flex-1 ${isMobile ? 'p-2' : 'p-4'} overflow-x-hidden bg-gray-100`}>
           {children}
         </main>
       </div>
