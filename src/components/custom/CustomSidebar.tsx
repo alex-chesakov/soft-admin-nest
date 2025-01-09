@@ -69,14 +69,16 @@ export function CustomSidebar({ isOpen, onOpenChange }: CustomSidebarProps) {
 
   return (
     <>
+      {isMobile && (
+        <div 
+          className={`fixed inset-0 bg-black/50 transition-opacity duration-300 ease-in-out z-[99998] ${
+            isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          }`} 
+          onClick={() => onOpenChange?.(false)} 
+        />
+      )}
       <div 
-        className={`fixed inset-0 bg-black/50 transition-opacity duration-300 ease-in-out z-[99998] ${
-          isMobile && isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        }`} 
-        onClick={() => onOpenChange?.(false)} 
-      />
-      <Sidebar 
-        className={`fixed inset-y-0 left-0 transition-transform duration-300 ease-in-out z-[99999] ${
+        className={`fixed inset-y-0 left-0 w-64 bg-background border-r shadow-lg transition-transform duration-300 ease-in-out z-[99999] ${
           isMobile && !isOpen ? '-translate-x-full' : 'translate-x-0'
         }`}
       >
@@ -131,7 +133,7 @@ export function CustomSidebar({ isOpen, onOpenChange }: CustomSidebarProps) {
             </button>
           </div>
         </SidebarFooter>
-      </Sidebar>
+      </div>
     </>
   );
 }
