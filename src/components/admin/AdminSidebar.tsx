@@ -139,7 +139,7 @@ export function AdminSidebar() {
             <Menu className="h-6 w-6" />
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="w-[300px] p-0">
+        <SheetContent side="left" className="w-[300px] p-0 z-[100]">
           <MenuContent 
             currentRole={currentRole} 
             handleRoleChange={handleRoleChange} 
