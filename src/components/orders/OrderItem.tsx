@@ -50,9 +50,9 @@ export const OrderItemComponent = ({
   const adjustedTotal = item.adjustedQuantity ? displayPrice * item.adjustedQuantity : null;
 
   return (
-    <div className="flex justify-between items-start border-b pb-4 last:border-0">
-      <div className="space-y-1 flex-1">
-        <div className="flex items-center gap-2">
+    <div className="flex flex-wrap justify-between items-start border-b pb-4 last:border-0 gap-4">
+      <div className="space-y-1 flex-1 min-w-[200px]">
+        <div className="flex items-center gap-2 flex-wrap">
           <p className="font-medium">{item.productName}</p>
           {item.productStatus && (
             <Badge variant={getStatusBadgeVariant(item.productStatus)}>
@@ -62,7 +62,7 @@ export const OrderItemComponent = ({
         </div>
         <p className="font-medium">BIN: {item.id}</p>
         <p className="text-sm text-gray-500 mt-2">Price: ${displayPrice.toFixed(2)}/{item.unit || 'Unit'}</p>
-        <div className="flex items-center gap-4 mt-2">
+        <div className="flex items-center gap-4 mt-2 flex-wrap">
           <div className="flex items-center gap-2">
             <label className={`text-sm text-gray-500 ${item.adjustedQuantity ? 'line-through text-gray-400' : ''}`}>Booked Qty:</label>
             {role === 'admin' && !item.adjustedQuantity ? (
@@ -116,14 +116,14 @@ export const OrderItemComponent = ({
           )}
         </div>
       </div>
-      <div className="text-right space-y-2">
+      <div className="text-right space-y-2 min-w-[120px]">
         <ItemStatusPopover
           status={item.status || 'Not collected'}
           statusColor={getItemStatusColor(item.status || 'Not collected')}
           onStatusChange={(newStatus, adjustedQty) => onStatusChange(item.id, newStatus, adjustedQty)}
           statuses={itemStatuses}
         />
-        <div className="flex items-center justify-end gap-2">
+        <div className="flex items-center justify-end gap-2 flex-wrap">
           <span className={`font-medium ${adjustedTotal ? 'line-through text-gray-400' : ''}`}>
             ${originalTotal.toFixed(2)}
           </span>
