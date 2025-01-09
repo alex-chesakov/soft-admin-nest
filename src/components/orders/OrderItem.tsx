@@ -61,6 +61,7 @@ export const OrderItemComponent = ({
           )}
         </div>
         <p className="font-medium">BIN: {item.id}</p>
+        <p className="text-sm text-gray-500 mt-2">Price: ${displayPrice.toFixed(2)}/{item.unit || 'Unit'}</p>
         <div className="flex flex-col gap-2 mt-2">
           <div className="flex items-center gap-2">
             <label className={`text-sm text-gray-500 ${item.adjustedQuantity ? 'line-through text-gray-400' : ''}`}>Booked Qty:</label>
@@ -122,7 +123,6 @@ export const OrderItemComponent = ({
           onStatusChange={(newStatus, adjustedQty) => onStatusChange(item.id, newStatus, adjustedQty)}
           statuses={itemStatuses}
         />
-        <p className="text-sm text-gray-500 mt-2">Price: ${displayPrice.toFixed(2)}/{item.unit || 'Unit'}</p>
         <div className="flex items-center justify-end gap-2">
           <span className={`font-medium ${adjustedTotal ? 'line-through text-gray-400' : ''}`}>
             ${originalTotal.toFixed(2)}
