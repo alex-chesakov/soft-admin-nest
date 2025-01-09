@@ -104,7 +104,6 @@ const OrderDetails = () => {
 
   return (
     <>
-      <h1 className="text-2xl font-bold mb-6">Order Details</h1>
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleContent>
           <div className="space-y-6">
