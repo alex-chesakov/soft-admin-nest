@@ -36,7 +36,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
           </div>
         )}
         <CustomSidebar isOpen={isMenuOpen} onOpenChange={setIsMenuOpen} />
-        <main className={`flex-1 ${isMobile ? 'pt-16 px-2' : 'p-4'} overflow-x-hidden bg-gray-100 dark:bg-gray-900`}>
+        <main className={`flex-1 ${isMobile ? 'pt-16 px-2' : 'p-4 md:ml-64'} overflow-x-hidden bg-gray-100 dark:bg-gray-900`}>
           {children}
         </main>
       </div>
