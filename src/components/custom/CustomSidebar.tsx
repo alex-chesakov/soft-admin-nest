@@ -69,6 +69,16 @@ export function CustomSidebar() {
 
   return (
     <>
+      {isMobile && (
+        <Button
+          variant="ghost"
+          size="icon"
+          className="fixed bottom-4 left-4 z-[99999] bg-primary hover:bg-primary/90 text-primary-foreground rounded-full shadow-lg w-12 h-12 flex items-center justify-center"
+          onClick={toggleMenu}
+        >
+          <Menu className="h-6 w-6" />
+        </Button>
+      )}
       <div 
         className={`fixed inset-0 bg-black/50 transition-opacity duration-300 ease-in-out z-[99998] ${
           isMobile && isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
@@ -88,15 +98,7 @@ export function CustomSidebar() {
                 {menuItems.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                      <a 
-                        href={item.url} 
-                        className="flex items-center gap-2"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setIsOpen(false);
-                          navigate(item.url);
-                        }}
-                      >
+                      <a href={item.url} className="flex items-center gap-2">
                         <item.icon className="h-5 w-5" />
                         <span>{item.title}</span>
                       </a>
