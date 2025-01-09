@@ -4,6 +4,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Play } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface OrderHeaderProps {
   id: string;
@@ -22,6 +23,7 @@ export const OrderHeader = ({
 }: OrderHeaderProps) => {
   const [status, setStatus] = useState(initialStatus);
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   const getStatusVariant = (status: string) => {
     switch (status.toLowerCase()) {
@@ -57,32 +59,39 @@ export const OrderHeader = ({
     });
   };
 
+  const StartCollectionButton = () => (
+    <Button 
+      onClick={handleStartCollection}
+      className="bg-green-500 hover:bg-green-600 w-full md:w-auto"
+      size="sm"
+    >
+      <Play className="mr-2 h-4 w-4" />
+      Start Collection
+    </Button>
+  );
+
   return (
-    <div className="flex justify-between items-center">
-      <div>
-        <div className="flex items-center gap-2">
-          <h1 className="text-2xl font-bold">Order {id}</h1>
-          <Badge variant={getStatusVariant(status)}>
-            {status}
-          </Badge>
-          {role === 'admin' && (
-            <OrderStatusEditDialog status={status} onSave={handleStatusUpdate} />
-          )}
+    <div className="space-y-4">
+      <div className="flex justify-between items-start">
+        <div>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-bold">Order {id}</h1>
+            <Badge variant={getStatusVariant(status)}>
+              {status}
+            </Badge>
+            {role === 'admin' && (
+              <OrderStatusEditDialog status={status} onSave={handleStatusUpdate} />
+            )}
+          </div>
+          <p className="text-gray-500">Placed on {date}</p>
         </div>
-        <p className="text-gray-500">Placed on {date}</p>
+        {role === 'collector' && !isMobile && <StartCollectionButton />}
       </div>
-      <div className="flex items-center gap-4">
-        {role === 'collector' && (
-          <Button 
-            onClick={handleStartCollection}
-            className="bg-green-500 hover:bg-green-600"
-            size="sm"
-          >
-            <Play className="mr-2 h-4 w-4" />
-            Start Collection
-          </Button>
-        )}
-      </div>
+      {role === 'collector' && isMobile && (
+        <div className="mt-2">
+          <StartCollectionButton />
+        </div>
+      )}
     </div>
   );
 };
