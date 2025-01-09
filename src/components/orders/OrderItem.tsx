@@ -62,7 +62,7 @@ export const OrderItemComponent = ({
         </div>
         <p className="font-medium">BIN: {item.id}</p>
         <p className="text-sm text-gray-500 mt-2">Price: ${displayPrice.toFixed(2)}/{item.unit || 'Unit'}</p>
-        <div className="flex items-center gap-4 mt-2 flex-wrap">
+        <div className="flex flex-col gap-2 mt-2">
           <div className="flex items-center gap-2">
             <label className={`text-sm text-gray-500 ${item.adjustedQuantity ? 'line-through text-gray-400' : ''}`}>Booked Qty:</label>
             {role === 'admin' && !item.adjustedQuantity ? (
