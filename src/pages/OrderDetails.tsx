@@ -107,7 +107,7 @@ const OrderDetails = () => {
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleContent>
           <div className="space-y-6">
-            <div className="flex flex-col lg:flex-row gap-6">
+            <div className="block lg:flex lg:gap-6">
               <div className="flex-1 space-y-6">
                 <OrderStatusSection 
                   id={id || ''} 
@@ -129,11 +129,13 @@ const OrderDetails = () => {
                   collectionWindow={orderDetails.collector?.collectionWindow}
                 />
 
-                <RequirementsSummary
-                  requirements={orderDetails.requirements || []}
-                  onUpdate={handleRequirementsUpdate}
-                  role={role as 'admin' | 'collector'}
-                />
+                <div className="block lg:hidden">
+                  <RequirementsSummary
+                    requirements={orderDetails.requirements || []}
+                    onUpdate={handleRequirementsUpdate}
+                    role={role as 'admin' | 'collector'}
+                  />
+                </div>
 
                 <OrderFees
                   items={orderDetails.items as OrderItem[]}
@@ -153,6 +155,14 @@ const OrderDetails = () => {
               </div>
 
               <div className="w-full lg:w-80 space-y-6">
+                <div className="hidden lg:block">
+                  <RequirementsSummary
+                    requirements={orderDetails.requirements || []}
+                    onUpdate={handleRequirementsUpdate}
+                    role={role as 'admin' | 'collector'}
+                  />
+                </div>
+
                 <CustomerInformation
                   customerName={orderDetails.customerName}
                   email={orderDetails.email}
