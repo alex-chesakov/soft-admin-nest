@@ -139,7 +139,11 @@ export function AdminSidebar() {
             <Menu className="h-6 w-6" />
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="w-[300px] p-0 z-[100]">
+        <SheetContent 
+          side="left" 
+          className="w-[300px] p-0"
+          style={{ zIndex: 9999 }}
+        >
           <MenuContent 
             currentRole={currentRole} 
             handleRoleChange={handleRoleChange} 
