@@ -61,6 +61,7 @@ export const OrderItemComponent = ({
           )}
         </div>
         <p className="font-medium">BIN: {item.id}</p>
+        <p className="text-sm text-gray-500 mt-2">Price: ${displayPrice.toFixed(2)}/{item.unit || 'Unit'}</p>
         <div className="flex flex-col gap-2 mt-2">
           <div className="flex items-center gap-2">
             <label className={`text-sm text-gray-500 ${item.adjustedQuantity ? 'line-through text-gray-400' : ''}`}>Booked Qty:</label>
@@ -115,15 +116,14 @@ export const OrderItemComponent = ({
           )}
         </div>
       </div>
-      <div className="flex flex-col items-end gap-2 min-w-[120px]">
-        <p className="text-sm text-gray-500">Price: ${displayPrice.toFixed(2)}/{item.unit || 'Unit'}</p>
+      <div className="text-right space-y-2 min-w-[120px]">
         <ItemStatusPopover
           status={item.status || 'Not collected'}
           statusColor={getItemStatusColor(item.status || 'Not collected')}
           onStatusChange={(newStatus, adjustedQty) => onStatusChange(item.id, newStatus, adjustedQty)}
           statuses={itemStatuses}
         />
-        <div className="flex items-center justify-end gap-2">
+        <div className="flex items-center justify-end gap-2 flex-wrap">
           <span className={`font-medium ${adjustedTotal ? 'line-through text-gray-400' : ''}`}>
             ${originalTotal.toFixed(2)}
           </span>
