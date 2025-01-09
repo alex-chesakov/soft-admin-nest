@@ -1,5 +1,5 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { AdminSidebar } from "@/components/admin/AdminSidebar";
+import { CustomSidebar } from "@/components/custom/CustomSidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface MainLayoutProps {
@@ -12,7 +12,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-gray-100">
-        <AdminSidebar />
+        <CustomSidebar />
         <main className={`flex-1 ${isMobile ? 'p-2' : 'p-4'} overflow-x-hidden`}>
           {children}
         </main>
