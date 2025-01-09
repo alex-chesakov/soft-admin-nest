@@ -108,7 +108,7 @@ const OrderDetails = () => {
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleContent>
           <div className="space-y-6">
-            <div className="flex gap-6">
+            <div className="flex flex-col lg:flex-row gap-6">
               <div className="flex-1 space-y-6">
                 <OrderStatusSection 
                   id={id || ''} 
@@ -147,7 +147,7 @@ const OrderDetails = () => {
                 />
               </div>
 
-              <div className="w-80 space-y-6">
+              <div className="w-full lg:w-80 space-y-6">
                 <RequirementsSummary
                   requirements={orderDetails.requirements || []}
                   onUpdate={handleRequirementsUpdate}
