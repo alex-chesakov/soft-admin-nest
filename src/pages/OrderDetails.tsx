@@ -17,7 +17,7 @@ const OrderDetails = () => {
   const { toast } = useToast();
   const [orderDetails, setOrderDetails] = useState<Order>(mockOrder);
   const role = localStorage.getItem('userRole') || 'admin';
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {
     if (id) {
@@ -129,12 +129,6 @@ const OrderDetails = () => {
                   collectionWindow={orderDetails.collector?.collectionWindow}
                 />
 
-                <RequirementsSummary
-                  requirements={orderDetails.requirements || []}
-                  onUpdate={handleRequirementsUpdate}
-                  role={role as 'admin' | 'collector'}
-                />
-
                 <OrderFees
                   items={orderDetails.items as OrderItem[]}
                   fees={orderDetails.fees}
@@ -153,6 +147,12 @@ const OrderDetails = () => {
               </div>
 
               <div className="w-full lg:w-80 space-y-6">
+                <RequirementsSummary
+                  requirements={orderDetails.requirements || []}
+                  onUpdate={handleRequirementsUpdate}
+                  role={role as 'admin' | 'collector'}
+                />
+
                 <CustomerInformation
                   customerName={orderDetails.customerName}
                   email={orderDetails.email}
