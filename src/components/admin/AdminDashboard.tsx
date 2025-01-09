@@ -3,8 +3,8 @@ import { Users, DollarSign, ShoppingCart, TrendingUp } from "lucide-react";
 
 export function AdminDashboard() {
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
-      <div className="mb-8">
+    <div className="p-4 md:p-6 lg:p-8 max-w-[1400px]">
+      <div className="mb-6">
         <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
         <p className="text-muted-foreground">Welcome to your admin dashboard</p>
       </div>
