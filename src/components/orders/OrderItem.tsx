@@ -124,7 +124,7 @@ export const OrderItemComponent = ({
           statuses={itemStatuses}
         />
         <div className="flex flex-col items-end gap-1">
-          <span className={`text-xs font-medium ${adjustedTotal ? 'line-through text-gray-400' : ''}`}>
+          <span className={adjustedTotal ? 'text-xs font-medium line-through text-gray-400' : 'font-medium'}>
             ${originalTotal.toFixed(2)}
           </span>
           {adjustedTotal && (
