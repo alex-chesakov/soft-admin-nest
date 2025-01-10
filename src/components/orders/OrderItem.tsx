@@ -61,7 +61,23 @@ export const OrderItemComponent = ({
           )}
         </div>
         <p className="font-medium">BIN: {item.id}</p>
-        <p className="text-sm text-gray-500 mt-2">Price: ${displayPrice.toFixed(2)}/{item.unit || 'Unit'}</p>
+        <div className="flex items-center gap-2">
+          <p className="text-sm text-gray-500 mt-2">Price: ${displayPrice.toFixed(2)}/{item.unit || 'Unit'}</p>
+          {role === 'admin' && !item.adjustedQuantity && (
+            <Select
+              value={item.unit || "Unit"}
+              onValueChange={(value) => onUnitChange(item.id, value as "Unit" | "Case")}
+            >
+              <SelectTrigger className="w-24 h-8">
+                <SelectValue placeholder="Select unit" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Unit">Unit</SelectItem>
+                <SelectItem value="Case">Case</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+        </div>
         <div className="flex flex-col gap-2 mt-2">
           <div className="flex items-center gap-2">
             <label className={`text-sm text-gray-500 ${item.adjustedQuantity ? 'line-through text-gray-400' : ''}`}>Booked Qty:</label>
@@ -99,20 +115,6 @@ export const OrderItemComponent = ({
               <label className="text-sm text-green-600">Adjusted Qty:</label>
               <span className="text-sm font-medium text-green-600">{item.adjustedQuantity}</span>
             </div>
-          )}
-          {role === 'admin' && !item.adjustedQuantity && (
-            <Select
-              value={item.unit || "Unit"}
-              onValueChange={(value) => onUnitChange(item.id, value as "Unit" | "Case")}
-            >
-              <SelectTrigger className="w-24 h-8">
-                <SelectValue placeholder="Select unit" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Unit">Unit</SelectItem>
-                <SelectItem value="Case">Case</SelectItem>
-              </SelectContent>
-            </Select>
           )}
         </div>
       </div>
