@@ -1,4 +1,3 @@
-
 import { Plus, Minus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -81,10 +80,10 @@ export const OrderItemComponent = ({
               </SelectContent>
             </Select>
           )}
-        </div>
-        
-        <div className="flex items-center gap-2 mt-1">
-          <p className="text-sm text-gray-500"><span className="font-bold">Items per case:</span> 4</p>
+          
+          {item.unit === "Case" && (
+            <p className="text-sm text-gray-500"><span className="font-bold">Items per case:</span> 4</p>
+          )}
         </div>
         
         <div className="flex flex-col gap-2 mt-2">
