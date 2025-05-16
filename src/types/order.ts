@@ -10,6 +10,7 @@ export interface OrderItem {
   productStatus?: string;
   item?: string;
   upc?: string;
+  itemsPerCase?: number;
 }
 
 export interface Order {

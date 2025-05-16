@@ -1,3 +1,4 @@
+
 import { Plus, Minus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -81,6 +82,11 @@ export const OrderItemComponent = ({
             </Select>
           )}
         </div>
+        
+        <div className="flex items-center gap-2 mt-1">
+          <p className="text-sm text-gray-500"><span className="font-bold">Items per case:</span> 4</p>
+        </div>
+        
         <div className="flex flex-col gap-2 mt-2">
           <div className="flex items-center gap-2">
             <label className={`text-sm text-gray-500 ${item.adjustedQuantity ? 'line-through text-gray-400' : ''} font-bold`}>Booked Qty:</label>
