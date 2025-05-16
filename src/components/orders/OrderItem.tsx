@@ -1,4 +1,3 @@
-
 import { Plus, Minus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -45,7 +44,7 @@ export const OrderItemComponent = ({
         return 'secondary';
     }
   };
-
+  
   const displayPrice = item.unit === "Case" ? item.price * 10 : item.price;
   const originalTotal = displayPrice * item.quantity;
   const adjustedTotal = item.adjustedQuantity ? displayPrice * item.adjustedQuantity : null;
@@ -62,11 +61,11 @@ export const OrderItemComponent = ({
           )}
         </div>
         <div className="flex flex-col space-y-1 mt-1">
-          <p className="text-sm text-gray-500">Item: {item.item || '431076'}</p>
-          <p className="text-sm text-gray-500">UPC: {item.upc || '2800095044'}</p>
+          <p className="text-sm text-gray-500"><span className="font-bold">Item:</span> {item.item || '431076'}</p>
+          <p className="text-sm text-gray-500"><span className="font-bold">UPC:</span> {item.upc || '2800095044'}</p>
         </div>
         <div className="flex items-center gap-2 mt-1">
-          <p className="text-sm text-gray-500">Price: ${displayPrice.toFixed(2)}/{item.unit || 'Unit'}</p>
+          <p className="text-sm text-gray-500"><span className="font-bold">Price:</span> ${displayPrice.toFixed(2)}/{item.unit || 'Unit'}</p>
           {role === 'admin' && !item.adjustedQuantity && (
             <Select
               value={item.unit || "Unit"}
@@ -84,7 +83,7 @@ export const OrderItemComponent = ({
         </div>
         <div className="flex flex-col gap-2 mt-2">
           <div className="flex items-center gap-2">
-            <label className={`text-sm text-gray-500 ${item.adjustedQuantity ? 'line-through text-gray-400' : ''}`}>Booked Qty:</label>
+            <label className={`text-sm text-gray-500 ${item.adjustedQuantity ? 'line-through text-gray-400' : ''} font-bold`}>Booked Qty:</label>
             {role === 'admin' && !item.adjustedQuantity ? (
               <div className="flex items-center">
                 <Button
@@ -116,7 +115,7 @@ export const OrderItemComponent = ({
           </div>
           {item.adjustedQuantity !== undefined && (
             <div className="flex items-center gap-2">
-              <label className="text-sm text-green-600">Adjusted Qty:</label>
+              <label className="text-sm text-green-600 font-bold">Adjusted Qty:</label>
               <span className="text-sm font-medium text-green-600">{item.adjustedQuantity}</span>
             </div>
           )}
