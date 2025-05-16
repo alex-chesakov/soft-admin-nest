@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import {
   Command,
@@ -20,14 +19,14 @@ import {
 } from "@/components/ui/dialog";
 
 const products = [
-  { id: "8", name: "Wireless Headphones", price: 199.99, itemNumber: "WH-555", upc: "890123456789" },
-  { id: "9", name: "Mechanical Keyboard", price: 149.99, itemNumber: "KB-999", upc: "901234567890" },
-  { id: "10", name: "Gaming Mouse", price: 79.99, itemNumber: "GM-777", upc: "012345678901" },
-  { id: "11", name: "Monitor Stand", price: 49.99, itemNumber: "MS-444", upc: "123456789098" },
-  { id: "12", name: "USB Microphone", price: 129.99, itemNumber: "UM-333", upc: "234567890987" },
-  { id: "13", name: "Webcam HD", price: 89.99, itemNumber: "WC-222", upc: "345678909876" },
-  { id: "14", name: "Desk Mat", price: 29.99, itemNumber: "DM-111", upc: "456789098765" },
-  { id: "15", name: "Cable Management Kit", price: 19.99, itemNumber: "CM-000", upc: "567890987654" },
+  { id: "8", name: "Wireless Headphones", price: 199.99 },
+  { id: "9", name: "Mechanical Keyboard", price: 149.99 },
+  { id: "10", name: "Gaming Mouse", price: 79.99 },
+  { id: "11", name: "Monitor Stand", price: 49.99 },
+  { id: "12", name: "USB Microphone", price: 129.99 },
+  { id: "13", name: "Webcam HD", price: 89.99 },
+  { id: "14", name: "Desk Mat", price: 29.99 },
+  { id: "15", name: "Cable Management Kit", price: 19.99 },
 ];
 
 interface ProductSearchBarProps {
@@ -51,9 +50,7 @@ export const ProductSearchBar = ({ onProductSelect }: ProductSearchBarProps) => 
         productName: product.name,
         price: selectedUnits[product.id] === "case" ? product.price * 6 : product.price,
         quantity: 1,
-        unit: selectedUnits[product.id] === "case" ? "Case" : "Unit",
-        itemNumber: product.itemNumber,
-        upc: product.upc
+        unit: selectedUnits[product.id] === "case" ? "Case" : "Unit"
       });
       setValue("");
       setOpen(false);
