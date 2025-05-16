@@ -1,3 +1,4 @@
+
 import { Plus, Minus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -60,8 +61,12 @@ export const OrderItemComponent = ({
             </Badge>
           )}
         </div>
-        <div className="flex items-center gap-2">
-          <p className="text-sm text-gray-500 mt-2">Price: ${displayPrice.toFixed(2)}/{item.unit || 'Unit'}</p>
+        <div className="flex flex-col space-y-1 mt-1">
+          <p className="text-sm text-gray-500">Item: {item.item || '431076'}</p>
+          <p className="text-sm text-gray-500">UPC: {item.upc || '2800095044'}</p>
+        </div>
+        <div className="flex items-center gap-2 mt-1">
+          <p className="text-sm text-gray-500">Price: ${displayPrice.toFixed(2)}/{item.unit || 'Unit'}</p>
           {role === 'admin' && !item.adjustedQuantity && (
             <Select
               value={item.unit || "Unit"}

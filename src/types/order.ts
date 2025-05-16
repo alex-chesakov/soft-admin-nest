@@ -1,3 +1,4 @@
+
 export interface OrderItem {
   id: string;
   productName: string;
@@ -7,6 +8,8 @@ export interface OrderItem {
   unit?: "Unit" | "Case";
   adjustedQuantity?: number;
   productStatus?: string;
+  item?: string;
+  upc?: string;
 }
 
 export interface Order {
